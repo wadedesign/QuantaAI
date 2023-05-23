@@ -1,0 +1,81 @@
+import nextcord
+from nextcord.ext import commands
+from typing import List, Tuple
+
+"""
+Being Gay
+
+"""
+
+
+# Replace the following imports with the correct imports based on the code you provided
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.vectorstores import Chroma
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.llms import OpenAI
+from langchain.chains import ConversationalRetrievalChain
+from langchain.document_loaders import TextLoader
+from langchain.memory import ConversationBufferMemory
+
+class DocumentChatCog(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.chat_history = []
+
+    @commands.command(name="up")
+    async def upload_document(self, ctx):
+        print("Upload command received.")  # Debugging print statement
+        if not ctx.message.attachments:
+            await ctx.send("Please attach a document to analyze.")
+            return
+
+        attachment = ctx.message.attachments[0]
+        file_path = f"{attachment.filename}"
+        print(f"File path: {file_path}")  # Debugging print statement
+        await attachment.save(file_path)
+
+        try:
+            with open(file_path, 'r', encoding='utf-8') as file:
+                document_content = file.read()
+            print(f"Document content: {document_content}")  # Debugging print statement
+
+            loader = TextLoader(document_content)
+            documents = loader.load()
+
+            text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+            documents = text_splitter.split_documents(documents)
+
+            embeddings = OpenAIEmbeddings()
+            vectorstore = Chroma.from_documents(documents, embeddings)
+
+            memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+            self.qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0), vectorstore.as_retriever(), memory=memory)
+
+            confirmation_message = f"Document '{attachment.filename}' uploaded and processed successfully. You can now ask questions."
+            print(confirmation_message)  # Debugging print statement
+            await ctx.send(confirmation_message)
+        except Exception as e:
+            print(f"An error occurred while processing the document: {e}")
+            await ctx.send("An error occurred while processing the document. Please try again.")
+
+
+    @commands.command()
+    async def ask(self, ctx, *, question: str):
+        if not hasattr(self, "qa"):
+            await ctx.send("Please upload a document first.")
+            return
+
+        result = self.qa({"question": question})
+        answer = result["answer"]
+        await ctx.send(answer)
+
+    @commands.command()
+    async def clear_history(self, ctx):
+        if hasattr(self, "qa"):
+            self.qa.memory.clear()
+            await ctx.send("Chat history cleared.")
+        else:
+            await ctx.send("No chat history to clear.")
+
+def setup(bot):
+    bot.add_cog(DocumentChatCog(bot))

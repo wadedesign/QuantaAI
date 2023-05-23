@@ -1,0 +1,15 @@
+[[changelog]]
+version = "1.0.0"
+date = "2023-05-01"
+changes = [
+  "Added new command: Retrieve user information",
+  "Fixed bug in message handling logic"
+]
+
+[[changelog]]
+version = "1.1.0"
+date = "2023-06-15"
+changes = [
+  "Implemented role management feature",
+  "Improved performance for message processing"
+]

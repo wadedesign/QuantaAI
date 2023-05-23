@@ -1,0 +1,44 @@
+- version: "1.0.0"
+  date: "2023-05-01"
+  changes:
+    - title: Added new command
+      description: Retrieve user information.
+      type: Feature
+
+    - title: Bug fix
+      description: Message handling logic.
+      type: Bugfix
+
+- version: "1.1.0"
+  date: "2023-06-15"
+  changes:
+    - title: Role management feature
+      description: Implement role management functionality.
+      type: Feature
+
+    - title: Performance improvement
+      description: Enhance message processing performance.
+      type: Enhancement
+
+    - title: Dependency update
+      description: Update dependencies to the latest versions.
+      type: Dependency
+
+- version: "1.1.1"
+  date: "2023-07-02"
+  changes:
+    - title: Bug fix
+      description: Command permissions issue.
+      type: Bugfix
+
+- version: "1.2.0"
+  date: "2023-08-10"
+  changes:
+    - title: User join event handler
+      description: Implement a new event handler for user join events.
+      type: Feature
+
+    - title: Custom prefix support
+      description: Add support for configuring custom bot prefixes.
+      type: Enhancement
+

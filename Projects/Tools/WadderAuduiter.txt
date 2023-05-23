@@ -1,0 +1,256 @@
+import nextcord
+import asyncio
+from nextcord.ext import commands
+from utils.WadderAutoMod import *
+from typing import Optional, Union
+from utils.WadderConverts import *
+from nextcord.utils import escape_markdown
+
+
+class mod(commands.Cog, description="Keep your server safe! 🛠️"):
+    def __init__(self, client):
+        self.client = client
+
+    @nextcord.slash_command(name='automod')
+    async def _automod(self, interaction: nextcord.Interaction):
+        pass
+
+    @_automod.subcommand()
+    @commands.has_permissions(administrator=True)
+    async def _automod(self, interaction: nextcord.Interaction):
+        if interaction.invoked_subcommand is None:
+            return await interaction.send_help(interaction.command)
+
+    @_automod.subcommand()
+    @commands.has_permissions(administrator=True)
+    async def am_show(self, interaction: nextcord.Interaction):
+        embed, view = await show_automod_config(interaction)
+        await interaction.response.send_message(embed=embed, view=view)
+
+    @_automod.subcommand()
+    @commands.has_permissions(administrator=True)
+    @commands.bot_has_permissions(administrator=True)
+    
+    async def automod_enable_module(self, interaction: nextcord.Interaction, module: Optional[AutomodModule] = None):
+        if module is not None:
+            await am_enable_a_module(interaction, module)
+            return await interaction.response.send_message(embed=success_embed(
+                f"{EMOJIS['tick_yes']} Enabled!",
+                f"The automod module `{module}` has been enabled!"
+            ))
+        else:
+            embed, view = await am_enable_module_dropdown(interaction)
+            await interaction.response.send_message(embed=embed, view=view)
+
+    @_automod.subcommand()
+    @commands.has_permissions(administrator=True)
+    @commands.bot_has_permissions(administrator=True)
+  
+    async def automod_disable_module(self, interaction: nextcord.Interaction, modules: commands.Greedy[AutomodModule] = None):
+        if not modules:
+            
+            return await interaction.response.send_message(embed=error_embed(
+                f"{EMOJIS['tick_no']} Invalid Usage!",
+                f"Please specify a module to disable!\nCorrect Usage: `{interaction.clean_prefix}automod disable <module>`",
+            ))
+        await am_disable_modules(interaction, *modules)
+        await interaction.response.send_message(embed=success_embed(
+            f"{EMOJIS['tick_yes']} Module Disabled!",
+            f"Module{'' if len(modules) == 1 else 's'}: {', '.join(['`' + module + '`' for module in modules])} {'has' if len(modules) == 1 else 'have'} now been disabled.",
+        ))
+
+    @_automod.subcommand()
+    @commands.has_permissions(administrator=True)
+    @commands.bot_has_permissions(administrator=True)
+    
+    async def automod_set_log_channel(self, interaction: nextcord.Interaction, channel: Union[nextcord.TextChannel, Lower] = None):
+        p = interaction.clean_prefix
+        if channel is None:
+            
+            return await interaction.response.send_message(embed=error_embed(
+                f"{EMOJIS['tick_no']} Invalid Usage!",
+                f"Please mention a channel.\nCorrect Usage: `{p}automod logchannel #channel`\nTo remove it: `{p}automod logchannel disable`"
+            ))
+        g = await self.client.get_guild_config(interaction.guild.id)
+        am = g['automod']
+        if isinstance(channel, nextcord.TextChannel):
+            am['log_channel'] = channel.id
+            return await interaction.response.send_message(embed=success_embed(
+                f"{EMOJIS['tick_yes']} Log Channel Set!",
+                f"The automod log channel has been set to {channel.mention}",
+            ))
+        elif channel in ['disable', 'remove']:
+            am['log_channel'] = None
+            return await interaction.response.send_message(embed=success_embed(
+                f"{EMOJIS['tick_yes']} Log Channel Removed!",
+                "Automod logs have now been turned off."
+            ))
+        else:
+            raise commands.ChannelNotFound(channel)
+
+    @_automod.subcommand()
+    @commands.has_permissions(administrator=True)
+    @commands.bot_has_permissions(administrator=True)
+    
+    async def automod_badword(self, interaction: nextcord.Interaction):
+        if interaction.invoked_subcommand is None:
+            return await interaction.send_help(interaction.command)
+
+    @_automod.subcommand()
+    @commands.has_permissions(administrator=True)
+    @commands.bot_has_permissions(administrator=True)
+    
+    async def am_badword_add(self, interaction: nextcord.Interaction, words: commands.Greedy[Lower] = None):
+        if words is None:
+            
+            return await interaction.response.send_message(embed=error_embed(
+                f"{EMOJIS['tick_no']} Invalid Usage!",
+                f"Please provide a word to add.\nCorrect Usage: `{interaction.clean_prefix}automod badword add <word> ...`\n\nNote: You can type multiple words seperated with a space to add more than one words."
+            ))
+        added, already_exist = await am_add_badwords(interaction, *words)
+        if len(added) == 0:
+            
+            return await interaction.response.send_message(embed=error_embed(
+                f"{EMOJIS['tick_no']} Already exists!",
+                f"The word{'' if len(already_exist) == 1 else 's'} {', '.join(already_exist)} are already added."
+            ))
+        await interaction.response.send_message(embed=success_embed(
+            f"{EMOJIS['tick_yes']} Word{'' if len(added) == 1 else 's'} added!",
+            f"The word{'' if len(added) == 1 else 's'}: {', '.join(['`' + word + '`' for word in added])} {'has' if len(added) == 1 else 'have'} been added.\nYou can use `{interaction.clean_prefix}automod badwords show` to get the list."
+        ))
+
+    @_automod.subcommand()
+    @commands.has_permissions(administrator=True)
+    @commands.bot_has_permissions(administrator=True)
+    
+    async def am_badword_remove(self, interaction: nextcord.Interaction, words: commands.Greedy[Lower] = None):
+        if words is None:
+            
+            return await interaction.response.send_message(embed=error_embed(
+                f"{EMOJIS['tick_no']} Invalid Usage!",
+                f"Please provide a word to remove.\nCorrect Usage: `{interaction.clean_prefix}automod badword remove <word> ...`\n\nNote: You can type multiple words seperated with a space to remove more than one words."
+            ))
+        removed, not_exist = await am_remove_badwords(interaction, *words)
+        if len(removed) == 0:
+            
+            return await interaction.response.send_message(embed=error_embed(
+                f"{EMOJIS['tick_no']} Not found!",
+                f"The word{'' if len(not_exist) == 1 else 's'} {', '.join(not_exist)} {'was' if len(not_exist) == 1 else 'were'} not found.\nPlease use `{interaction.clean_prefix}automod badword show` to get the whole list."
+            ))
+        await interaction.response.send_message(embed=success_embed(
+            f"{EMOJIS['tick_yes']} Word{'' if len(removed) == 1 else 's'} removed!",
+            f"The word{'' if len(removed) == 1 else 's'}: {', '.join(['`' + word + '`' for word in removed])} {'has' if len(removed) == 1 else 'have'} been removed.\nYou can use `{interaction.clean_prefix}automod badwords show` to get the list."
+        ))
+
+    @_automod.subcommand()
+    @commands.has_permissions(administrator=True)
+    @commands.bot_has_permissions(administrator=True)
+    
+    async def am_badword_list(self, interaction: nextcord.Interaction):
+        embed, view = await view_badword_list(interaction)
+        try:
+            await interaction.user.send(embed=embed, view=view)
+            await interaction.message.add_reaction('👌')
+        except nextcord.Forbidden:
+            
+            return await interaction.response.send_message(f"{EMOJIS['tick_no']}I was unable to DM you the list, please enable your DMs.")
+
+    @_automod.subcommand()
+    @commands.has_permissions(administrator=True)
+    @commands.bot_has_permissions(administrator=True)
+    
+    async def automod_links(self, interaction: nextcord.Interaction):
+        if interaction.invoked_subcommand is None:
+            return await interaction.send_help(interaction.command)
+
+    @_automod.subcommand()
+    @commands.has_permissions(administrator=True)
+    @commands.bot_has_permissions(administrator=True)
+    
+    async def add_whitelist_link(self, interaction: nextcord.Interaction, url: Url = None):
+        prefix = interaction.clean_prefix
+        if url is None:
+            
+            return await interaction.response.send_message(embed=error_embed(
+                f"{EMOJIS['tick_no']} Invalid Usage!",
+                f"Please provide a link to whitelist.\nCorrect Usage: `{prefix}automod links add <link>`\nExample: `{prefix}automod links add https://example.com`"
+            ))
+        final = await link_add_to_whitelist(interaction, url)
+        if final:
+            await interaction.response.send_message(embed=success_embed(
+                f"{EMOJIS['tick_yes']} Link added!",
+                f"The link: `{url}` has been added to the whitelist."
+            ))
+        else:
+            
+            await interaction.response.send_message(embed=error_embed(
+                f"{EMOJIS['tick_no']} Link already there!",
+                f"This link: `{url}` is already there in the whitelist.\nPlease use `{prefix}automod links show` to view all the whitelisted links."
+            ))
+
+    @_automod.subcommand()
+    @commands.has_permissions(administrator=True)
+    @commands.bot_has_permissions(administrator=True)
+    
+    async def remove_whitelist_links(self, interaction: nextcord.Interaction, url: Url = None):
+        prefix = interaction.clean_prefix
+        if url is None:
+            
+            return await interaction.response.send_message(embed=error_embed(
+                f"{EMOJIS['tick_no']} Invalid Usage!",
+                f"Please provide a link to unwhitelist.\nCorrect Usage: `{prefix}automod links remove <link>`\nExample: `{prefix}automod links remove https://example.com`"
+            ))
+        final = await link_remove_from_whitelist(interaction, url)
+        if final:
+            await interaction.response.send_message(embed=success_embed(
+                f"{EMOJIS['tick_yes']} Link removed!",
+                f"The link: `{url}` has been removed from the whitelist."
+            ))
+        else:
+            await interaction.response.send_message(embed=error_embed(
+                f"{EMOJIS['tick_no']} Link not found!",
+                f"This link: `{url}` is not in the whitelist.\nPlease use `{prefix}automod links show` to view all the whitelisted links."
+            ))
+
+    @_automod.subcommand()
+    @commands.has_permissions(administrator=True)
+    @commands.bot_has_permissions(administrator=True)
+    
+    async def view_whitelist_links(self, interaction: nextcord.Interaction):
+        embed, view = await view_whitelisted_links_list(interaction)
+        try:
+            await interaction.user.send(embed=embed, view=view)
+            await interaction.message.add_reaction('👌')
+        except nextcord.Forbidden:
+            await interaction.response.send_message(f"{EMOJIS['tick_no']}I was unable to DM you the list, please enable your DMs.")
+
+    @_automod.subcommand()
+    @commands.has_permissions(administrator=True)
+    @commands.bot_has_permissions(administrator=True)
+    
+    async def am_whitelist_stuff(self, interaction: nextcord.Interaction, choice: Optional[AddRemoveConverter] = None, setting: Optional[Union[nextcord.TextChannel, nextcord.Role]] = None):
+        p = interaction.clean_prefix
+        correct_usage = f"{p}automod whitelist add/remove @role/#channel"
+        example = f"{p}automod whitelist add @boosters"
+        you_idiot = error_embed(
+            f"{EMOJIS['tick_no']} Invalid Usage!",
+            f"Correct Usage: `{correct_usage}`\nExample: `{example}`"
+        )
+        if choice is None or setting is None:
+            
+            return await interaction.response.send_message(embed=you_idiot)
+        final = await am_whitelist_func(interaction, choice, setting)
+        if final:
+            return await interaction.response.send_message(embed=success_embed(
+                f"{EMOJIS['tick_yes']} Success!",
+                f"Users {'with' if isinstance(setting, nextcord.Role) else 'in'} {setting.mention} will {'no longer' if choice else 'now'} trigger automod."
+            ))
+        else:
+            
+            return await interaction.response.send_message(embed=error_embed(
+                f"{EMOJIS['tick_no']} Failure!",
+                f"{setting.mention} is {'already' if choice else 'not'} a whitelisted {'role' if isinstance(setting, nextcord.Role) else 'channel'}."
+            ))
+            
+def setup(bot):
+    bot.add_cog(mod(bot))

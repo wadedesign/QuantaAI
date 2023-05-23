@@ -1,0 +1,286 @@
+
+import asyncio
+import nextcord
+from typing import Optional, Union, List
+from nextcord.ext import commands
+from nextcord import SelectOption
+
+
+class SelectWithMultipleOptions(nextcord.ui.Select):
+    def __init__(self, placeholder: str, options: List[str]):
+        super().__init__(
+            placeholder=placeholder,
+            min_values=1,
+            max_values=len(options),
+            options=[SelectOption(label=option.replace("_", " ").title(), value=option) for option in options],
+        )
+
+
+class BasicView(nextcord.ui.View):
+    def __init__(self, ctx: commands.Context, timeout: Optional[int] = None):
+        super().__init__(timeout=timeout)
+        self.ctx = ctx
+
+    async def interaction_check(self, interaction: nextcord.Interaction):
+        if interaction.user.id != self.ctx.author.id:
+            await interaction.response.send_message(f"This is {self.ctx.author.mention}'s command, not yours.", ephemeral=True)
+            return False
+        return True
+
+
+class Confirm(nextcord.ui.View):
+    def __init__(self, context: commands.Context, timeout: Optional[int] = 300, user: Optional[Union[nextcord.Member, nextcord.User]] = None):
+        super().__init__(timeout=timeout)
+        self.value = None
+        self.context = context
+        self.user = user or self.context.author
+
+    @nextcord.ui.button(label='Yes', style=nextcord.ButtonStyle.green)
+    async def yes(self, b, i):
+        self.value = True
+        self.stop()
+
+    @nextcord.ui.button(label='No', style=nextcord.ButtonStyle.red)
+    async def no(self, b, i):
+        self.value = False
+        self.stop()
+
+    async def interaction_check(self, interaction: nextcord.Interaction):
+        if interaction.user != self.user:
+            await interaction.response.send_message("You cannot interact in other's commands.", ephemeral=True)
+            return False
+        return True
+
+
+class Paginator(nextcord.ui.View):
+    def __init__(self, ctx: commands.Context, embeds: List[nextcord.Embed]):
+        super().__init__(timeout=None)
+        self.ctx = ctx
+        self.embeds = embeds
+        self.current = 0
+
+    async def edit(self, msg, pos):
+        em = self.embeds[pos]
+        em.set_footer(text=f"Page: {pos+1}/{len(self.embeds)}")
+        await msg.edit(embed=em)
+
+    @nextcord.ui.button(emoji='◀️', style=nextcord.ButtonStyle.blurple)
+    async def bac(self, b, i):
+        if self.current == 0:
+            return
+        await self.edit(i.message, self.current - 1)
+        self.current -= 1
+
+    @nextcord.ui.button(emoji='⏹️', style=nextcord.ButtonStyle.blurple)
+    async def stap(self, b, i):
+        await i.message.delete()
+
+    @nextcord.ui.button(emoji='▶️', style=nextcord.ButtonStyle.blurple)
+    async def nex(self, b, i):
+        if self.current + 1 == len(self.embeds):
+            return
+        await self.edit(i.message, self.current + 1)
+        self.current += 1
+
+    async def interaction_check(self, interaction):
+        if interaction.user == self.ctx.author:
+            return True
+        await interaction.response.send_message("Not your command ._.", ephemeral=True)
+
+
+class PaginatorText(nextcord.ui.View):
+    def __init__(self, ctx: commands.Context, stuff: List[str]):
+        super().__init__(timeout=None)
+        self.ctx = ctx
+        self.stuff = stuff
+        self.current = 0
+
+    async def edit(self, msg, pos):
+        await msg.edit(content=self.stuff[pos])
+
+    @nextcord.ui.button(emoji='◀️', style=nextcord.ButtonStyle.blurple)
+    async def bac(self, b, i):
+        if self.current == 0:
+            return
+        await self.edit(i.message, self.current - 1)
+        self.current -= 1
+
+    @nextcord.ui.button(emoji='⏹️', style=nextcord.ButtonStyle.blurple)
+    async def stap(self, b, i):
+        await i.message.delete()
+
+    @nextcord.ui.button(emoji='▶️', style=nextcord.ButtonStyle.blurple)
+    async def nex(self, b, i):
+        if self.current + 1 == len(self.stuff):
+            return
+        await self.edit(i.message, self.current + 1)
+        self.current += 1
+
+    async def interaction_check(self, interaction):
+        if interaction.user == self.ctx.author:
+            return True
+        await interaction.response.send_message("Not your command ._.", ephemeral=True)
+
+
+class CloseOrClaimTicket(nextcord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+
+    @nextcord.ui.button(label='Claim', style=nextcord.ButtonStyle.blurple)
+    async def claim(self, b: nextcord.ui.Button, i: nextcord.Interaction):
+        b.disabled = True
+        await i.message.edit(view=self)
+        await i.channel.send(f'This ticket has been claimed by: {i.user.mention}')
+
+    @nextcord.ui.button(label='Close', style=nextcord.ButtonStyle.red)
+    async def close(self, b: nextcord.ui.Button, i: nextcord.Interaction):
+        b.disabled = True
+        await i.message.edit(view=self)
+        await i.channel.send('Closing ticket...')
+        await asyncio.sleep(2)
+        await i.channel.edit(archived=True)
+
+
+class TicketView(nextcord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+
+    async def open_ticket(self, i):
+        pass
+
+    @nextcord.ui.button(label="Click to open ticket.", emoji='🎟️', custom_id='epicbot-tickets')
+    async def ticket(self, button: nextcord.Button, interaction: nextcord.Interaction):
+        for t in interaction.guild.threads:
+            if t.name == f'ticket-{interaction.user.id}' and not t.archived:
+                return await interaction.response.send_message(f'You already have a ticket {t.mention}', ephemeral=True)
+        channel = interaction.channel
+        thread = await channel.create_thread(name=f'ticket-{interaction.user.id}')
+        await thread.send(
+            f"📂 {interaction.user.mention} has created a ticket.",
+            allowed_mentions=nextcord.AllowedMentions(
+                everyone=False,
+                roles=False,
+                users=True,
+                replied_user=False
+            ),
+            view=CloseOrClaimTicket()
+        )
+
+
+class SelfRoleOptionSelecter(nextcord.ui.View):
+    def __init__(self, ctx: commands.Context, timeout: Optional[int] = 300):
+        super().__init__(timeout=timeout)
+        self.ctx = ctx
+        self.value = None
+
+    @nextcord.ui.select(placeholder="Please select a selfrole option.", options=[
+        SelectOption(label='Reactions', description="Users will react to get roles.", value='reaction'),
+        SelectOption(label='Dropdowns', description="Users will select roles from a dropdown menu like this!", value='dropdown'),
+        SelectOption(label='Buttons', description="Users will get roles by clicking buttons.", value='button')
+    ])
+    async def uwu(self, select: nextcord.ui.Select, interaction: nextcord.Interaction):
+        self.value = select.values[0]
+
+    @nextcord.ui.button(label="Continue", style=nextcord.ButtonStyle.blurple)
+    async def go_ahead(self, b: nextcord.Button, i: nextcord.Interaction):
+        self.stop()
+
+    @nextcord.ui.button(label="Stop", style=nextcord.ButtonStyle.red)
+    async def cancel(self, b: nextcord.Button, i: nextcord.Interaction):
+        self.value = None
+        self.stop()
+
+    async def interaction_check(self, interaction: nextcord.Interaction) -> bool:
+        if interaction.user != self.ctx.author:
+            return False
+        return True
+
+
+class SelfRoleEditor(nextcord.ui.View):
+    def __init__(self, ctx: commands.Context, timeout: Optional[int] = 300):
+        super().__init__(timeout=timeout)
+        self.ctx = ctx
+        self.value = None
+
+    @nextcord.ui.select(placeholder="Please select an option to modify!", options=[
+        SelectOption(label='Add', description="Add roles to the list.", value='add'),
+        SelectOption(label='Remove', description="Remove roles from the list.", value='remove')
+    ])
+    async def uwu(self, select: nextcord.ui.Select, interaction: nextcord.Interaction):
+        self.value = select.values[0]
+
+    @nextcord.ui.button(label="Continue", style=nextcord.ButtonStyle.blurple)
+    async def go_ahead(self, b: nextcord.Button, i: nextcord.Interaction):
+        self.stop()
+
+    @nextcord.ui.button(label="Stop", style=nextcord.ButtonStyle.red)
+    async def cancel(self, b: nextcord.Button, i: nextcord.Interaction):
+        self.value = None
+        self.stop()
+
+    async def interaction_check(self, interaction: nextcord.Interaction) -> bool:
+        if interaction.user != self.ctx.author:
+            return False
+        return True
+
+
+class SelfRoleButton(nextcord.ui.Button):
+    def __init__(self, guild: nextcord.Guild, emoji: str, role_id: int):
+        super().__init__(emoji=emoji, style=nextcord.ButtonStyle.blurple, custom_id=str(role_id))
+        self.guild = guild
+        self.emoji = emoji
+        self.role = guild.get_role(int(role_id))
+
+    async def callback(self, interaction: nextcord.Interaction):
+        if self.role is None:
+            return
+        if self.role in interaction.user.roles:
+            await interaction.user.remove_roles(self.role, reason="EpicBot Selfroles")
+            await interaction.response.send_message(f"Removed the {self.role.mention} role.", ephemeral=True)
+        else:
+            await interaction.user.add_roles(self.role, reason="EpicBot Selfroles")
+            await interaction.response.send_message(f"Gave you the {self.role.mention} role.", ephemeral=True)
+
+
+class ButtonSelfRoleView(nextcord.ui.View):
+    def __init__(self, guild: nextcord.Guild, stuff: dict):
+        super().__init__(timeout=None)
+        for role_id, emoji in stuff.items():
+            button = SelfRoleButton(guild, emoji, int(role_id))
+            self.add_item(button)
+
+
+class DropDownSelfRoleSelect(nextcord.ui.Select):
+    def __init__(self, guild: nextcord.Guild, stuff: dict):
+        options = []
+        for role_id, emoji in stuff.items():
+            role = guild.get_role(int(role_id))
+            if role is not None:
+                options.append(nextcord.SelectOption(label=role.name, emoji=emoji, value=str(role_id)))
+        if len(options) == 1:
+            options.append(nextcord.SelectOption(label="Remove role", emoji='❌', value='remove'))
+        super().__init__(placeholder="Please select a role.", options=options, custom_id='selfrole-dropdown')
+        self.guild = guild
+        self.stuff = stuff
+
+    async def callback(self, interaction: nextcord.Interaction):
+        if self.values[0] == 'remove':
+            role = self.guild.get_role(int(self.options[0].value))
+            await interaction.user.remove_roles(role, reason="EpicBot Selfroles")
+            await interaction.response.send_message(f"Removed the {role.mention} role.", ephemeral=True)
+            return
+        role = self.guild.get_role(int(self.values[0]))
+        if role is None:
+            return
+        if role in interaction.user.roles:
+            await interaction.user.remove_roles(role, reason="EpicBot Selfroles")
+            await interaction.response.send_message(f"Removed the {role.mention} role.", ephemeral=True)
+        else:
+            await interaction.user.add_roles(role, reason="EpicBot Selfroles")
+            await interaction.response.send_message(f"Gave you the {role.mention} role.", ephemeral=True)
+
+
+class DropDownSelfRoleView(nextcord.ui.View):
+    def __init__(self, guild: nextcord.Guild, stuff: dict):
+        super().__init__(timeout=None)
+        self.add_item(DropDownSelfRoleSelect(guild, stuff))

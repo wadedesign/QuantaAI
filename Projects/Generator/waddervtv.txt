@@ -1,0 +1,105 @@
+""" # need google api key
+    # Stable Diffusion AI image generatio
+    @main.subcommand() #
+    async def search_google(self, interaction: nextcord.Interaction, *, query: str):
+        await interaction.response.defer()
+    # Initialize the OpenAI language model
+        llm = OpenAI(temperature=0)
+
+        # Load tools and initialize the agent
+        tools = load_tools(["google-search"], llm=llm)
+        agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
+
+        # Perform the Google search
+        results = agent.run(query)
+
+        # Send the search results in the chat
+        response = "Top results:\n"
+        for result in results[:3]:
+            response += f"{result['title']} - {result['link']}\n"
+
+        await interaction.send(response)
+    """
+
+
+
+    """ # Todo: Make it where it doesn't auto join the voice chat and listsen, make it where it just listens and then joins the voice chat and answers the question
+    @main.subcommand(name="set_call_phrase")
+    async def set_call_phrase(self, interaction: nextcord.Interaction, call_phrase: str):
+        self.call_phrases[interaction.user.id] = call_phrase.lower()
+        await interaction.send(f"Call phrase set to: {call_phrase}")
+
+    @tasks.loop(seconds=5)  # Run the task every 5 seconds
+    async def listen_for_call_phrases(self):
+        recognizer = sr.Recognizer()
+
+        for guild in self.bot.guilds:
+            for channel in guild.voice_channels:
+                if not channel.members:
+                    continue
+
+                voice_client = None
+                for vc in self.bot.voice_clients:
+                    if vc.channel == channel:
+                        voice_client = vc
+                        break
+
+                if not voice_client:
+                    # Join the voice channel
+                    voice_client = await channel.connect()
+
+                for member in channel.members:
+                    if member.bot:
+                        continue
+
+                    with sr.Microphone() as source:
+                        print("Listening...")
+                        audio_data = recognizer.listen(source)
+                        try:
+                            input_text = recognizer.recognize_google(audio_data).strip().lower()
+                        except sr.UnknownValueError:
+                            continue
+
+                    call_phrase = self.call_phrases.get(member.id)
+                    if call_phrase and call_phrase in input_text:
+                        query = input_text
+                        response = agent({"input": query})
+                        response_text = ""
+                        for step in response["intermediate_steps"]:
+                            response_text += f"{step[1]}\n{step[0][2]}\n\n"
+
+                        # Use regular expressions to find the final answer
+                        match = re.search(r'Final Answer: (.+)', response_text)
+                        if match:
+                            answer = match.group(1)
+                        else:
+                            answer = "Sorry, I couldn't find an answer."
+
+                        # Prepare data for text-to-speech API
+                        data = data_template.copy()
+                        data['text'] = response_text
+
+                        # Send request to the text-to-speech API
+                        response = requests.post(url, json=data, headers=headers)
+
+                        # Save the response as an mp3 file
+                        with open('output.mp3', 'wb') as f:
+                            for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
+                                if chunk:
+                                    f.write(chunk)
+
+                        # Load the response.mp3 file and play it through the Discord bot
+                        audio_source = nextcord.FFmpegPCMAudio("output.mp3")
+                        voice_client.play(audio_source, after=lambda e: print(f"Error: {e}") if e else None)
+                        await asyncio.sleep(audio_source.duration)
+
+                        # Delete the response.mp3 file
+                        if os.path.exists("output.mp3"):
+                            os.remove("output.mp3")
+                        await voice_client.disconnect()
+                        break
+
+    @listen_for_call_phrases.before_loop
+    async def before_listen_for_call_phrases(self):
+        await self.bot.wait_until_ready()
+"""

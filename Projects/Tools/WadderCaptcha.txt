@@ -1,0 +1,99 @@
+import asyncio
+import random
+import nextcord
+from nextcord.ext import commands
+import io
+from captcha.image import ImageCaptcha
+import string
+
+
+class Captcha(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.verification_role = None
+
+    async def send_captcha(self, member: nextcord.Member):
+    # Generate a random alphanumeric string
+        captcha_text = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+        
+        # Create a captcha image
+        image_captcha = ImageCaptcha()
+        captcha_image = image_captcha.generate_image(captcha_text)
+        
+        # Save the image to a BytesIO object
+        image_data = io.BytesIO()
+        captcha_image.save(image_data, 'PNG')
+        image_data.seek(0)
+        
+        # Send the image as a file to the user
+        file = nextcord.File(fp=image_data, filename='captcha.png')
+        await member.send(content='Please enter the text shown in the captcha image:', file=file)
+        
+        return captcha_text
+
+    async def verify_captcha(self, member: nextcord.Member, captcha_text: str):
+        # Wait for the user to respond with the correct captcha text
+        def check(message):
+            return message.author == member and message.content.upper() == captcha_text.upper()
+
+        try:
+            await self.bot.wait_for('message', check=check, timeout=60)
+            return True
+        except asyncio.TimeoutError:
+            return False
+
+    @commands.Cog.listener()
+    async def on_member_join(self, member: nextcord.Member):
+        captcha = await self.send_captcha(member)
+        verified = await self.verify_captcha(member, captcha)
+
+        if verified:
+            # Add verification role
+            if self.verification_role is not None:
+                await member.add_roles(self.verification_role)
+        else:
+            # Kick the member for not completing the captcha
+            await member.kick(reason="Failed to complete the captcha")
+
+    @nextcord.slash_command(name="captcha", description="Commands for managing suggestions")
+    async def captcha(self, interaction: nextcord.Interaction):
+        pass
+
+
+    @captcha.subcommand()
+    @commands.has_permissions(manage_roles=True)
+    async def captcha_approve(self, interaction: nextcord.Interaction, member: nextcord.Member):
+        if self.verification_role is not None:
+            await member.add_roles(self.verification_role)
+        else:
+            await interaction.send("Verification role is not set.")
+
+    @captcha.subcommand()
+    @commands.has_permissions(manage_roles=True)
+    async def captcha_approve_all(self, interaction: nextcord.Interaction):
+        if self.verification_role is not None:
+            for member in interaction.guild.members:
+                if not self.verification_role in member.roles:
+                    await member.add_roles(self.verification_role)
+        else:
+            await interaction.send("Verification role is not set.")
+
+    @captcha.subcommand()
+    @commands.has_permissions(manage_roles=True)
+    async def captcha_challenge(self, interaction: nextcord.Interaction, member: nextcord.Member):
+        captcha = await self.send_captcha(member)
+        verified = await self.verify_captcha(member, captcha)
+
+        if verified:
+            await interaction.send(f"{member.mention} successfully completed the captcha challenge.")
+        else:
+            await interaction.send(f"{member.mention} failed to complete the captcha challenge.")
+
+    @captcha.subcommand()
+    @commands.has_permissions(manage_roles=True)
+    async def set_verification_role(self, interaction: nextcord.Interaction, role: nextcord.Role):
+        self.verification_role = role
+        await interaction.send(f"Verification role set to: {role.name}")
+
+def setup(bot):
+    bot.add_cog(Captcha(bot))

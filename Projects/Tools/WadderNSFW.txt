@@ -1,0 +1,54 @@
+import akito
+import nextcord
+from akito import Var, Link
+from nextcord.ext import commands
+
+# ! This is a NSFW cog, so it will only work in NSFW channels soon, have a disclaimer for it !
+
+class NSFW(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        
+        
+    @nextcord.slash_command(name="waddernsfw")
+    async def main(self, interaction: nextcord.Interaction):
+        pass    
+    
+    @main.subcommand(name="nsfwanal")
+    #@akito.votelock() # ** Remove this line **
+    async def anal(self, interaction: nextcord.Interaction):
+        result = await akito.nsfw('anal')
+
+        embed = nextcord.Embed(
+            title = "🔞 Anal",
+            color = interaction.user.top_role.color
+        )
+        embed.set_image(url = result['image'])
+        await interaction.send(embed = embed)
+        
+    @main.subcommand(name="nsfwbj")
+    #@akito.votelock() # ** Remove this line **
+    async def blowjob(self, interaction: nextcord.Interaction):
+        result = await akito.nsfw('bj')
+
+        embed = nextcord.Embed(
+            title = "🔞 Blowjob",
+            color = interaction.user.top_role.color
+        )
+        embed.set_image(url = result['image'])
+        await interaction.send(embed = embed)
+        
+    @main.subcommand(name="nsfwbj")
+    #@akito.votelock() # ** Remove this line **
+    async def boob(self, interaction: nextcord.Interaction):
+        result = await akito.nsfw('boobs')
+
+        embed = nextcord.Embed(
+            title = "🔞 Boobs",
+            color = interaction.user.top_role.color
+        )
+        embed.set_image(url = result['image'])
+        await interaction.respond(embed = embed)
+        
+def setup(bot):
+    bot.add_cog(NSFW(bot))

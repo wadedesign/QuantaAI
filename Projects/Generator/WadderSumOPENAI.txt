@@ -1,0 +1,118 @@
+
+
+# ! Works to get the prompt
+
+import logging
+import os
+import nextcord # add this
+import openai
+from langchain import OpenAI
+from langchain.chains.summarize import load_summarize_chain
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from nextcord.ext import commands
+from pytube import YouTube
+
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
+
+
+def setup(bot: commands.Bot):
+    bot.add_cog(SummaryCog(bot)) # please put this on bottom lol
+
+
+def progress_func(chunk=None, file_handle=None, remaining=None):
+    """progress call back function for the Summarize function"""
+    logger.info("progressing...")
+
+
+def complete_func(self, path):
+    """complete callback function for the Summarize function"""
+    logger.info("complete")
+    logger.info(self)
+    logger.info(path)
+
+async def send_large_message(interaction: nextcord.Interaction, content: str, max_length=2000):
+    if len(content) <= max_length:
+        await interaction.send(content)
+    else:
+        parts = [content[i:i + max_length] for i in range(0, len(content), max_length)]
+        for part in parts:
+            await interaction.send(part)
+
+
+
+async def on_application_command_error(interaction: nextcord.Interaction, error):
+    if isinstance(error, commands.CommandInvokeError):
+        logger.error(f"In {interaction.command}: {error.original}")
+    if not interaction.response.is_done():
+        await interaction.send(content="An error occurred while processing the command.")
+async def download_yt_file(link):
+    yt = YouTube(
+        link,
+        on_progress_callback=progress_func,
+        on_complete_callback=complete_func,
+        use_oauth=True,
+        allow_oauth_cache=True,
+    )
+    logger.info("Processing:  " + yt.title)
+    stream = yt.streams.filter(only_audio=True).last()
+    try:
+        ytFile = stream.download(os.getenv("SAVE_PATH"))
+        logger.info(f"Processing complete. saving to path {ytFile}")
+    except Exception as e:
+        ytFile = None
+        logger.info(f"Error processing {e}")
+    return ytFile
+
+
+class SummaryCog(commands.Cog):
+    def __init__(self, bot: commands.Bot) -> None:
+        self.bot = bot
+        self.is_busy = False 
+                            # this is the name     # this is the description
+    @nextcord.slash_command(name="summary", description="Summarize a video")
+    async def get_summary(self, interaction: nextcord.Interaction, link):
+        await interaction.response.defer()
+
+        ytFile = await download_yt_file(link)
+
+        audio_file = open(ytFile, "rb")
+        transcript = openai.Audio.transcribe("whisper-1", audio_file)
+        transcript = str(transcript)
+        logger.info(transcript)
+        prompt = f"Write a Title for the transcript that is under 15 words. " \
+                 f"Then write: '--Summary--' " \
+                 f"Write 'Summary' as a Heading 1. " \
+                 f"Write a summary of the provided transcript. " \
+                 f"Then  write: '--Additional Info--'. " \
+                 f"Then return a list of the main points in the provided transcript. " \
+                 f"Then return a list of action items. " \
+                 f"Then return a list of follow up questions. " \
+                 f"Then return a list of potential arguments against the transcript." \
+                 f"For each list, return a Heading 2 before writing the list items. " \
+                 f"Limit each list item to 200 words, and return no more than 20  points per list. " \
+                 f"Transcript: {transcript}"
+
+        openai_api_key = os.getenv("OPENAI_API_KEY")
+        openai.api_key = openai_api_key
+
+        response = openai.Completion.create(
+            engine="text-davinci-003",
+            prompt=prompt,
+            max_tokens=2048,
+            n=1,
+            stop=None,
+            temperature=0.7,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0
+        )
+
+        result = response.choices[0].text.strip()
+        await send_large_message(interaction, result)
+        return result
+
+def setup(bot: commands.Bot):
+    bot.add_cog(SummaryCog(bot))

@@ -1,0 +1,56 @@
+Tasks: 
+
+- Updated Weather Cog (add more weather data) (DONE)
+
+- Add Flight APIS
+    * Flight Tracker
+    * Flight Logger (Notion)
+    * Download Chart data
+
+
+- Twitter Webhook 
+    * Wadder Projects Twitter Page 
+        - update got the keys and everything, but it is not tweeting!
+
+
+- Machine Learning Cog
+    * Using Pytorch 
+        - gathers the last 100 messages 
+
+
+- Make the ECO command way better and UI easier!
+
+
+
+- Modals Example is made 
+    - do more
+
+
+- Better Ticket Bot (Make a Seperate One) (DONE!!)
+
+
+- Better Help Commands
+    * Dynmiac 
+
+
+- Make the ModMail more personaly
+
+- Make the AFK commands more personally
+
+- Add a better currency cog (Works, but needs some heavy work!)
+
+
+- Good Partnership 
+ ̶ ̶ ̶ ̶*̶ ̶M̶a̶k̶e̶ ̶i̶t̶ ̶l̶o̶o̶k̶ ̶b̶e̶t̶t̶e̶r̶!̶ ̶&̶ ̶G̶i̶v̶e̶ ̶a̶ ̶h̶e̶l̶p̶ ̶c̶o̶m̶m̶a̶n̶d̶ ̶t̶o̶ ̶u̶n̶d̶e̶r̶s̶t̶a̶n̶d̶ ̶h̶o̶w̶ ̶t̶o̶ ̶u̶s̶e̶ ̶i̶t̶!̶
+
+- Provide all Descriptions for Commands (NOT DONE)
+
+- Using the StockGame, use the stocks from the wadderweb
+
+- Welcome Message is set, but need to fix the issue. Profile pic is in the top left not center. 
+
+- DiscordRVS 
+
+-̶ ̶M̶a̶y̶b̶e̶ ̶N̶e̶e̶d̶ ̶t̶o̶ ̶d̶e̶l̶e̶t̶e̶ ̶t̶h̶e̶ ̶D̶M̶ ̶w̶e̶l̶c̶o̶m̶e̶ ̶m̶e̶s̶s̶a̶g̶e̶s̶!̶
+
+-̶ ̶D̶e̶f̶.̶ ̶D̶e̶l̶e̶t̶e̶ ̶t̶h̶e̶ ̶B̶i̶r̶t̶h̶d̶a̶y̶.̶
