@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 from nextcord.ext import commands
 from pretty_help import PrettyHelp
 from Logs.logger import setup_logger
-import requests
 
+# added by wade
 
 ending_note = "For additional assistance, contact a moderator."
 color = 0x00FF00
