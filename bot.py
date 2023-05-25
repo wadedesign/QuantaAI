@@ -1,3 +1,4 @@
+import asyncio
 import importlib
 import importlib.util
 import os
@@ -6,6 +7,8 @@ from dotenv import load_dotenv
 from nextcord.ext import commands
 from pretty_help import PrettyHelp
 from Logs.logger import setup_logger
+import requests
+
 
 ending_note = "For additional assistance, contact a moderator."
 color = 0x00FF00
@@ -16,6 +19,7 @@ intents = nextcord.Intents.all()
 intents.guild_messages = True
 bot = commands.Bot(command_prefix='!', intents=nextcord.Intents.all(), help_command=PrettyHelp())
 YOUR_USER_ID = int(os.getenv("YOUR_USER_ID"))
+
 
 
 @bot.event
@@ -31,21 +35,29 @@ async def update_presence():
     await bot.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name=f"{num_guilds} guilds | Check out: github.com/wadder12"))
 
 
-with open(r'TODO/Update/changelog.TOML', 'r', encoding='utf-8') as f:
-    changelog = f.read()
-changelog_channel_id = 1099128349978275863
 
 
 @bot.event
 async def on_ready():
-    await update_presence()
-    print('Logged in as {0.user}'.format(bot))
-    changelog_channel = bot.get_channel(changelog_channel_id)
-    embed = nextcord.Embed(title="Changelog for Wadder", description=changelog, color=0xFF5733)
-    embed.add_field(name="Developer", value="Wade#1781", inline=False)
-    await changelog_channel.send(embed=embed)
+    try:
+        with open(r'TODO/Update/changelog.TOML', 'r', encoding='utf-8') as f:
+            changelog = f.read()
+        channel_id = 1099128349978275863  # Replace with the ID of the channel you want to send the embed to
+
+        channel = bot.get_channel(channel_id)
+        if channel:
+            embed = nextcord.Embed(title="Changelog for Wadder", description=changelog, color=0xFF5733)
+            embed.add_field(name="Developer", value="Wade#1781", inline=False)
+            await channel.send(embed=embed)
+        else:
+            print(f"Unable to find channel with ID: {channel_id}")
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
 
 
+
+
+    
 @bot.event
 async def on_guild_join(guild):
     await update_presence()
