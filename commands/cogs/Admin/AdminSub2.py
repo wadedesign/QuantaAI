@@ -16,7 +16,7 @@ class WadderCommandsV1(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @nextcord.slash_command(name="wadderv1")
+    @nextcord.slash_command(name="quanta1")
     async def main(self, interaction: nextcord.Interaction):
         pass    
 

@@ -2,7 +2,8 @@ import nextcord
 from nextcord.ext import commands
 import tweepy
 
-# Set up Twitter API credentials
+# Set up Twitter API credentials 
+# ! Replace the values below with your own Twitter API credentials
 consumer_key = ''
 consumer_secret = ''
 access_token = ''

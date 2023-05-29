@@ -170,7 +170,7 @@ class WadderVTV(commands.Cog):
         #except Exception as e:
             #print(f"Error: {e}")
             #await interaction.send(f"Sorry, I couldn't find a result for '{query}'.")
-
+    # 
     # ** Serp Google Search  (Works Very Well, this was a bitch) **
     @main.subcommand(name="serp")
     async def search_google(self, interaction: nextcord.Interaction, *, query: str):
@@ -190,7 +190,8 @@ class WadderVTV(commands.Cog):
         response = f"Result:\n{result}"
         await interaction.send(response)
     
-    # ** Give a url image link and have it explain it and what it means
+    # ** Give a url image link and have it explain it and what it means 
+    # ! Works still
     @main.subcommand(name="scenexplain", description="Explain a scene with a url image")
     async def scene_explain(self, interaction: nextcord.Interaction, *, image_url: str):
         await interaction.response.defer()
