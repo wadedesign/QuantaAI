@@ -1,3 +1,4 @@
+import datetime
 import nextcord
 from nextcord.ext import commands
 import asyncio
@@ -27,7 +28,10 @@ class ScheduleCog(commands.Cog):
 
         del self.scheduled_events[event_key]
 
-    @nextcord.slash_command(name="schedulemessage", description="Schedules a message to be sent after the specified delay (in seconds).")
+    @nextcord.slash_command(name="quanta4")
+    async def main(self, interaction: nextcord.Interaction):
+        pass
+    @main.subcommand(name="schedulemessage", description="Schedules a message to be sent after the specified delay (in seconds).")
     @commands.has_permissions(administrator=True)
     async def schedulemessage(self, interaction: nextcord.Interaction, delay: int, message: str):
         await interaction.response.send_message(f"Scheduling your message in {delay} seconds.")
@@ -38,6 +42,37 @@ class ScheduleCog(commands.Cog):
 
         self.scheduled_events[event_key] = (t, function, args, {})
         asyncio.create_task(self.execute_scheduled_event(event_key))
+        
+    @main.subcommand() # added 29th of May
+    @commands.is_owner()
+    async def whisper(self, interaction: nextcord.Interaction, user_id: int, *, msg: str):
+        """Dm users."""
+        user = await self.bot.fetch_user(user_id)
+        try:
+            e = nextcord.Embed(colour=nextcord.Colour.red())
+            e.title = "You've recieved a message from a developer!"
+            e.add_field(name="Developer:", value=interaction.message.author, inline=False)
+            e.add_field(name="Time:", value=datetime.datetime.now().strftime("%A, %B %-d %Y at %-I:%M%p").replace("PM", "pm").replace("AM", "am"), inline=False)
+            e.add_field(name="Message:", value=msg, inline=False)
+            e.set_thumbnail(url=interaction.message.author.avatar_url)
+            await user.send(embed=e)
+        except:
+            await interaction.send(':x: Failed to send message to user_id `{}`.'.format(user_id))
+        else:
+            await interaction.send('Succesfully sent message to {}'.format(user_id))
+            
+
+    @main.subcommand(name="custom_embed", description="Create a custom embed.")
+    @commands.has_permissions(administrator=True)
+    async def custom_embed(self, interaction: nextcord.Interaction, channel: nextcord.TextChannel, title: str, description: str, color: int):
+        await interaction.response.defer()
+        
+        # Create the embed
+        embed = nextcord.Embed(title=title, description=description, color=nextcord.Color(color))
+
+        # Send the embed
+        await channel.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(ScheduleCog(bot))
