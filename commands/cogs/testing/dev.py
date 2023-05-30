@@ -417,6 +417,42 @@ class Developer(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+            
+    @dev.subcommand(name="cocktail", description="Search cocktail recipes")
+    async def cocktail(self, interaction: nextcord.Interaction, search_term: str):
+        try:
+            url = f"https://www.thecocktaildb.com/api/json/v1/1/search.php?s={search_term}"
+            response = requests.get(url)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            data = response.json()
+
+            # Create Embed
+            embed = nextcord.Embed(title=f"Cocktail Recipes: {search_term.title()}", color=nextcord.Color.blue())
+
+            if "drinks" in data:
+                drinks = data["drinks"]
+                
+                for drink in drinks:
+                    name = drink["strDrink"]
+                    category = drink["strCategory"]
+                    instructions = drink["strInstructions"]
+
+                    embed.add_field(name=name, value=f"Category: {category}\nInstructions: {instructions}", inline=False)
+
+            else:
+                embed.description = "No cocktail recipes found."
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching cocktail recipes.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
 def setup(bot):
     bot.add_cog(Developer(bot))
 
