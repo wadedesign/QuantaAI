@@ -46,13 +46,15 @@ async def on_ready():
 
         channel = bot.get_channel(channel_id)
         if channel:
-            embed = nextcord.Embed(title="Changelog for Wadder", description=changelog, color=0xFF5733)
-            embed.add_field(name="Developer", value="Wade#1781", inline=False)
+            embed = nextcord.Embed(title="Changelog for Wadder", description=changelog, color=nextcord.Color.orange())
+            embed.set_author(name="Wade", icon_url="https://example.com/wade_avatar.png")
+            embed.set_footer(text="Bot developed by Wade#1781")
             await channel.send(embed=embed)
         else:
             print(f"Unable to find channel with ID: {channel_id}")
     except Exception as e:
         print(f"An error occurred: {str(e)}")
+
 
 
 
