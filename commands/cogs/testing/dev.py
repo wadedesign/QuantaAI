@@ -542,8 +542,8 @@ class Developer(commands.Cog):
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
             
-    @dev.subcommand(name="memers", description="Get popular memes")
-    async def memesr(self, interaction: nextcord.Interaction):
+    @dev.subcommand(name="memeers", description="Get popular memes")
+    async def memers(self, interaction: nextcord.Interaction):
         try:
             url = "https://api.imgflip.com/get_memes"
 
@@ -562,7 +562,8 @@ class Developer(commands.Cog):
                 name = meme["name"]
                 image_url = meme["url"]
 
-                embed.add_field(name=name, value=f"[View Image]({image_url})", inline=False)
+                embed.add_field(name=name, value="\u200b", inline=False)  # Add an empty value for spacing
+                embed.set_image(url=image_url)  # Set the image URL for each meme
 
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
