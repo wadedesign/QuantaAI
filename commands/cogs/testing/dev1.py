@@ -161,5 +161,39 @@ class Developer1(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+            
+    @dev2.subcommand(name="usaspending", description="Get information from the USAspending.gov API")
+    async def usaspending(self, interaction: nextcord.Interaction):
+        try:
+            url = "https://api.usaspending.gov/api/v2/references/toptier_agencies/"
+
+            response = requests.get(url)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            data = response.json()
+
+            if data and "results" in data:
+                agencies = data["results"]
+
+                agency_list = "\n".join([agency["name"] for agency in agencies])
+
+                embed = nextcord.Embed(title="Top-Tier Agencies", color=nextcord.Color.blue())
+                embed.description = agency_list
+
+                await interaction.response.send_message(embed=embed, ephemeral=True)
+
+            else:
+                embed = nextcord.Embed(title="Top-Tier Agencies", color=nextcord.Color.blue())
+                embed.description = "No agencies found."
+                await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching information from the USAspending.gov API.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
 def setup(bot):
     bot.add_cog(Developer1(bot))
