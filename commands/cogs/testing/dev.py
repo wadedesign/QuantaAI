@@ -112,7 +112,7 @@ class Developer(commands.Cog):
             for i in range(1, number + 1):
                 result *= i
 
-            embed = nextcord.Embed(title="Factorial Calculation", color=nextcord.Color.dark_cyan())
+            embed = nextcord.Embed(title="Factorial Calculation", color=nextcord.Color.blurple())
             embed.add_field(name="Number", value=number, inline=True)
             embed.add_field(name="Factorial", value=result, inline=True)
 
@@ -184,6 +184,50 @@ class Developer(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+            
+    @dev.subcommand(name="serverdetails", description="Get detailed information about the server")
+    async def serverdetails(self, interaction: nextcord.Interaction):
+        try:
+            guild = interaction.guild
+
+            # Role Hierarchy
+            roles = guild.roles[1:]  # Exclude @everyone role
+            sorted_roles = sorted(roles, key=lambda r: r.position, reverse=True)
+            role_hierarchy = "\n".join([f"{role.name}: {role.position}" for role in sorted_roles])
+
+            # Member Presence
+            online_members = []
+            idle_members = []
+            offline_members = []
+
+            for member in guild.members:
+                if member.status == nextcord.Status.online:
+                    online_members.append(member.display_name)
+                elif member.status == nextcord.Status.idle:
+                    idle_members.append(member.display_name)
+                else:
+                    offline_members.append(member.display_name)
+
+            # Create Embed
+            embed = nextcord.Embed(title="Server Details", color=nextcord.Color.blurple())
+            embed.set_thumbnail(url=guild.icon.url)
+            embed.add_field(name="Member Count", value=f"Total: {guild.member_count}\nOnline: {len(online_members)}\nIdle: {len(idle_members)}\nOffline: {len(offline_members)}", inline=False)
+            embed.add_field(name="Role Hierarchy", value=role_hierarchy, inline=False)
+            embed.add_field(name="Online Members", value=", ".join(online_members) if online_members else "None", inline=False)
+            embed.add_field(name="Idle Members", value=", ".join(idle_members) if idle_members else "None", inline=False)
+            embed.add_field(name="Offline Members", value=", ".join(offline_members) if offline_members else "None", inline=False)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while executing the command.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
+
 
 
 def setup(bot):
