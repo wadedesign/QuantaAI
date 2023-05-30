@@ -52,21 +52,23 @@ async def on_ready():
 
             # Add buttons
             view = nextcord.ui.View()
-            view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.link, label="Visit Website", emoji="🌐", url="https://example.com"))
-            view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.primary, label="Support Server", emoji="🤝", url="https://example.com/support"))
-
-            row1 = nextcord.ui.VBox()
-            row1.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.secondary, label="GitHub Repo", emoji="🔗", url="https://github.com/your_username/your_repo"))
-            row1.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.success, label="Documentation", emoji="📚", url="https://example.com/docs"))
-            row1.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.danger, label="Bug Report", emoji="🐛", url="https://example.com/bug-report"))
-
-            view.add_item(row1)
+            
+            select = nextcord.ui.Select(placeholder="Choose an option", min_values=1, max_values=1)
+            select.add_option(label="Visit Website", emoji="🌐", url="https://example.com")
+            select.add_option(label="Support Server", emoji="🤝", url="https://example.com/support")
+            select.add_option(label="GitHub Repo", emoji="🔗", url="https://github.com/your_username/your_repo")
+            select.add_option(label="Documentation", emoji="📚", url="https://example.com/docs")
+            select.add_option(label="Bug Report", emoji="🐛", url="https://example.com/bug-report")
+            
+            view.add_item(select)
 
             await channel.send(embed=embed, view=view)
         else:
             print(f"Unable to find channel with ID: {channel_id}")
     except Exception as e:
         print(f"An error occurred: {str(e)}")
+
+
 
 
 
