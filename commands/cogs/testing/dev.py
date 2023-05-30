@@ -3,6 +3,7 @@ import nextcord
 from nextcord.ext import commands
 import os
 from nextcord.ui import Button
+import requests
 
 class Developer(commands.Cog):
     def __init__(self, bot):
@@ -216,6 +217,31 @@ class Developer(commands.Cog):
             embed.add_field(name="Online Members", value=", ".join(online_members) if online_members else "None", inline=False)
             embed.add_field(name="Idle Members", value=", ".join(idle_members) if idle_members else "None", inline=False)
             embed.add_field(name="Offline Members", value=", ".join(offline_members) if offline_members else "None", inline=False)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while executing the command.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
+
+
+    @dev.subcommand(name="catfact", description="Get a random cat fact")
+    async def catfact(self, interaction: nextcord.Interaction):
+        try:
+            # Fetch data from the API
+            response = requests.get("https://cat-fact.herokuapp.com/facts/random")
+            data = response.json()
+
+            # Extract the cat fact
+            cat_fact = data["text"]
+
+            # Create Embed
+            embed = nextcord.Embed(title="Random Cat Fact", description=cat_fact, color=nextcord.Color.orange())
 
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
