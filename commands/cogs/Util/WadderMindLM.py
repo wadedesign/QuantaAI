@@ -79,7 +79,7 @@ class WadderMindML:
                 self.total_messages = data['total_messages']
 
     def save_data(self, server_id):
-        file_name = f'data_{server_id}.json'
+        file_name = f'data/data_{server_id}.json'
 
         data = {
             'words': {k: dict(v) for k, v in self.words.items()},

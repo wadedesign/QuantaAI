@@ -17,7 +17,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 intents = nextcord.Intents.all()
 intents.guild_messages = True
-bot = commands.Bot(command_prefix='!', intents=nextcord.Intents.all(), help_command=PrettyHelp())
+bot = commands.Bot(command_prefix='!', intents=nextcord.Intents.all(), help_command=PrettyHelp(), activity = nextcord.Activity(type=nextcord.ActivityType.listening, name="the community"))
 YOUR_USER_ID = int(os.getenv("YOUR_USER_ID"))
 
 
@@ -40,9 +40,9 @@ async def update_presence():
 @bot.event
 async def on_ready():
     try:
-        with open(r'TODO/Update/changelog.TOML', 'r', encoding='utf-8') as f:
+        with open(r'TODO/Update/changelog1.md', 'r', encoding='utf-8') as f:
             changelog = f.read()
-        channel_id = 1099128349978275863  # Replace with the ID of the channel you want to send the embed to
+        channel_id = 1112958990171775089  # Replace with the ID of the channel you want to send the embed to
 
         channel = bot.get_channel(channel_id)
         if channel:
