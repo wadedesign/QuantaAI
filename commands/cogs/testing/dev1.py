@@ -335,12 +335,12 @@ class Developer1(commands.Cog):
 
             # Add buttons for webcast and Wikipedia links
             buttons = [
-                nextcord.Button(label="Webcast", style=nextcord.ButtonStyle.link, url=webcast_url),
-                nextcord.Button(label="Wikipedia", style=nextcord.ButtonStyle.link, url=wikipedia_url)
+                nextcord.Button(style=nextcord.ButtonStyle.link, url=webcast_url, label="Webcast"),
+                nextcord.Button(style=nextcord.ButtonStyle.link, url=wikipedia_url, label="Wikipedia")
             ]
             action_row = nextcord.ActionRow(*buttons)
 
-            await interaction.response.send_message(embed=embed, components=action_row, ephemeral=True)
+            await interaction.response.send_message(embed=embed, components=[action_row], ephemeral=True)
 
         except Exception as e:
             print(str(e))
