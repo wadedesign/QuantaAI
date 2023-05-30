@@ -129,6 +129,37 @@ class Developer1(commands.Cog):
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
+    @dev2.subcommand(name="healthcare", description="Get information from the Healthcare.gov API")
+    async def healthcare(self, interaction: nextcord.Interaction):
+        try:
+            url = "https://www.healthcare.gov/api/index.json"
 
+            response = requests.get(url)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            data = response.json()
+
+            if data and "topics" in data:
+                topics = data["topics"]
+                topic_list = "\n".join(topics)
+
+                embed = nextcord.Embed(title="Healthcare Topics", color=nextcord.Color.blue())
+                embed.description = topic_list
+
+                await interaction.response.send_message(embed=embed, ephemeral=True)
+
+            else:
+                embed = nextcord.Embed(title="Healthcare Topics", color=nextcord.Color.blue())
+                embed.description = "No topics found."
+                await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching information from the Healthcare.gov API.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
 def setup(bot):
     bot.add_cog(Developer1(bot))
