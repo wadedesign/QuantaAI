@@ -104,6 +104,26 @@ class Developer(commands.Cog):
             error_embed.title = "Error Occurred"
             error_embed.description = "An error occurred while executing the command."
             await interaction.send(embed=error_embed)
+            
+    @dev.subcommand(name="factorial", description="Calculate the factorial of a number")
+    async def factorial(self, interaction: nextcord.Interaction, number: int):
+        try:
+            result = 1
+            for i in range(1, number + 1):
+                result *= i
+
+            embed = nextcord.Embed(title="Factorial Calculation", color=nextcord.Color.dark_cyan())
+            embed.add_field(name="Number", value=number, inline=True)
+            embed.add_field(name="Factorial", value=result, inline=True)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(color=nextcord.Color.red())
+            error_embed.title = "Error Occurred"
+            error_embed.description = "An error occurred while executing the command."
+            await interaction.send(embed=error_embed)
 
 def setup(bot):
     bot.add_cog(Developer(bot))
