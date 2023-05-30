@@ -53,6 +53,44 @@ class Developer1(commands.Cog):
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
 
+    @dev2.subcommand(name="fbiwanted", description="Get the FBI's most wanted list")
+    async def fbiwanted(self, interaction: nextcord.Interaction):
+        try:
+            url = "https://api.fbi.gov/wanted/v1/list"
+
+            response = requests.get(url)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            data = response.json()
+
+            if data and "items" in data:
+                wanted_list = data["items"]
+                embed = nextcord.Embed(title="FBI's Most Wanted", color=nextcord.Color.red())
+
+                for wanted in wanted_list:
+                    title = wanted["title"]
+                    description = wanted["description"]
+                    image_url = wanted["images"][0]["large"]
+
+                    embed.add_field(name=title, value=description, inline=False)
+                    embed.set_image(url=image_url)
+
+                await interaction.response.send_message(embed=embed, ephemeral=True)
+
+            else:
+                embed = nextcord.Embed(title="FBI's Most Wanted", color=nextcord.Color.red())
+                embed.description = "No wanted list found."
+                await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching the FBI's most wanted list.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
+
 
 
 
