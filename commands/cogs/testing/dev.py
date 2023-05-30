@@ -7,8 +7,12 @@ from nextcord.ui import Button
 class Developer(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        
+    @nextcord.slash_command(name="dev")
+    async def dev(self, interaction: nextcord.Interaction):
+        pass
 
-    @nextcord.slash_command(name="developer", description="Get developer info")
+    @dev.subcommand(name="developer", description="Get developer info")
     async def developer(self, interaction: nextcord.Interaction):
         config_path = os.path.join(os.getcwd(), "botconfig", "config.json")
         with open(config_path, "r") as config_file:
@@ -32,7 +36,8 @@ class Developer(commands.Cog):
             error_embed.title = "Error Occurred"
             error_embed.description = "An error occurred while executing the command."
             await interaction.send(embed=error_embed)
-    @nextcord.slash_command(name="commands2", description="Get list of available commands")
+    
+    @dev.subcommand(name="commands2", description="Get list of available commands")
     async def commands2(self, interaction: nextcord.Interaction):
         try:
             command_list = []
@@ -42,6 +47,28 @@ class Developer(commands.Cog):
 
             embed = nextcord.Embed(title="Available Commands", color=nextcord.Color.green())
             embed.description = "\n".join(command_list)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(color=nextcord.Color.red())
+            error_embed.title = "Error Occurred"
+            error_embed.description = "An error occurred while executing the command."
+            await interaction.send(embed=error_embed)
+
+
+    @dev.subcommand(name="rolemembers", description="List members in a specific role")
+    async def rolemembers(self, interaction: nextcord.Interaction, role: nextcord.Role):
+        try:
+            members = role.members
+
+            if members:
+                member_list = "\n".join([member.name for member in members])
+                embed = nextcord.Embed(title=f"Members in {role.name}", color=nextcord.Color.teal())
+                embed.description = member_list
+            else:
+                embed = nextcord.Embed(title=f"No members in {role.name}", color=nextcord.Color.red())
 
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
