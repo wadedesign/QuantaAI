@@ -347,6 +347,41 @@ class Developer1(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+            
+    @dev2.subcommand(name="space_agencies", description="Fetch information about top space agencies")
+    async def space_agencies(self, interaction: nextcord.Interaction):
+        try:
+            url = "https://ll.thespacedevs.com/2.2.0/agencies/?limit=10"
+            response = requests.get(url)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            data = response.json()
+            agencies = data["results"]
+
+            # Create an embed to display the space agencies information
+            embed = nextcord.Embed(title="Top Space Agencies", color=nextcord.Color.blue())
+
+            for agency in agencies:
+                name = agency["name"]
+                country = agency["country"]
+                description = agency["description"]
+
+                embed.add_field(name=":star: Agency", value=name, inline=False)
+                embed.add_field(name=":earth_americas: Country", value=country, inline=False)
+                embed.add_field(name=":pencil: Description", value=description, inline=False)
+                embed.add_field(name="\u200b", value="\u200b", inline=False)  # Empty field for spacing
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching the space agencies information.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
+
 
 
 def setup(bot):
