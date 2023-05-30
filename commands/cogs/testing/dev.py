@@ -541,6 +541,39 @@ class Developer(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+            
+    @dev.subcommand(name="memers", description="Get popular memes")
+    async def memesr(self, interaction: nextcord.Interaction):
+        try:
+            url = "https://api.imgflip.com/get_memes"
+
+            response = requests.get(url)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            data = response.json()
+
+            # Extract meme data from the response
+            memes = data["data"]["memes"]
+
+            # Create Embed
+            embed = nextcord.Embed(title="Popular Memes", color=nextcord.Color.blue())
+
+            for meme in memes:
+                name = meme["name"]
+                image_url = meme["url"]
+
+                embed.add_field(name=name, value=f"[View Image]({image_url})", inline=False)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching popular memes.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
 def setup(bot):
     bot.add_cog(Developer(bot))
 
