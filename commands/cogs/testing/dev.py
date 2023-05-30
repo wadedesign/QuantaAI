@@ -32,7 +32,25 @@ class Developer(commands.Cog):
             error_embed.title = "Error Occurred"
             error_embed.description = "An error occurred while executing the command."
             await interaction.send(embed=error_embed)
+    @nextcord.slash_command(name="commands2", description="Get list of available commands")
+    async def commands2(self, interaction: nextcord.Interaction):
+        try:
+            command_list = []
+            for command in self.bot.commands:
+                if not command.hidden:
+                    command_list.append(f"`/{command.name}` - {command.description}")
 
+            embed = nextcord.Embed(title="Available Commands", color=nextcord.Color.green())
+            embed.description = "\n".join(command_list)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(color=nextcord.Color.red())
+            error_embed.title = "Error Occurred"
+            error_embed.description = "An error occurred while executing the command."
+            await interaction.send(embed=error_embed)
 
 def setup(bot):
     bot.add_cog(Developer(bot))
