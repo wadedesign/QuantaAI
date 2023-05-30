@@ -237,13 +237,17 @@ class Developer1(commands.Cog):
 
             # Add fields to the embed for each transaction
             for transaction in data:
-                house_id = transaction["house_id"]
-                stock_symbol = transaction["stock_symbol"]
-                quantity = transaction["quantity"]
-                price = transaction["price"]
+                transaction_date = transaction["transaction_date"]
+                ticker = transaction["ticker"]
+                asset_description = transaction["asset_description"]
+                transaction_type = transaction["type"]
+                amount = transaction["amount"]
+                representative = transaction["representative"]
+                district = transaction["district"]
+                state = transaction["state"]
 
-                field_value = f"House ID: {house_id}\nStock Symbol: {stock_symbol}\nQuantity: {quantity}\nPrice: {price}"
-                embed.add_field(name="Transaction", value=field_value, inline=False)
+                field_value = f"Ticker: {ticker}\nAsset Description: {asset_description}\nType: {transaction_type}\nAmount: {amount}\nRepresentative: {representative}\nDistrict: {district}\nState: {state}"
+                embed.add_field(name=f"Transaction Date: {transaction_date}", value=field_value, inline=False)
 
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
