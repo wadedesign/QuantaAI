@@ -147,6 +147,43 @@ class Developer(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+    @dev.subcommand(name="serverinfo2", description="Get information about the server")
+    async def serverinfo2(self, interaction: nextcord.Interaction):
+        try:
+            guild = interaction.guild
+
+            # Member Statistics
+            member_count = guild.member_count
+            online_count = len([member for member in guild.members if member.status != nextcord.Status.offline])
+            bot_count = len([member for member in guild.members if member.bot])
+
+            # Channel Counts
+            text_channel_count = len(guild.text_channels)
+            voice_channel_count = len(guild.voice_channels)
+            category_count = len(guild.categories)
+
+            # Server Features
+            features = ", ".join(guild.features) if guild.features else "None"
+
+            # Create Embed
+            embed = nextcord.Embed(title="Server Information", color=nextcord.Color.green())
+            embed.set_thumbnail(url=guild.icon.url)
+            embed.add_field(name="Name", value=guild.name, inline=True)
+            embed.add_field(name="Owner", value=guild.owner.mention, inline=True)
+            embed.add_field(name="Members", value=f"Total: {member_count}\nOnline: {online_count}\nBots: {bot_count}", inline=False)
+            embed.add_field(name="Channels", value=f"Text Channels: {text_channel_count}\nVoice Channels: {voice_channel_count}\nCategories: {category_count}", inline=False)
+            embed.add_field(name="Features", value=features, inline=False)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while executing the command.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
 
 def setup(bot):
