@@ -272,6 +272,41 @@ class Developer1(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+            
+    @dev2.subcommand(name="carbonintensity", description="Fetch carbon intensity data")
+    async def carbonintensity(self, interaction: nextcord.Interaction):
+        try:
+            url = "https://api.carbonintensity.org.uk/intensity/date"
+
+            response = requests.get(url)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            data = response.json()
+
+            # Extract the data for the latest date
+            latest_date_data = data["data"][0]
+
+            # Get the date and intensity values
+            date = latest_date_data["from"]
+            intensity_forecast = latest_date_data["intensity"]["forecast"]
+            intensity_actual = latest_date_data["intensity"]["actual"]
+
+            # Create an embed to display the carbon intensity data
+            embed = nextcord.Embed(title="Carbon Intensity Data", color=nextcord.Color.teal())
+            embed.add_field(name="Date", value=date, inline=False)
+            embed.add_field(name="Forecast Intensity", value=intensity_forecast, inline=True)
+            embed.add_field(name="Actual Intensity", value=intensity_actual, inline=True)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching the carbon intensity data.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
 def setup(bot):
     bot.add_cog(Developer1(bot))
