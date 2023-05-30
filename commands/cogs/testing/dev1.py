@@ -327,14 +327,20 @@ class Developer1(commands.Cog):
 
             # Create an embed to display the launch information
             embed = nextcord.Embed(title="Latest SpaceX Launch", color=nextcord.Color.blue())
-            embed.add_field(name="Mission Name", value=mission_name, inline=False)
-            embed.add_field(name="Launch Date (UTC)", value=launch_date_utc, inline=False)
-            embed.add_field(name="Rocket", value=rocket_name, inline=False)
-            embed.add_field(name="Details", value=details, inline=False)
-            embed.add_field(name="Webcast", value=f"[Watch Here]({webcast_url})")
-            embed.add_field(name="Wikipedia", value=f"[Read More]({wikipedia_url})")
+            embed.add_field(name=":rocket: Mission Name", value=mission_name, inline=False)
+            embed.add_field(name=":calendar: Launch Date (UTC)", value=launch_date_utc, inline=False)
+            embed.add_field(name=":rocket: Rocket", value=rocket_name, inline=False)
+            embed.add_field(name=":clipboard: Details", value=details, inline=False)
+            embed.set_footer(text="SpaceX", icon_url="https://i.imgur.com/2rWmEHm.png")
 
-            await interaction.response.send_message(embed=embed, ephemeral=True)
+            # Add buttons for webcast and Wikipedia links
+            buttons = [
+                nextcord.Button(label="Webcast", style=nextcord.ButtonStyle.link, url=webcast_url),
+                nextcord.Button(label="Wikipedia", style=nextcord.ButtonStyle.link, url=wikipedia_url)
+            ]
+            action_row = nextcord.ActionRow(*buttons)
+
+            await interaction.response.send_message(embed=embed, components=action_row, ephemeral=True)
 
         except Exception as e:
             print(str(e))
