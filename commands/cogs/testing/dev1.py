@@ -370,6 +370,10 @@ class Developer1(commands.Cog):
                 country = agency["country_code"]
                 description = agency["description"]
 
+                # Truncate the description if it exceeds the character limit
+                if len(description) > 1024:
+                    description = description[:1021] + "..."
+
                 embed.add_field(name=":star: Agency", value=name, inline=False)
                 embed.add_field(name=":earth_americas: Country", value=country, inline=False)
                 embed.add_field(name=":pencil: Description", value=description, inline=False)
@@ -385,6 +389,7 @@ class Developer1(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+
 
 
 
