@@ -507,8 +507,6 @@ class Developer(commands.Cog):
 
             data = response.json()
 
-            print(data)  # Print the response content for debugging purposes
-
             # Create Embed
             embed = nextcord.Embed(title="Live Giveaway Search Results", color=nextcord.Color.blue())
 
@@ -521,8 +519,14 @@ class Developer(commands.Cog):
                     title = giveaway["title"]
                     platform = giveaway["platform"]
                     value = giveaway["value"]
+                    thumbnail = giveaway["thumbnail"]
+                    description = giveaway["description"]
+                    instructions = giveaway["instructions"]
 
                     embed.add_field(name=title, value=f"Platform: {platform}\nValue: {value}", inline=False)
+                    embed.add_field(name="Description", value=description, inline=False)
+                    embed.add_field(name="Instructions", value=instructions, inline=False)
+                    embed.set_thumbnail(url=thumbnail)
 
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
