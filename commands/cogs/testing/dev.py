@@ -254,6 +254,37 @@ class Developer(commands.Cog):
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
+    @dev.subcommand(name="countryinfo", description="Get information about a country")
+    async def countryinfo(self, interaction: nextcord.Interaction, country: str):
+        try:
+            # Fetch country data from the API
+            response = requests.get(f"https://restcountries.com/v3.1/name/{country}")
+            data = response.json()
+
+            # Extract relevant country information
+            country_data = data[0]
+            country_name = country_data["name"]["official"]
+            country_capital = country_data["capital"][0]
+            country_population = country_data["population"]
+            country_area = country_data["area"]
+
+            # Create Embed
+            embed = nextcord.Embed(title="Country Information", color=nextcord.Color.gold())
+            embed.add_field(name="Country", value=country_name, inline=True)
+            embed.add_field(name="Capital", value=country_capital, inline=True)
+            embed.add_field(name="Population", value=country_population, inline=True)
+            embed.add_field(name="Area", value=country_area, inline=True)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while executing the command.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
 
 def setup(bot):
