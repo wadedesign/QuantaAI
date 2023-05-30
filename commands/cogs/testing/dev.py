@@ -17,7 +17,7 @@ class Developer(commands.Cog):
             embed = nextcord.Embed(color=nextcord.Color.blue())  # Replace with the desired color
             embed.set_thumbnail(url="https://cdn.discordapp.com/avatars/442355791412854784/df7b527a701d9a1ab6d73213576fe295.webp?size=1024")
             embed.set_author(name="Developer Info", url="https://milrato.eu")
-            embed.add_field(name="🆕 NEW GITHUB", value=f"> There is now an **open Source** Version of this Bot on [Tomato#6966's Github](https://github.com/Tomato6966)\n> [Link](https://github.com/Tomato6966/Multipurpose-discord-bot) but please make sure to **give __Credits__** if you use it!\n> Make sure to read the [README](https://github.com/Tomato6966/Multipurpose-discord-bot#readme) and the [WIKI / FAQ](https://github.com/Tomato6966/Multipurpose-discord-bot/wiki) carefully before opening an [ISSUE](https://github.com/Tomato6966/Multipurpose-discord-bot/issues/new/choose)")
+            embed.add_field(name="🆕 NEW GITHUB", value=f"> There is now an **open Source** Version of this Bot on [Tomato#6966's Github](https://github.com/wadder12)\n> [Link](https://github.com/wadder12/QuantaAI) but please make sure to **give __Credits__** if you use it!\n> Make sure to read the [README](https://github.com/wadder12/QuantaAI) and the [WIKI / FAQ](https://github.com/wadder12/QuantaAI) carefully before opening an [ISSUE](https://github.com/wadder12/QuantaAI)")
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
         except Exception as e:
