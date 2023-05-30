@@ -298,13 +298,13 @@ class Developer(commands.Cog):
                 rates = data["rates"]
 
                 # Create Embed
-                embed = nextcord.Embed(title="Latest Exchange Rates", color=nextcord.Color.blue())
+                embed = nextcord.Embed(title="💱 Latest Exchange Rates", color=nextcord.Color.blue())
                 embed.set_thumbnail(url="https://example.com/exchangerate_icon.png")
-                embed.add_field(name="Base Currency", value=base_currency, inline=True)
+                embed.add_field(name="Base Currency", value=f"`{base_currency}`", inline=True)
 
                 # Add rate fields
                 for currency, rate in rates.items():
-                    embed.add_field(name=currency, value=str(rate), inline=True)
+                    embed.add_field(name=currency, value=f"```\n{rate:,.2f}\n```", inline=True)
 
                 await interaction.response.send_message(embed=embed, ephemeral=True)
             else:
