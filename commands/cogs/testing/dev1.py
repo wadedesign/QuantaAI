@@ -91,7 +91,43 @@ class Developer1(commands.Cog):
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
+    @dev2.subcommand(name="federalregister", description="Get information about the latest document from the Federal Register")
+    async def federalregister(self, interaction: nextcord.Interaction):
+        try:
+            url = "https://www.federalregister.gov/api/v1/documents?per_page=1&order=newest"
 
+            response = requests.get(url)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            data = response.json()
+
+            if data and "results" in data:
+                latest_document = data["results"][0]
+                title = latest_document["title"]
+                document_number = latest_document["document_number"]
+                publication_date = latest_document["publication_date"]
+                html_url = latest_document["html_url"]
+
+                embed = nextcord.Embed(title=title, color=nextcord.Color.blue())
+                embed.add_field(name="Document Number", value=document_number, inline=True)
+                embed.add_field(name="Publication Date", value=publication_date, inline=True)
+                embed.add_field(name="More Information", value=f"[Read More]({html_url})", inline=False)
+
+                await interaction.response.send_message(embed=embed, ephemeral=True)
+
+            else:
+                embed = nextcord.Embed(title="Federal Register Document", color=nextcord.Color.blue())
+                embed.description = "No document found."
+                await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching information from the Federal Register.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
 
 def setup(bot):
