@@ -307,6 +307,39 @@ class Developer1(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+            
+    @dev2.subcommand(name="spacex", description="Fetch information about the latest SpaceX launch")
+    async def spacex(self, interaction: nextcord.Interaction):
+        try:
+            url = "https://api.spacexdata.com/v5/launches/latest"
+            response = requests.get(url)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            data = response.json()
+
+            # Extract relevant information from the response
+            mission_name = data["name"]
+            launch_date_utc = data["date_utc"]
+            rocket_name = data["rocket"]["name"]
+            details = data["details"]
+
+            # Create an embed to display the launch information
+            embed = nextcord.Embed(title="Latest SpaceX Launch", color=nextcord.Color.blue())
+            embed.add_field(name="Mission Name", value=mission_name, inline=False)
+            embed.add_field(name="Launch Date (UTC)", value=launch_date_utc, inline=False)
+            embed.add_field(name="Rocket", value=rocket_name, inline=False)
+            embed.add_field(name="Details", value=details, inline=False)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching the SpaceX launch information.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
 def setup(bot):
     bot.add_cog(Developer1(bot))
