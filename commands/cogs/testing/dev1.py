@@ -333,12 +333,13 @@ class Developer1(commands.Cog):
             embed.add_field(name=":clipboard: Details", value=details, inline=False)
             embed.set_footer(text="SpaceX", icon_url="https://i.imgur.com/2rWmEHm.png")
 
-            # Add buttons for webcast and Wikipedia links
-            buttons = [
-                nextcord.ui.Button(style=nextcord.ButtonStyle.link, url=webcast_url, label="Webcast"),
-                nextcord.ui.Button(style=nextcord.ButtonStyle.link, url=wikipedia_url, label="Wikipedia")
-            ]
-            action_row = nextcord.ActionRow(*buttons)
+            # Create buttons for webcast and Wikipedia links
+            webcast_button = nextcord.ui.Button(style=nextcord.ButtonStyle.link, label="Webcast", url=webcast_url)
+            wikipedia_button = nextcord.ui.Button(style=nextcord.ButtonStyle.link, label="Wikipedia", url=wikipedia_url)
+
+            # Create an action row and add the buttons
+            action_row = nextcord.ui.ActionRow()
+            action_row.add_components(webcast_button, wikipedia_button)
 
             await interaction.response.send_message(embed=embed, components=[action_row], ephemeral=True)
 
@@ -350,6 +351,7 @@ class Developer1(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+
 
 def setup(bot):
     bot.add_cog(Developer1(bot))
