@@ -290,21 +290,25 @@ class Developer(commands.Cog):
     async def exchangerates(self, interaction: nextcord.Interaction):
         try:
             response = requests.get("https://api.exchangerate.host/latest")
+            response.raise_for_status()  # Check for any HTTP errors
+
             data = response.json()
+            if "rates" in data:
+                base_currency = data["base"]
+                rates = data["rates"]
 
-            base_currency = data["base"]
-            rates = data["rates"]
+                # Create Embed
+                embed = nextcord.Embed(title="Latest Exchange Rates", color=nextcord.Color.blue())
+                embed.set_thumbnail(url="https://example.com/exchangerate_icon.png")
+                embed.add_field(name="Base Currency", value=base_currency, inline=True)
 
-            # Create Embed
-            embed = nextcord.Embed(title="Latest Exchange Rates", color=nextcord.Color.blue())
-            embed.set_thumbnail(url="https://example.com/exchangerate_icon.png")
-            embed.add_field(name="Base Currency", value=base_currency, inline=True)
+                # Add rate fields
+                for currency, rate in rates.items():
+                    embed.add_field(name=currency, value=str(rate), inline=True)
 
-            # Add rate fields
-            for currency, rate in rates.items():
-                embed.add_field(name=currency, value=str(rate), inline=True)
-
-            await interaction.response.send_message(embed=embed, ephemeral=True)
+                await interaction.response.send_message(embed=embed, ephemeral=True)
+            else:
+                raise ValueError("Invalid response format")
 
         except Exception as e:
             print(str(e))
