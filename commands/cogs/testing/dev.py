@@ -78,6 +78,32 @@ class Developer(commands.Cog):
             error_embed.title = "Error Occurred"
             error_embed.description = "An error occurred while executing the command."
             await interaction.send(embed=error_embed)
+            
+    @dev.subcommand(name="temperature1", description="Convert temperature between Celsius and Fahrenheit")
+    async def temperature1(self, interaction: nextcord.Interaction, value: float, unit: str):
+        try:
+            celsius = None
+            fahrenheit = None
+
+            if unit.lower() == "c":
+                celsius = value
+                fahrenheit = (value * 9/5) + 32
+            elif unit.lower() == "f":
+                fahrenheit = value
+                celsius = (value - 32) * 5/9
+
+            embed = nextcord.Embed(title="Temperature Conversion", color=nextcord.Color.dark_teal())
+            embed.add_field(name="Celsius", value=f"{celsius}°C", inline=True)
+            embed.add_field(name="Fahrenheit", value=f"{fahrenheit}°F", inline=True)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(color=nextcord.Color.red())
+            error_embed.title = "Error Occurred"
+            error_embed.description = "An error occurred while executing the command."
+            await interaction.send(embed=error_embed)
 
 def setup(bot):
     bot.add_cog(Developer(bot))
