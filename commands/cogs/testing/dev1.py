@@ -348,22 +348,26 @@ class Developer1(commands.Cog):
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
             
-    @dev2.subcommand(name="space_agencies", description="Fetch information about top space agencies")
+    @dev2.subcommand(name="space_agencies", description="Fetch information about space agencies")
     async def space_agencies(self, interaction: nextcord.Interaction):
         try:
-            url = "https://ll.thespacedevs.com/2.2.0/agencies/?limit=10"
-            response = requests.get(url)
+            base_url = "https://ll.thespacedevs.com/2.2.0/agencies/"
+            params = {
+                "mode": "detailed",  # Use detailed mode to get more information
+                "ordering": "featured"  # Order by featured
+            }
+            response = requests.get(base_url, params=params)
             response.raise_for_status()  # Check for any HTTP errors
 
             data = response.json()
             agencies = data["results"]
 
             # Create an embed to display the space agencies information
-            embed = nextcord.Embed(title="Top Space Agencies", color=nextcord.Color.blue())
+            embed = nextcord.Embed(title="Space Agencies", color=nextcord.Color.blue())
 
             for agency in agencies:
                 name = agency["name"]
-                country = agency["country"]
+                country = agency["country_code"]
                 description = agency["description"]
 
                 embed.add_field(name=":star: Agency", value=name, inline=False)
@@ -381,6 +385,7 @@ class Developer1(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+
 
 
 
