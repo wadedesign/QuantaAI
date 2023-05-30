@@ -1,3 +1,4 @@
+import io
 import json
 import nextcord
 from nextcord.ext import commands
@@ -203,12 +204,14 @@ class Developer1(commands.Cog):
 
             # Create an embed with the SVG image as a file attachment
             embed = nextcord.Embed(title="Random Pixel Art", color=nextcord.Color.blue())
+
+            # Create a file-like object from the SVG data
+            file = io.BytesIO(svg_data.encode())
+
+            # Set the file attachment in the embed
             embed.set_image(url="attachment://pixel_art.svg")
 
-            # Create a file object from the SVG data
-            file = nextcord.File(data=svg_data, filename="pixel_art.svg")
-
-            await interaction.response.send_message(embed=embed, file=file, ephemeral=True)
+            await interaction.response.send_message(embed=embed, file=nextcord.File(file, "pixel_art.svg"), ephemeral=True)
 
         except Exception as e:
             print(str(e))
