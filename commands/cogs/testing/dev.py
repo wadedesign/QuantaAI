@@ -507,6 +507,8 @@ class Developer(commands.Cog):
 
             data = response.json()
 
+            print(data)  # Print the response content for debugging purposes
+
             # Create Embed
             embed = nextcord.Embed(title="Live Giveaway Search Results", color=nextcord.Color.blue())
 
