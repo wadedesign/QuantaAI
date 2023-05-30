@@ -360,7 +360,16 @@ class Developer1(commands.Cog):
             response.raise_for_status()  # Check for any HTTP errors
 
             data = response.json()
-            agencies = data["results"]
+            agencies = data.get("results")
+
+            if not agencies:
+                error_embed = nextcord.Embed(
+                    title="No Agencies Found",
+                    description="No space agencies found.",
+                    color=nextcord.Color.red()
+                )
+                await interaction.response.send_message(embed=error_embed, ephemeral=True)
+                return
 
             total_agencies = len(agencies)
             split_index = total_agencies // 2
@@ -375,9 +384,12 @@ class Developer1(commands.Cog):
 
             # Add fields to the first embed
             for agency in agencies1:
-                name = agency["name"]
-                country = agency["country_code"]
-                description = agency["description"]
+                name = agency.get("name")
+                country = agency.get("country_code")
+                description = agency.get("description")
+
+                if not name or not country or not description:
+                    continue
 
                 # Truncate the description if it exceeds the character limit
                 if len(description) > 1024:
@@ -390,9 +402,12 @@ class Developer1(commands.Cog):
 
             # Add fields to the second embed
             for agency in agencies2:
-                name = agency["name"]
-                country = agency["country_code"]
-                description = agency["description"]
+                name = agency.get("name")
+                country = agency.get("country_code")
+                description = agency.get("description")
+
+                if not name or not country or not description:
+                    continue
 
                 # Truncate the description if it exceeds the character limit
                 if len(description) > 1024:
@@ -414,6 +429,7 @@ class Developer1(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+
 
 
 
