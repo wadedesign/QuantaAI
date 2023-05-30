@@ -124,6 +124,30 @@ class Developer(commands.Cog):
             error_embed.title = "Error Occurred"
             error_embed.description = "An error occurred while executing the command."
             await interaction.send(embed=error_embed)
+            
+    @dev.subcommand(name="serverchannels", description="Get information about server channels")
+    async def serverchannels(self, interaction: nextcord.Interaction):
+        try:
+            guild = interaction.guild
+
+            embed = nextcord.Embed(title="Server Channels", color=nextcord.Color.purple())
+
+            for category in guild.categories:
+                category_channels = [channel.name for channel in category.channels if isinstance(channel, nextcord.TextChannel)]
+                if category_channels:
+                    embed.add_field(name=category.name, value="\n".join(category_channels), inline=False)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while executing the command.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
+
 
 def setup(bot):
     bot.add_cog(Developer(bot))
