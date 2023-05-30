@@ -320,8 +320,10 @@ class Developer1(commands.Cog):
             # Extract relevant information from the response
             mission_name = data["name"]
             launch_date_utc = data["date_utc"]
-            rocket_name = data["rocket"]["name"]
+            rocket_name = data["rocket"]
             details = data["details"]
+            webcast_url = data["links"]["webcast"]
+            wikipedia_url = data["links"]["wikipedia"]
 
             # Create an embed to display the launch information
             embed = nextcord.Embed(title="Latest SpaceX Launch", color=nextcord.Color.blue())
@@ -329,6 +331,8 @@ class Developer1(commands.Cog):
             embed.add_field(name="Launch Date (UTC)", value=launch_date_utc, inline=False)
             embed.add_field(name="Rocket", value=rocket_name, inline=False)
             embed.add_field(name="Details", value=details, inline=False)
+            embed.add_field(name="Webcast", value=f"[Watch Here]({webcast_url})")
+            embed.add_field(name="Wikipedia", value=f"[Read More]({wikipedia_url})")
 
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
