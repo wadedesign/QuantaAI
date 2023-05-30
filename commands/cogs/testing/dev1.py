@@ -335,8 +335,8 @@ class Developer1(commands.Cog):
 
             # Add buttons for webcast and Wikipedia links
             buttons = [
-                nextcord.Button(style=nextcord.ButtonStyle.link, url=webcast_url, label="Webcast"),
-                nextcord.Button(style=nextcord.ButtonStyle.link, url=wikipedia_url, label="Wikipedia")
+                nextcord.ui.Button(style=nextcord.ButtonStyle.link, url=webcast_url, label="Webcast"),
+                nextcord.ui.Button(style=nextcord.ButtonStyle.link, url=wikipedia_url, label="Wikipedia")
             ]
             action_row = nextcord.ActionRow(*buttons)
 
