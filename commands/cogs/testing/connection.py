@@ -14,7 +14,7 @@ class ConnectionInfo(commands.Cog):
     async def main(self, interaction: nextcord.Interaction):
         pass
 
-    @main.subcommand()
+    @main.subcommand() 
     async def connectioninfo(self, interaction: nextcord.Interaction, *, user: nextcord.User = None):
         await interaction.response.defer()
         user = user or interaction.user
