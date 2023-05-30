@@ -453,6 +453,49 @@ class Developer(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+            
+    @dev.subcommand(name="freetogame", description="Search games from FreeToGame API")
+    async def freetogame(self, interaction: nextcord.Interaction, platform: str = "all", category: str = None, sort_by: str = None):
+        try:
+            url = "https://www.freetogame.com/api/games"
+
+            # Set query parameters
+            params = {"platform": platform}
+            if category:
+                params["category"] = category
+            if sort_by:
+                params["sort-by"] = sort_by
+
+            response = requests.get(url, params=params)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            data = response.json()
+
+            # Create Embed
+            embed = nextcord.Embed(title="Free Games Results", color=nextcord.Color.blue())
+
+            if "error" in data:
+                embed.description = "No games found matching the criteria."
+            else:
+                games = data
+
+                for game in games:
+                    title = game["title"]
+                    genre = game["genre"]
+                    description = game["short_description"]
+
+                    embed.add_field(name=title, value=f"Genre: {genre}\nDescription: {description}", inline=False)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching game information.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
 def setup(bot):
     bot.add_cog(Developer(bot))
 
