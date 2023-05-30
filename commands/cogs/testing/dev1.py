@@ -333,15 +333,11 @@ class Developer1(commands.Cog):
             embed.add_field(name=":clipboard: Details", value=details, inline=False)
             embed.set_footer(text="SpaceX", icon_url="https://i.imgur.com/2rWmEHm.png")
 
-            # Create buttons for webcast and Wikipedia links
-            webcast_button = nextcord.ui.Button(style=nextcord.ButtonStyle.link, label="Webcast", url=webcast_url)
-            wikipedia_button = nextcord.ui.Button(style=nextcord.ButtonStyle.link, label="Wikipedia", url=wikipedia_url)
+            # Add buttons for webcast and Wikipedia links
+            embed.add_field(name=":tv: Webcast", value=f"[Watch here]({webcast_url})")
+            embed.add_field(name=":book: Wikipedia", value=f"[Read more]({wikipedia_url})")
 
-            # Create an action row and add the buttons
-            action_row = nextcord.ui.ActionRow()
-            action_row.add_components(webcast_button, wikipedia_button)
-
-            await interaction.response.send_message(embed=embed, components=[action_row], ephemeral=True)
+            await interaction.response.send_message(embed=embed, ephemeral=True)
 
         except Exception as e:
             print(str(e))
