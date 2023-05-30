@@ -2,12 +2,13 @@ import json
 import nextcord
 from nextcord.ext import commands
 import os
+from nextcord.ui import Button
 
 class Developer(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @nextcord.slash_command(name="developer", description="wip")
+    @nextcord.slash_command(name="developer", description="Get developer info")
     async def developer(self, interaction: nextcord.Interaction):
         config_path = os.path.join(os.getcwd(), "botconfig", "config.json")
         with open(config_path, "r") as config_file:
@@ -18,7 +19,12 @@ class Developer(commands.Cog):
             embed.set_thumbnail(url="https://cdn.discordapp.com/avatars/442355791412854784/df7b527a701d9a1ab6d73213576fe295.webp?size=1024")
             embed.set_author(name="Developer Info", url="https://milrato.eu")
             embed.add_field(name="🆕 NEW GITHUB", value=f"> There is now an **open Source** Version of this Bot on [Tomato#6966's Github](https://github.com/wadder12)\n> [Link](https://github.com/wadder12/QuantaAI) but please make sure to **give __Credits__** if you use it!\n> Make sure to read the [README](https://github.com/wadder12/QuantaAI) and the [WIKI / FAQ](https://github.com/wadder12/QuantaAI) carefully before opening an [ISSUE](https://github.com/wadder12/QuantaAI)")
-            await interaction.response.send_message(embed=embed, ephemeral=True)
+            
+            button = Button(label="Support Server", url="https://discord.com/gg/milrato")
+            view = nextcord.ui.View()
+            view.add_item(button)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True, view=view)
 
         except Exception as e:
             print(str(e))
@@ -30,6 +36,7 @@ class Developer(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Developer(bot))
+
 
 
 
