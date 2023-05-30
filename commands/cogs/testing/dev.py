@@ -385,6 +385,38 @@ class Developer(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+            
+            
+    @dev.subcommand(name="breweries", description="Search breweries by city")
+    async def breweries(self, interaction: nextcord.Interaction, city: str):
+        try:
+            url = f"https://api.openbrewerydb.org/v1/breweries?by_city={city}&per_page=3"
+            response = requests.get(url)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            data = response.json()
+
+            # Create Embed
+            embed = nextcord.Embed(title=f"Breweries in {city.title()}", color=nextcord.Color.blue())
+
+            for brewery in data:
+                name = brewery["name"]
+                brewery_type = brewery["brewery_type"]
+                address = brewery["street"]
+                website = brewery["website_url"]
+
+                embed.add_field(name=name, value=f"Type: {brewery_type}\nAddress: {address}\nWebsite: {website}", inline=False)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching breweries.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
 def setup(bot):
     bot.add_cog(Developer(bot))
 
