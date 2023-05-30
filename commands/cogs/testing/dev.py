@@ -285,6 +285,35 @@ class Developer(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+            
+    @dev.subcommand(name="exchangerates", description="Get the latest exchange rates")
+    async def exchangerates(self, interaction: nextcord.Interaction):
+        try:
+            response = requests.get("https://api.exchangerate.host/latest")
+            data = response.json()
+
+            base_currency = data["base"]
+            rates = data["rates"]
+
+            # Create Embed
+            embed = nextcord.Embed(title="Latest Exchange Rates", color=nextcord.Color.blue())
+            embed.set_thumbnail(url="https://example.com/exchangerate_icon.png")
+            embed.add_field(name="Base Currency", value=base_currency, inline=True)
+
+            # Add rate fields
+            for currency, rate in rates.items():
+                embed.add_field(name=currency, value=str(rate), inline=True)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching exchange rates.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
 
 def setup(bot):
