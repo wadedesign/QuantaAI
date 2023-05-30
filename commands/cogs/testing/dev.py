@@ -355,6 +355,34 @@ class Developer(commands.Cog):
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
+    @dev.subcommand(name="techcrunch", description="Get latest posts from TechCrunch")
+    async def techcrunch(self, interaction: nextcord.Interaction):
+        try:
+            url = "https://techcrunch.com/wp-json/wp/v2/posts?per_page=5&context=embed"
+            response = requests.get(url)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            data = response.json()
+
+            # Create Embed
+            embed = nextcord.Embed(title="Latest Posts from TechCrunch", color=nextcord.Color.blue())
+
+            for post in data:
+                title = post["title"]["rendered"]
+                link = post["link"]
+
+                embed.add_field(name=title, value=f"[Read More]({link})", inline=False)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching TechCrunch posts.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
 def setup(bot):
     bot.add_cog(Developer(bot))
 
