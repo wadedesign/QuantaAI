@@ -496,6 +496,51 @@ class Developer(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+            
+    @dev.subcommand(name="gamerpower", description="Search live giveaways from GamerPower API")
+    async def gamerpower(self, interaction: nextcord.Interaction, platform: str = None, giveaway_type: str = None, sort_by: str = None):
+        try:
+            url = "https://www.gamerpower.com/api/giveaways"
+
+            # Set query parameters
+            params = {}
+            if platform:
+                params["platform"] = platform
+            if giveaway_type:
+                params["type"] = giveaway_type
+            if sort_by:
+                params["sort-by"] = sort_by
+
+            response = requests.get(url, params=params)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            data = response.json()
+
+            # Create Embed
+            embed = nextcord.Embed(title="Live Giveaway Search Results", color=nextcord.Color.blue())
+
+            if "error" in data:
+                embed.description = "No live giveaways found matching the criteria."
+            else:
+                giveaways = data
+
+                for giveaway in giveaways:
+                    title = giveaway["title"]
+                    platform = giveaway["platform"]
+                    value = giveaway["value"]
+
+                    embed.add_field(name=title, value=f"Platform: {platform}\nValue: {value}", inline=False)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching live giveaway information.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
 def setup(bot):
     bot.add_cog(Developer(bot))
 
