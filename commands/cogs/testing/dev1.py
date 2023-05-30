@@ -436,27 +436,8 @@ class Developer1(commands.Cog):
         try:
             base_url = "https://xeno-canto.org/api/2/recordings"
             
-            # Fetch the total number of pages available
-            response = requests.get(base_url)
-            response.raise_for_status()
-            data = response.json()
-            num_pages = int(data.get("numPages", 0))
-            
-            if num_pages == 0:
-                error_embed = nextcord.Embed(
-                    title="Error Occurred",
-                    description="Failed to fetch the number of pages from the Xeno-Canto API.",
-                    color=nextcord.Color.red()
-                )
-                await interaction.response.send_message(embed=error_embed, ephemeral=True)
-                return
-            
-            # Generate a random page number within the valid range
-            page = random.randint(1, num_pages)
-            
             params = {
-                "query": "q:A",
-                "page": page
+                "query": "q:A"
             }
             
             response = requests.get(base_url, params=params)
