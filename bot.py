@@ -54,12 +54,16 @@ async def on_ready():
             view = nextcord.ui.View()
             view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.link, label="Visit Website", url="https://example.com"))
             view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.primary, label="Support Server", url="https://example.com/support"))
+            view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.secondary, label="GitHub Repo", url="https://github.com/your_username/your_repo"))
+            view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.success, label="Documentation", url="https://example.com/docs"))
+            view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.danger, label="Bug Report", url="https://example.com/bug-report"))
 
             await channel.send(embed=embed, view=view)
         else:
             print(f"Unable to find channel with ID: {channel_id}")
     except Exception as e:
         print(f"An error occurred: {str(e)}")
+
 
 
 
