@@ -224,6 +224,7 @@ class Developer1(commands.Cog):
             
     @dev2.subcommand(name="housestock", description="Fetch house stock data")
     async def housestock(self, interaction: nextcord.Interaction):
+        
         try:
             url = "https://house-stock-watcher-data.s3-us-west-2.amazonaws.com/data/all_transactions.json"
 
@@ -232,11 +233,15 @@ class Developer1(commands.Cog):
 
             data = response.json()
 
-            # Create an embed to display the data
+            # Limit the number of transactions to be displayed in the embed
+            max_transactions = 5
+            truncated_data = data[:max_transactions]
+
+            # Create an embed to display the truncated data
             embed = nextcord.Embed(title="House Stock Data", color=nextcord.Color.green())
 
             # Add fields to the embed for each transaction
-            for transaction in data:
+            for transaction in truncated_data:
                 transaction_date = transaction["transaction_date"]
                 ticker = transaction["ticker"]
                 asset_description = transaction["asset_description"]
@@ -249,7 +254,15 @@ class Developer1(commands.Cog):
                 field_value = f"Ticker: {ticker}\nAsset Description: {asset_description}\nType: {transaction_type}\nAmount: {amount}\nRepresentative: {representative}\nDistrict: {district}\nState: {state}"
                 embed.add_field(name=f"Transaction Date: {transaction_date}", value=field_value, inline=False)
 
-            await interaction.response.send_message(embed=embed, ephemeral=True)
+            # Add a "Read More" button to view the full list of transactions
+            if len(data) > max_transactions:
+                embed.set_footer(text="Click 'Read More' to view the full list of transactions")
+                button = nextcord.ui.Button(style=nextcord.ButtonStyle.primary, label="Read More", url=url)
+                view = nextcord.ui.View()
+                view.add_item(button)
+                await interaction.response.send_message(embed=embed, ephemeral=True, view=view)
+            else:
+                await interaction.response.send_message(embed=embed, ephemeral=True)
 
         except Exception as e:
             print(str(e))
