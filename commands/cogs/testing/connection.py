@@ -1,16 +1,17 @@
 import nextcord
 from nextcord.ext import commands
+from nextcord.ui import Button
 
 class ConnectionInfo(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
         self.footer = "This is the footer for all embeds that are sent by this bot."
 
     def get_footer(self):
         return self.footer
-    @nextcord.slash_command(name='sub12')
-    async def main (self, interaction: nextcord.Interaction):
+
+    @nextcord.slash_command(name='test1')
+    async def main(self, interaction: nextcord.Interaction):
         pass
 
     @main.subcommand()
@@ -72,22 +73,27 @@ class ConnectionInfo(commands.Cog):
                 color=0xFF0000,
             ))
 
-    @main.subcommand() # add way more ui to this
+    @main.subcommand()
     async def support(self, interaction: nextcord.Interaction):
         try:
             embed = nextcord.Embed(
                 title="Support Server",
-                description="Click [here](https://discord.com/gg/milrato) to join our support server.",
+                description="Welcome to our support server! Here, you can get assistance from our helpful community.",
                 color=nextcord.Color.blue()
             )
-            await interaction.send(embed=embed)
+
+            button = Button(label="Join Support Server", url="https://discord.com/gg/milrato")
+            view = nextcord.ui.View()
+            view.add_item(button)
+
+            await interaction.response.send_message(embed=embed, view=view)
         except Exception as e:
             print(e)
             error_message = "An error occurred. Please try again later."
-            await interaction.send(error_message)
-    
+            await interaction.response.send_message(error_message, ephemeral=True)
 
 
 def setup(bot):
     bot.add_cog(ConnectionInfo(bot))
+
 
