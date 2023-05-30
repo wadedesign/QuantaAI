@@ -498,20 +498,11 @@ class Developer(commands.Cog):
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
             
     @dev.subcommand(name="gamerpower", description="Search live giveaways from GamerPower API") # not working atm
-    async def gamerpower(self, interaction: nextcord.Interaction, platform: str = None, giveaway_type: str = None, sort_by: str = None):
+    async def gamerpower(self, interaction: nextcord.Interaction):
         try:
-            url = "https://www.gamerpower.com/api/giveaways"
+            url = "https://www.gamerpower.com/api/giveaways?platform=steam&type=loot&sort-by=popularity"
 
-            # Set query parameters
-            params = {}
-            if platform:
-                params["platform"] = platform
-            if giveaway_type:
-                params["type"] = giveaway_type
-            if sort_by:
-                params["sort-by"] = sort_by
-
-            response = requests.get(url, params=params)
+            response = requests.get(url)
             response.raise_for_status()  # Check for any HTTP errors
 
             data = response.json()
