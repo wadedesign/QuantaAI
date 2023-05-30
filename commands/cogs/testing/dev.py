@@ -517,8 +517,8 @@ class Developer(commands.Cog):
 
                 for giveaway in giveaways:
                     title = giveaway["title"]
-                    platform = giveaway["platform"]
-                    value = giveaway["value"]
+                    platform = ", ".join(giveaway["platforms"].split(", "))
+                    value = giveaway["worth"]
                     thumbnail = giveaway["thumbnail"]
                     description = giveaway["description"]
                     instructions = giveaway["instructions"]
