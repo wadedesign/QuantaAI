@@ -1,5 +1,6 @@
 import io
 import json
+import random
 import nextcord
 from nextcord.ext import commands
 import os
@@ -430,61 +431,49 @@ class Developer1(commands.Cog):
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
-    @dev2.subcommand(name="xeno_canto", description="Fetch recordings from Xeno-Canto API")
-    async def xeno_canto(self, interaction: nextcord.Interaction):
+    @dev2.subcommand(name="xeno_canto_random", description="Fetch a random recording from Xeno-Canto API")
+    async def xeno_canto_random(self, interaction: nextcord.Interaction):
         try:
             base_url = "https://xeno-canto.org/api/2/recordings"
             
-            query = interaction.options.get("query").value
-            page = interaction.options.get("page").value
-
-            params = {
-                "query": query,
-                "page": page
-            }
-
-            response = requests.get(base_url, params=params)
+            response = requests.get(base_url)
             response.raise_for_status()  # Check for any HTTP errors
 
             data = response.json()
             
-            num_recordings = data.get("numRecordings")
-            num_species = data.get("numSpecies")
-            current_page = data.get("page")
-            total_pages = data.get("numPages")
             recordings = data.get("recordings")
             
             if not recordings:
                 error_embed = nextcord.Embed(
                     title="No Recordings Found",
-                    description="No recordings found for the given query.",
+                    description="No recordings found in the database.",
                     color=nextcord.Color.red()
                 )
                 await interaction.response.send_message(embed=error_embed, ephemeral=True)
                 return
             
-            embed = nextcord.Embed(title="Xeno-Canto Recordings", color=nextcord.Color.blue())
-            embed.add_field(name=":cd: Number of Recordings", value=num_recordings, inline=False)
-            embed.add_field(name=":bird: Number of Species", value=num_species, inline=False)
-            embed.add_field(name=":page_facing_up: Current Page", value=current_page, inline=False)
-            embed.add_field(name=":books: Total Pages", value=total_pages, inline=False)
+            random_recording = random.choice(recordings)
             
-            # Display the recordings
-            for recording in recordings:
-                id = recording.get("id")
-                genus = recording.get("gen")
-                species = recording.get("sp")
-                country = recording.get("cnt")
-                location = recording.get("loc")
-                
-                if not id or not genus or not species or not country or not location:
-                    continue
-                
-                embed.add_field(name=":sound: Recording", value=f"[{id}](https://xeno-canto.org/{id})", inline=False)
-                embed.add_field(name=":bird: Species", value=f"{genus} {species}", inline=False)
-                embed.add_field(name=":earth_americas: Country", value=country, inline=False)
-                embed.add_field(name=":round_pushpin: Location", value=location, inline=False)
-                embed.add_field(name="\u200b", value="\u200b", inline=False)  # Empty field for spacing
+            id = random_recording.get("id")
+            genus = random_recording.get("gen")
+            species = random_recording.get("sp")
+            country = random_recording.get("cnt")
+            location = random_recording.get("loc")
+            
+            if not id or not genus or not species or not country or not location:
+                error_embed = nextcord.Embed(
+                    title="Invalid Recording Data",
+                    description="The selected recording has missing or invalid data.",
+                    color=nextcord.Color.red()
+                )
+                await interaction.response.send_message(embed=error_embed, ephemeral=True)
+                return
+            
+            embed = nextcord.Embed(title="Xeno-Canto Random Recording", color=nextcord.Color.blue())
+            embed.add_field(name=":sound: Recording", value=f"[{id}](https://xeno-canto.org/{id})", inline=False)
+            embed.add_field(name=":bird: Species", value=f"{genus} {species}", inline=False)
+            embed.add_field(name=":earth_americas: Country", value=country, inline=False)
+            embed.add_field(name=":round_pushpin: Location", value=location, inline=False)
             
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
@@ -492,7 +481,7 @@ class Developer1(commands.Cog):
             print(str(e))
             error_embed = nextcord.Embed(
                 title="Error Occurred",
-                description="An error occurred while fetching the Xeno-Canto recordings.",
+                description="An error occurred while fetching a random recording from Xeno-Canto.",
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
