@@ -436,7 +436,12 @@ class Developer1(commands.Cog):
         try:
             base_url = "https://xeno-canto.org/api/2/recordings"
             
-            response = requests.get(base_url)
+            params = {
+                "query": "q:A",
+                "page": random.randint(1, 1000)  # Fetch a random page of recordings
+            }
+            
+            response = requests.get(base_url, params=params)
             response.raise_for_status()  # Check for any HTTP errors
 
             data = response.json()
