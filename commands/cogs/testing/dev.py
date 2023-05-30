@@ -319,6 +319,41 @@ class Developer(commands.Cog):
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
+    @dev.subcommand(name="dexsearch", description="Search DEX data")
+    async def dexsearch(self, interaction: nextcord.Interaction, query: str):
+        try:
+            url = f"https://api.dexscreener.com/latest/dex/search?q={query}"
+            response = requests.get(url)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            data = response.json()
+
+            # Extract relevant information
+            if "results" in data:
+                results = data["results"]
+
+                # Create Embed
+                embed = nextcord.Embed(title="DEX Search Results", color=nextcord.Color.blue())
+
+                for result in results:
+                    name = result["name"]
+                    symbol = result["symbol"]
+                    volume = result["volume"]
+
+                    embed.add_field(name=name, value=f"Symbol: {symbol}\nVolume: {volume}", inline=False)
+
+                await interaction.response.send_message(embed=embed, ephemeral=True)
+            else:
+                raise ValueError("Invalid response format")
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching DEX data.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
 def setup(bot):
     bot.add_cog(Developer(bot))
