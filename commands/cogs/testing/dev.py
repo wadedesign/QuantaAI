@@ -497,7 +497,7 @@ class Developer(commands.Cog):
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
             
-    @dev.subcommand(name="gamerpower", description="Search live giveaways from GamerPower API")
+    @dev.subcommand(name="gamerpower", description="Search live giveaways from GamerPower API") # not working atm
     async def gamerpower(self, interaction: nextcord.Interaction, platform: str = None, giveaway_type: str = None, sort_by: str = None):
         try:
             url = "https://www.gamerpower.com/api/giveaways"
