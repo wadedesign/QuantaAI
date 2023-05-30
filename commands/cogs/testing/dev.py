@@ -370,8 +370,10 @@ class Developer(commands.Cog):
             for post in data:
                 title = post["title"]["rendered"]
                 link = post["link"]
+                excerpt = post["excerpt"]["rendered"]
 
-                embed.add_field(name=title, value=f"[Read More]({link})", inline=False)
+                embed.add_field(name=title, value=excerpt, inline=False)
+                embed.add_field(name="Read More", value=f"[Click Here]({link})", inline=False)
 
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
