@@ -163,7 +163,7 @@ class Developer1(commands.Cog):
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
             
     @dev2.subcommand(name="usaspending", description="Get information from the USAspending.gov API")
-    async def usaspending(self, interaction: nextcord.Interaction):
+    async def agencies(self, interaction: nextcord.Interaction):
         try:
             url = "https://api.usaspending.gov/api/v2/references/toptier_agencies/"
 
@@ -172,20 +172,15 @@ class Developer1(commands.Cog):
 
             data = response.json()
 
-            if data and "results" in data:
-                agencies = data["results"]
+            # Process the JSON data as needed
+            # Example: Get a list of agency names
+            agency_names = [agency["name"] for agency in data["results"]]
 
-                agency_list = "\n".join([agency["name"] for agency in agencies])
+            # Create an embed to display the agency names
+            embed = nextcord.Embed(title="Top-Tier Agencies", color=nextcord.Color.blue())
+            embed.description = "\n".join(agency_names)
 
-                embed = nextcord.Embed(title="Top-Tier Agencies", color=nextcord.Color.blue())
-                embed.description = agency_list
-
-                await interaction.response.send_message(embed=embed, ephemeral=True)
-
-            else:
-                embed = nextcord.Embed(title="Top-Tier Agencies", color=nextcord.Color.blue())
-                embed.description = "No agencies found."
-                await interaction.response.send_message(embed=embed, ephemeral=True)
+            await interaction.response.send_message(embed=embed, ephemeral=True)
 
         except Exception as e:
             print(str(e))
@@ -195,5 +190,6 @@ class Developer1(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+
 def setup(bot):
     bot.add_cog(Developer1(bot))
