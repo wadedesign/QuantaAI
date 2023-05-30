@@ -190,6 +190,34 @@ class Developer1(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+            
+    @dev2.subcommand(name="dicebear", description="Generate a random pixel art image")
+    async def dicebear(self, interaction: nextcord.Interaction):
+        try:
+            url = "https://api.dicebear.com/6.x/pixel-art/svg"
+
+            response = requests.get(url)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            svg_data = response.text
+
+            # Create an embed with the SVG image as a file attachment
+            embed = nextcord.Embed(title="Random Pixel Art", color=nextcord.Color.blue())
+            embed.set_image(url="attachment://pixel_art.svg")
+
+            # Create a file object from the SVG data
+            file = nextcord.File(data=svg_data, filename="pixel_art.svg")
+
+            await interaction.response.send_message(embed=embed, file=file, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching the pixel art image from the DiceBear API.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
 def setup(bot):
     bot.add_cog(Developer1(bot))
