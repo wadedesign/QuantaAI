@@ -362,10 +362,19 @@ class Developer1(commands.Cog):
             data = response.json()
             agencies = data["results"]
 
-            # Create an embed to display the space agencies information
-            embed = nextcord.Embed(title="Space Agencies", color=nextcord.Color.blue())
+            total_agencies = len(agencies)
+            split_index = total_agencies // 2
 
-            for agency in agencies:
+            # Split agencies into two separate lists
+            agencies1 = agencies[:split_index]
+            agencies2 = agencies[split_index:]
+
+            # Create embeds to display the space agencies information
+            embed1 = nextcord.Embed(title="Space Agencies - Part 1", color=nextcord.Color.blue())
+            embed2 = nextcord.Embed(title="Space Agencies - Part 2", color=nextcord.Color.blue())
+
+            # Add fields to the first embed
+            for agency in agencies1:
                 name = agency["name"]
                 country = agency["country_code"]
                 description = agency["description"]
@@ -374,12 +383,28 @@ class Developer1(commands.Cog):
                 if len(description) > 1024:
                     description = description[:1021] + "..."
 
-                embed.add_field(name=":star: Agency", value=name, inline=False)
-                embed.add_field(name=":earth_americas: Country", value=country, inline=False)
-                embed.add_field(name=":pencil: Description", value=description, inline=False)
-                embed.add_field(name="\u200b", value="\u200b", inline=False)  # Empty field for spacing
+                embed1.add_field(name=":star: Agency", value=name, inline=False)
+                embed1.add_field(name=":earth_americas: Country", value=country, inline=False)
+                embed1.add_field(name=":pencil: Description", value=description, inline=False)
+                embed1.add_field(name="\u200b", value="\u200b", inline=False)  # Empty field for spacing
 
-            await interaction.response.send_message(embed=embed, ephemeral=True)
+            # Add fields to the second embed
+            for agency in agencies2:
+                name = agency["name"]
+                country = agency["country_code"]
+                description = agency["description"]
+
+                # Truncate the description if it exceeds the character limit
+                if len(description) > 1024:
+                    description = description[:1021] + "..."
+
+                embed2.add_field(name=":star: Agency", value=name, inline=False)
+                embed2.add_field(name=":earth_americas: Country", value=country, inline=False)
+                embed2.add_field(name=":pencil: Description", value=description, inline=False)
+                embed2.add_field(name="\u200b", value="\u200b", inline=False)  # Empty field for spacing
+
+            await interaction.response.send_message(embed=embed1, ephemeral=True)
+            await interaction.followup.send_message(embed=embed2, ephemeral=True)
 
         except Exception as e:
             print(str(e))
@@ -389,6 +414,7 @@ class Developer1(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+
 
 
 
