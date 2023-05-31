@@ -43,27 +43,47 @@ class UserNotes(commands.Cog):
             if note:
                 self.user_notes.setdefault(user_id, []).append(note)
                 self.save_notes()
-                await interaction.response.send_message(f"Note added for {user.name}: {note}", ephemeral=True)
+                await interaction.response.send_message(
+                    content=f":white_check_mark: Note added for {user.name}: {note}",
+                    ephemeral=True
+                )
             else:
-                await interaction.response.send_message("Please provide a note to add.", ephemeral=True)
+                await interaction.response.send_message(
+                    content="Please provide a note to add.",
+                    ephemeral=True
+                )
         elif action == "view":
             notes = self.user_notes.get(user_id, [])
             if notes:
                 notes_list = "\n".join(f"- {n}" for n in notes)
-                await interaction.response.send_message(f"Notes for {user.name}:\n{notes_list}", ephemeral=True)
+                embed = nextcord.Embed(
+                    title=f"Notes for {user.name}",
+                    description=notes_list,
+                    color=nextcord.Color.blue()
+                )
+                await interaction.response.send_message(embed=embed, ephemeral=True)
             else:
-                await interaction.response.send_message(f"No notes found for {user.name}.", ephemeral=True)
+                await interaction.response.send_message(
+                    content=f"No notes found for {user.name}.",
+                    ephemeral=True
+                )
         elif action == "delete":
             if note:
                 notes = self.user_notes.get(user_id, [])
                 if note in notes:
                     notes.remove(note)
                     self.save_notes()
-                    await interaction.response.send_message(f"Note deleted for {user.name}: {note}", ephemeral=True)
+                    await interaction.response.send_message(
+                        content=f":wastebasket: Note deleted for {user.name}: {note}",
+                        ephemeral=True
+                    )
                 else:
                     await interaction.response.send_message("Note not found.", ephemeral=True)
             else:
-                await interaction.response.send_message("Please provide a note to delete.", ephemeral=True)
+                await interaction.response.send_message(
+                    content="Please provide a note to delete.",
+                    ephemeral=True
+                )
 
 def setup(bot):
     bot.add_cog(UserNotes(bot))
