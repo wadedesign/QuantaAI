@@ -669,6 +669,37 @@ class Developer1(commands.Cog):
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
 
+    @dev2.subcommand(description="Fetch a random color from the ColourLovers API")
+    async def random_color(self, interaction: nextcord.Interaction):
+        try:
+            url = "http://www.colourlovers.com/api/colors/random"
+
+            response = requests.get(url)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            data = response.json()
+
+            # Extract color details from the response
+            color_title = data[0]["title"]
+            color_hex = data[0]["hex"]
+            color_rgb = data[0]["rgb"]
+
+            # Create an embed to display the random color
+            embed = nextcord.Embed(title="Random Color", color=color_hex)
+            embed.add_field(name="Title", value=color_title, inline=False)
+            embed.add_field(name="Hex", value=color_hex, inline=False)
+            embed.add_field(name="RGB", value=color_rgb, inline=False)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching the random color.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
 
 def setup(bot):
