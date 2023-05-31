@@ -492,7 +492,43 @@ class Developer1(commands.Cog):
 
 
 
+    @dev2.subcommand(name="quantaweather", description="Fetch weather information from 7Timer API")
+    async def weatherq(self, interaction: nextcord.Interaction):
+        try:
+            url = "http://www.7timer.info/bin/api.pl"
+            params = {
+                "lon": "113.17",
+                "lat": "23.09",
+                "product": "astro",
+                "output": "json"
+            }
+            
+            response = requests.get(url, params=params)
+            response.raise_for_status()
 
+            data = response.json()
+            
+            # Extract relevant information from the response
+            weather_info = data["dataseries"][0]["weather"]
+            temperature = data["dataseries"][0]["temp2m"]
+            precipitation = data["dataseries"][0]["prec_amount"]
+
+            # Create an embed to display the weather information
+            embed = nextcord.Embed(title="7Timer Weather Information", color=nextcord.Color.blue())
+            embed.add_field(name="Weather", value=weather_info, inline=False)
+            embed.add_field(name="Temperature", value=f"{temperature}°C", inline=False)
+            embed.add_field(name="Precipitation", value=precipitation, inline=False)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching weather information from 7Timer API.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
 def setup(bot):
     bot.add_cog(Developer1(bot))
