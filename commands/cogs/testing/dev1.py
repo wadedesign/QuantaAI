@@ -7,10 +7,32 @@ import os
 from nextcord.ui import Button
 import requests
 
+
+def get_wind_emoji(direction):
+        if direction == "N":
+            return ":arrow_up:"
+        elif direction == "NE":
+            return ":arrow_upper_right:"
+        elif direction == "E":
+            return ":arrow_right:"
+        elif direction == "SE":
+            return ":arrow_lower_right:"
+        elif direction == "S":
+            return ":arrow_down:"
+        elif direction == "SW":
+            return ":arrow_lower_left:"
+        elif direction == "W":
+            return ":arrow_left:"
+        elif direction == "NW":
+            return ":arrow_upper_left:"
+        else:
+            return ""
+
 class Developer1(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        
+    
+   
         
     @nextcord.slash_command(name="dev2")
     async def dev2(self, interaction: nextcord.Interaction):
@@ -545,25 +567,38 @@ class Developer1(commands.Cog):
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
-def get_wind_emoji(direction):
-        if direction == "N":
-            return ":arrow_up:"
-        elif direction == "NE":
-            return ":arrow_upper_right:"
-        elif direction == "E":
-            return ":arrow_right:"
-        elif direction == "SE":
-            return ":arrow_lower_right:"
-        elif direction == "S":
-            return ":arrow_down:"
-        elif direction == "SW":
-            return ":arrow_lower_left:"
-        elif direction == "W":
-            return ":arrow_left:"
-        elif direction == "NW":
-            return ":arrow_upper_left:"
-        else:
-            return ""
+
+        
+    @dev2.subcommand(name="animeqts", description="Fetch anime quotes from AnimeChan API")
+    async def quotesan(self, interaction: nextcord.Interaction):
+        try:
+            url = "https://animechan.vercel.app/api/quotes"
+
+            response = requests.get(url)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            quotes = response.json()
+
+            # Create an embed to display the quotes
+            embed = nextcord.Embed(title="Anime Quotes", color=nextcord.Color.blue())
+
+            for quote in quotes:
+                character = quote["character"]
+                anime = quote["anime"]
+                quote_text = quote["quote"]
+
+                embed.add_field(name=f":bust_in_silhouette: Character - {character}", value=f":tv: Anime - {anime}\n:speech_balloon: Quote - {quote_text}", inline=False)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching the quotes.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
 def setup(bot):
     bot.add_cog(Developer1(bot))
