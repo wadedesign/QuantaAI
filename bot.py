@@ -40,7 +40,7 @@ async def update_presence():
 @bot.event
 async def on_ready():
     try:
-        with open(r'TODO/Update/changelog1.md', 'r', encoding='utf-8') as f:
+        with open(r'TODO/Update/changelog2.md', 'r', encoding='utf-8') as f:
             changelog = f.read()
         channel_id = 1112958990171775089  # Replace with the ID of the channel you want to send the embed to
 
