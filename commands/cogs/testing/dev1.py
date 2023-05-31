@@ -669,7 +669,7 @@ class Developer1(commands.Cog):
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
 
-    @dev2.subcommand(description="Fetch a random color from the ColourLovers API")
+    @dev2.subcommand(description="Fetch a random color from the ColourLovers API") # ! need api key
     async def random_color(self, interaction: nextcord.Interaction):
         try:
             url = "http://www.colourlovers.com/api/colors/random"
