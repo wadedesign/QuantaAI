@@ -359,13 +359,19 @@ class WadderCommandsV1(commands.Cog):
         chart_filename = "message_stats.png"
         fig.write_image(chart_filename)
 
-        # Send the chart as an image attachment
+        # Create an embed to display the message statistics
+        embed = nextcord.Embed(title="Message Statistics", color=nextcord.Color.blue())
+        embed.add_field(name="User", value=' '.join([f':bust_in_silhouette: {name}' for name in usernames]), inline=True)
+        embed.add_field(name="Message Count", value=' '.join([f':speech_balloon: {count}' for count in message_counts]), inline=True)
+
+        # Send the chart image and the embed as a message
         with open(chart_filename, "rb") as file:
             chart_image = nextcord.File(file)
-            await interaction.send(file=chart_image)
+            await interaction.send(file=chart_image, embed=embed)
 
         # Remove the chart image file
         os.remove(chart_filename)
+
        
 
             
