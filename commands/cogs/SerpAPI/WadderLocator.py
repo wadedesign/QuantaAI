@@ -93,7 +93,7 @@ class LocalSearchCog(commands.Cog):
             await interaction.send("No visual matches found.")
             
     #** Uses a word to find videos from google **#
-    @main.subcommand(name="googlevideos1", description="Searches for videos based on a query")
+    @main.subcommand(name="googlevideos", description="Searches for videos based on a query")
     async def googlevideos(self, interaction: nextcord.Interaction, query: str):
         await interaction.response.defer()
         params = {
