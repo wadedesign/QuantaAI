@@ -599,6 +599,33 @@ class Developer1(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+            
+    @dev2.subcommand(base="characters", description="Fetch available characters from the AnimeChan API")
+    async def characters(self, interaction: nextcord.Interaction):
+        try:
+            url = "https://animechan.vercel.app/api/available/character"
+
+            response = requests.get(url)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            characters = response.json()
+
+            # Create an embed to display the available characters
+            embed = nextcord.Embed(title="Available Anime Characters", color=nextcord.Color.blue())
+            character_list = ', '.join(characters)
+            embed.add_field(name=":busts_in_silhouette: Characters", value=character_list)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching the available characters.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
+
 
 def setup(bot):
     bot.add_cog(Developer1(bot))
