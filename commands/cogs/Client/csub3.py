@@ -19,8 +19,11 @@ class WeatherCog(commands.Cog):
             return response.json()
         else:
             return None
-
-    @nextcord.slash_command()
+        
+    @nextcord.slash_command(name="q1")
+    async def q1(self, interaction: nextcord.Interaction):
+        pass
+    @q1.subcommand()
     async def weather(self, interaction: nextcord.Interaction, location: str):
         """Get the current weather for a given location."""
         api_key = os.getenv("WEATHER_API_KEY")
@@ -50,6 +53,39 @@ class WeatherCog(commands.Cog):
             await interaction.response.send_message(embed=embed)
         else:
             await interaction.response.send_message("Failed to fetch weather data. Please try again later.")
+            
+    @q1.subcommand(name="onlinestatus", description="Print how many people are using each type of device.")
+    async def onlinestatus(self, ctx: commands.Context):
+        """Print how many people are using each type of device."""
+        device = {
+            (True, True, True): 0,
+            (False, True, True): 1,
+            (True, False, True): 2,
+            (True, True, False): 3,
+            (False, False, True): 4,
+            (True, False, False): 5,
+            (False, True, False): 6,
+            (False, False, False): 7,
+        }
+        store = [0, 0, 0, 0, 0, 0, 0, 0]
+        for m in ctx.guild.members:
+            value = (
+                m.desktop_status == nextcord.Status.offline,
+                m.web_status == nextcord.Status.offline,
+                m.mobile_status == nextcord.Status.offline,
+            )
+            store[device[value]] += 1
+        msg = (
+            f"offline all: {store[0]}"
+            f"\ndesktop only: {store[1]}"
+            f"\nweb only: {store[2]}"
+            f"\nmobile only: {store[3]}"
+            f"\ndesktop web: {store[4]}"
+            f"\nweb mobile: {store[5]}"
+            f"\ndesktop mobile: {store[6]}"
+            f"\nonline all: {store[7]}"
+        )
+        await ctx.send(f"```py\n{msg}```")
 
 def setup(bot):
     bot.add_cog(WeatherCog(bot))
