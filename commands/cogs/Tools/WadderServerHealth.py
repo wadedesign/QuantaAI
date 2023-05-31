@@ -2,7 +2,7 @@ import nextcord
 from nextcord.ext import commands
 from datetime import datetime, timedelta
 
-class Helpful(commands.Cog):
+class Helpful(commands.Cog): #** RFP, Slash Commands
 
     def __init__(self, bot):
         self.bot = bot
@@ -19,28 +19,34 @@ class Helpful(commands.Cog):
 
         async with ctx.channel.typing():
             count = 0
-            async for message in channel.history(limit=500000, after=datetime.today() - timedelta(days=100)): count += 1
+            async for message in channel.history(limit=500000, after=datetime.today() - timedelta(days=100)):
+                count += 1
 
             if count >= 5000:
                 average = "OVER 5000!"
-                healthiness = "VERY HEALTHY"
+                healthiness = "VERY HEALTHY \U0001F60D"  # Emoji: 😍
 
             else:
                 try:
                     average = round(count / 100, 2)
 
-                    if 0 > server_id.member_count / average: healthiness = "VERY HEALTHY"
-                    elif server_id.member_count / average <= 5: healthiness = "HEALTHY"
-                    elif server_id.member_count / average <= 10: healthiness = "NORMAL"
-                    elif server_id.member_count / average <= 20: healthiness = "UNHEALTHY"
-                    else: healthiness = "VERY UNHEALTHY"
+                    if 0 > server_id.member_count / average:
+                        healthiness = "VERY HEALTHY \U0001F60D"  # Emoji: 😍
+                    elif server_id.member_count / average <= 5:
+                        healthiness = "HEALTHY \U0001F642"  # Emoji: 🙂
+                    elif server_id.member_count / average <= 10:
+                        healthiness = "NORMAL \U0001F610"  # Emoji: 😐
+                    elif server_id.member_count / average <= 20:
+                        healthiness = "UNHEALTHY \U0001F615"  # Emoji: 😕
+                    else:
+                        healthiness = "VERY UNHEALTHY \U0001F625"  # Emoji: 😥
 
                 except ZeroDivisionError:
                     average = 0
-                    healthiness = "VERY UNHEALTHY"
+                    healthiness = "VERY UNHEALTHY \U0001F625"  # Emoji: 😥
 
-            embed.add_field(name="­", value=f"# of members: {server_id.member_count}", inline=False)
-            embed.add_field(name="­", value=f'# of messages per day on average in "{channel}" is: {average}', inline=False)
+            embed.add_field(name="­", value=f" Number of members: {server_id.member_count}", inline=False)
+            embed.add_field(name="­", value=f'Number of messages per day on average in "{channel}" is: {average}', inline=False)
             embed.add_field(name="­", value=f"Channel health: {healthiness}", inline=False)
 
             await ctx.send(embed=embed)
