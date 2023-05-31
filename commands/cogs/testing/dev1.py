@@ -633,6 +633,37 @@ class Developer1(commands.Cog):
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
+    @dev2.subcommand(name='waifu',description="Fetch waifu pictures from WAIFU.IM API")
+    async def waifu(self, interaction: nextcord.Interaction, tags: str = "waifu"):
+        try:
+            url = "https://api.waifu.im/search"
+            params = {
+                "tags": tags
+            }
+
+            response = requests.get(url, params=params)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            data = response.json()
+
+            # Extract image URL from the response
+            image_url = data["files"][0]["url"]
+
+            # Create an embed to display the waifu picture
+            embed = nextcord.Embed(title="Waifu Picture", color=nextcord.Color.blue())
+            embed.set_image(url=image_url)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching the waifu picture.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
+
 
 def setup(bot):
     bot.add_cog(Developer1(bot))
