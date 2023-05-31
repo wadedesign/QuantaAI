@@ -646,12 +646,16 @@ class Developer1(commands.Cog):
 
             data = response.json()
 
-            # Extract image URL from the response
-            image_url = data["data"][0]["url"]
+            # Extract image details from the response
+            image = data["images"][0]
+            image_url = image["url"]
+            artist_name = image["artist"]["name"]
+            source_url = image["source"]
 
             # Create an embed to display the waifu picture
             embed = nextcord.Embed(title="Waifu Picture", color=nextcord.Color.blue())
             embed.set_image(url=image_url)
+            embed.set_footer(text=f"Artist: {artist_name} | Source: {source_url}")
 
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
@@ -663,6 +667,7 @@ class Developer1(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+
 
 
 
