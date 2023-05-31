@@ -20,7 +20,8 @@ class MessageArchive(commands.Cog):
             await archive_file.write(json.dumps(messages, indent=2))
         
         return f"{channel.guild.id}_{channel.id}_archive.json"
-    @nextcord.slash_command(name="archive", description="Archive messages from a channel.")
+
+    @nextcord.slash_command(name="archive", description="📚 Archive messages from a channel.")
     async def main(self, interaction: nextcord.Interaction):
         pass
     
@@ -28,7 +29,17 @@ class MessageArchive(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def arc(self, interaction: nextcord.Interaction, channel: nextcord.TextChannel):
         archive_filename = await self.archive_messages(channel)
-        await interaction.send(f"Archived messages from {channel.mention}.", file=nextcord.File(archive_filename))
+        
+        embed = nextcord.Embed(
+            title="Message Archive",
+            description=f"Archived messages from {channel.mention}",
+            color=nextcord.Color.blue()
+        )
+        embed.set_footer(text="Created by MessageArchive")
+        
+        file = nextcord.File(archive_filename, filename=f"{channel.name}_archive.json")
+        
+        await interaction.send(embed=embed, file=file)
 
     @main.subcommand()
     @commands.has_permissions(administrator=True)
@@ -36,7 +47,18 @@ class MessageArchive(commands.Cog):
         for channel in interaction.guild.text_channels:
             try:
                 archive_filename = await self.archive_messages(channel)
-                await interaction.send(f"Archived messages from {channel.mention}.", file=nextcord.File(archive_filename))
+                
+                embed = nextcord.Embed(
+                    title="Message Archive",
+                    description=f"Archived messages from {channel.mention}",
+                    color=nextcord.Color.blue()
+                )
+                embed.set_footer(text="Created by MessageArchive")
+                
+                file = nextcord.File(archive_filename, filename=f"{channel.name}_archive.json")
+                
+                await interaction.send(embed=embed, file=file)
+                
             except Exception as e:
                 print(f"Error archiving channel {channel}: {e}")
 
