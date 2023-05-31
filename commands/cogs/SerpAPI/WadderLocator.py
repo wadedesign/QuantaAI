@@ -135,7 +135,7 @@ class LocalSearchCog(commands.Cog):
                 response = f"{movie['title']} - {movie['link']}"
                 await interaction.send(response)
         else:
-            await interaction.send("No movie results found.")
+            await interaction.send("No movie results found.") #movie_resutls error 
             
     @main.subcommand(name="bing", description="Searches for things on bing")
     async def bingsearch(self, interaction: nextcord.Interaction, query: str):
