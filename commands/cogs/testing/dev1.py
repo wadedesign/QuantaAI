@@ -522,15 +522,17 @@ class Developer1(commands.Cog):
 
             # Create an embed to display the weather information
             embed = nextcord.Embed(title="Weather Information", color=nextcord.Color.blue())
-            embed.add_field(name="Timepoint", value=str(timepoint), inline=False)
-            embed.add_field(name="Cloud Cover", value=str(cloudcover), inline=False)
-            embed.add_field(name="Seeing", value=str(seeing), inline=False)
-            embed.add_field(name="Transparency", value=str(transparency), inline=False)
-            embed.add_field(name="Lifted Index", value=str(lifted_index), inline=False)
-            embed.add_field(name="Relative Humidity", value=str(rh2m), inline=False)
-            embed.add_field(name="Wind", value=f"Direction: {wind_direction}\nSpeed: {wind_speed}", inline=False)
-            embed.add_field(name="Temperature", value=str(temp2m), inline=False)
-            embed.add_field(name="Precipitation Type", value=str(prec_type), inline=False)
+            embed.add_field(name=":clock1: Timepoint", value=str(timepoint), inline=False)
+            embed.add_field(name=":cloud: Cloud Cover", value=str(cloudcover), inline=False)
+            embed.add_field(name=":telescope: Seeing", value=str(seeing), inline=False)
+            embed.add_field(name=":crystal_ball: Transparency", value=str(transparency), inline=False)
+            embed.add_field(name=":arrow_double_down: Lifted Index", value=str(lifted_index), inline=False)
+            embed.add_field(name=":droplet: Relative Humidity", value=str(rh2m), inline=False)
+            embed.add_field(name=":dash: Wind",
+                            value=f"Direction: {wind_direction} {get_wind_emoji(wind_direction)}\nSpeed: {wind_speed}",
+                            inline=False)
+            embed.add_field(name=":thermometer: Temperature", value=str(temp2m), inline=False)
+            embed.add_field(name=":umbrella: Precipitation Type", value=str(prec_type), inline=False)
 
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
@@ -542,6 +544,26 @@ class Developer1(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+
+def get_wind_emoji(direction):
+        if direction == "N":
+            return ":arrow_up:"
+        elif direction == "NE":
+            return ":arrow_upper_right:"
+        elif direction == "E":
+            return ":arrow_right:"
+        elif direction == "SE":
+            return ":arrow_lower_right:"
+        elif direction == "S":
+            return ":arrow_down:"
+        elif direction == "SW":
+            return ":arrow_lower_left:"
+        elif direction == "W":
+            return ":arrow_left:"
+        elif direction == "NW":
+            return ":arrow_upper_left:"
+        else:
+            return ""
 
 def setup(bot):
     bot.add_cog(Developer1(bot))
