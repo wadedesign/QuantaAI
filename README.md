@@ -34,4 +34,15 @@ QuantaAI is an AI-powered Discord bot designed to streamline server management a
 
 To get started with QuantaAI, visit the bot's [documentation](http://wadderprojects.bhweb.ws/documentation/documentation-html-template-master/docum.html) on the website.
 
-
+[![Powered by AI](https://img.shields.io/badge/Powered%20by-AI-orange.svg)](https://www.openai.com/)
+[![Global Connectivity](https://img.shields.io/badge/Global-Connectivity-blue.svg)](http://wadderprojects.bhweb.ws/)
+[![Language Learning](https://img.shields.io/badge/Language-Learning-yellow.svg)](http://wadderprojects.bhweb.ws/)
+[![Content Moderation](https://img.shields.io/badge/Content-Moderation-red.svg)](http://wadderprojects.bhweb.ws/)
+[![User-Friendly](https://img.shields.io/badge/User-Friendly-green.svg)](http://wadderprojects.bhweb.ws/)
+[![Free Access](https://img.shields.io/badge/Free-Access-purple.svg)](http://wadderprojects.bhweb.ws/)
+[![Community Building](https://img.shields.io/badge/Community-Building-brightgreen.svg)](http://wadderprojects.bhweb.ws/)
+[![Server Management](https://img.shields.io/badge/Server-Management-lightgrey.svg)](http://wadderprojects.bhweb.ws/)
+[![Customizable Commands](https://img.shields.io/badge/Customizable-Commands-ff69b4.svg)](http://wadderprojects.bhweb.ws/)
+[![Scalability](https://img.shields.io/badge/Scalability-critical.svg)](http://wadderprojects.bhweb.ws/)
+[![Continuous Development](https://img.shields.io/badge/Continuous-Development-yellowgreen.svg)](http://wadderprojects.bhweb.ws/)
+[![Documentation & Support](https://img.shields.io/badge/Documentation-&-Support-lightblue.svg)](http://wadderprojects.bhweb.ws/)
