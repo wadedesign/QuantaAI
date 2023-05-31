@@ -3,7 +3,7 @@ import nextcord
 from nextcord.ext import commands
 from nextcord import Interaction
 
-class TemplateCog(commands.Cog):
+class TemplateCog(commands.Cog): #** RFP **#
     def __init__(self, bot):
         self.bot = bot
 
