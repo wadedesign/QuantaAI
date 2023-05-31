@@ -3,7 +3,7 @@ import nextcord
 from nextcord.ext import commands
 import aiofiles
 
-class MessageArchive(commands.Cog):
+class MessageArchive(commands.Cog): #** RFP **#
     def __init__(self, bot):
         self.bot = bot
 
