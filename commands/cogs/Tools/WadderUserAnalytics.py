@@ -12,6 +12,7 @@ class UserAnalyticsCog(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         """Counts the number of messages sent by each user"""
+        print(f"on_message called: {message.content}")
         if message.author.bot:
             return
         if message.guild.id not in self.message_count:
@@ -24,6 +25,7 @@ class UserAnalyticsCog(commands.Cog):
     @commands.Cog.listener()
     async def on_message_delete(self, message):
         """Updates the message count when a message is deleted"""
+        print(f"on_message_delete called: {message.content}")
         if message.author.bot:
             return
         if message.guild.id in self.message_count and message.author.id in self.message_count[message.guild.id]:
@@ -40,12 +42,13 @@ class UserAnalyticsCog(commands.Cog):
             message_count_embed.add_field(name="Message Count", value=f"{message_count} \U0001F4AC")  # Emoji: 💬
 
             # Get the path to the GIF file in your project's directory
-            gif_path = os.path.join(os.getcwd(), 'quanta.gif')
+            gif_path = os.path.join(os.getcwd(), 'images', 'quanta.gif')
+
+            print(f"GIF Path: {gif_path}")
 
             # Load and attach the GIF file
-            with open(gif_path, 'rb') as gif_file:
-                gif = File(gif_file, filename='animated.gif')
-                message_count_embed.set_image(url="attachment://animated.gif")
+            gif = File(gif_path, filename='animated.gif')
+            message_count_embed.set_image(url="attachment://animated.gif")
 
             await ctx.send(file=gif, embed=message_count_embed)
         else:
@@ -56,16 +59,19 @@ class UserAnalyticsCog(commands.Cog):
                     message_count_embed.add_field(name=user.display_name, value=f"{count} \U0001F4AC")  # Emoji: 💬
 
             # Get the path to the GIF file in your project's directory
-            gif_path = os.path.join(os.getcwd(), 'quanta.gif')
+            gif_path = os.path.join(os.getcwd(), 'images', 'quanta.gif')
+
+            print(f"GIF Path: {gif_path}")
 
             # Load and attach the GIF file
-            with open(gif_path, 'rb') as gif_file:
-                gif = File(gif_file, filename='animated.gif')
-                message_count_embed.set_image(url="attachment://animated.gif")
+            gif = File(gif_path, filename='animated.gif')
+            message_count_embed.set_image(url="attachment://animated.gif")
 
             await ctx.send(file=gif, embed=message_count_embed)
 
 def setup(bot):
     bot.add_cog(UserAnalyticsCog(bot))
+
+
 
 
