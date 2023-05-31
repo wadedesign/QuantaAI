@@ -3,8 +3,6 @@ import nextcord
 from nextcord.ext import commands
 from nextcord import Interaction
 
-## ? could leave or add more sub commands ? ##
-
 class TemplateCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -12,18 +10,18 @@ class TemplateCog(commands.Cog):
     async def generate_server_structure(self, guild):
         structure = []
 
-        structure.append(f"Server Name: {guild.name}")
-        structure.append("Categories:")
+        structure.append(f"🏰 Server Name: {guild.name}")
+        structure.append("📚 Categories:")
 
         for category in guild.categories:
             structure.append(f"  - {category.name}")
 
-        structure.append("Channels:")
+        structure.append("📝 Channels:")
 
         for channel in guild.channels:
             structure.append(f"  - {channel.name}")
 
-        structure.append("Roles:")
+        structure.append("🔒 Roles:")
 
         for role in guild.roles:
             structure.append(f"  - {role.name}")
@@ -35,7 +33,7 @@ class TemplateCog(commands.Cog):
     async def savetemplate(self, interaction: Interaction):
         # Check if the user has admin privileges
         if not interaction.user.guild_permissions.administrator:
-            await interaction.response.send_message("You must have administrator privileges to use this command.", ephemeral=True)
+            await interaction.response.send_message("❌ You must have administrator privileges to use this command.", ephemeral=True)
             return
 
         name = "My Server Template"
