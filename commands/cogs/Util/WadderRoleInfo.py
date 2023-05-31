@@ -1,6 +1,8 @@
 import nextcord
 from nextcord.ext import commands
 
+# ** Good Command, RFP **
+
 class RoleInfoCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
