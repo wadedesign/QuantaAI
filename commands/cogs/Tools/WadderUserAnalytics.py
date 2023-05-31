@@ -3,6 +3,8 @@ from nextcord.ext import commands
 from nextcord import File
 import os
 
+# ** RFP ** SLash Commands
+
 class UserAnalyticsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
