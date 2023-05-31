@@ -701,6 +701,42 @@ class Developer1(commands.Cog):
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
+    @dev2.subcommand(name="art", description="Fetch a random artwork from the Art Institute of Chicago API")
+    async def artchi(self, interaction: nextcord.Interaction):
+        try:
+            url = "https://api.artic.edu/api/v1/artworks"
+
+            response = requests.get(url)
+            response.raise_for_status()  # Check for any HTTP errors
+
+            artworks = response.json()["data"]
+
+            # Extract character names from the response
+            characters = [artwork["title"] for artwork in artworks]
+
+            # Create an embed to display the available characters
+            embed = nextcord.Embed(title="Available Art Characters", color=nextcord.Color.blue())
+
+            # Split characters into multiple fields
+            chunk_size = 10  # Number of characters per field
+            chunks = [characters[i:i + chunk_size] for i in range(0, len(characters), chunk_size)]
+
+            for i, chunk in enumerate(chunks):
+                field_name = f"Characters (Part {i+1})"
+                character_list = ', '.join(chunk)
+                embed.add_field(name=field_name, value=character_list, inline=False)
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        except Exception as e:
+            print(str(e))
+            error_embed = nextcord.Embed(
+                title="Error Occurred",
+                description="An error occurred while fetching the available characters.",
+                color=nextcord.Color.red()
+            )
+            await interaction.response.send_message(embed=error_embed, ephemeral=True)
+
 
 def setup(bot):
     bot.add_cog(Developer1(bot))
