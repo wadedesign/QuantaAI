@@ -633,7 +633,7 @@ class Developer1(commands.Cog):
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
 
-    @dev2.subcommand(name='waifu',description="Fetch waifu pictures from WAIFU.IM API")
+    @dev2.subcommand(description="Fetch waifu pictures from WAIFU.IM API")
     async def waifu(self, interaction: nextcord.Interaction, tags: str = "waifu"):
         try:
             url = "https://api.waifu.im/search"
@@ -647,7 +647,7 @@ class Developer1(commands.Cog):
             data = response.json()
 
             # Extract image URL from the response
-            image_url = data["files"][0]["url"]
+            image_url = data["data"][0]["url"]
 
             # Create an embed to display the waifu picture
             embed = nextcord.Embed(title="Waifu Picture", color=nextcord.Color.blue())
@@ -663,6 +663,7 @@ class Developer1(commands.Cog):
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
+
 
 
 def setup(bot):
