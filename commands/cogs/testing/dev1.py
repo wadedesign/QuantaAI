@@ -600,7 +600,7 @@ class Developer1(commands.Cog):
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
             
-    @dev2.subcommand(base="characters", description="Fetch available characters from the AnimeChan API")
+    @dev2.subcommand(name="characters", description="Fetch available characters from the AnimeChan API")
     async def characters(self, interaction: nextcord.Interaction):
         try:
             url = "https://animechan.vercel.app/api/available/character"
@@ -612,8 +612,15 @@ class Developer1(commands.Cog):
 
             # Create an embed to display the available characters
             embed = nextcord.Embed(title="Available Anime Characters", color=nextcord.Color.blue())
-            character_list = ', '.join(characters)
-            embed.add_field(name=":busts_in_silhouette: Characters", value=character_list)
+
+            # Split characters into multiple fields
+            chunk_size = 10  # Number of characters per field
+            chunks = [characters[i:i + chunk_size] for i in range(0, len(characters), chunk_size)]
+
+            for i, chunk in enumerate(chunks):
+                field_name = f"Characters (Part {i+1})"
+                character_list = ', '.join(chunk)
+                embed.add_field(name=field_name, value=character_list, inline=False)
 
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
