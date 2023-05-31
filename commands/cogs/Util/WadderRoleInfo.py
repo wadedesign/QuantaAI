@@ -16,17 +16,16 @@ class RoleInfoCog(commands.Cog):
             await interaction.response.send_message("You don't have permission to use this command.", ephemeral=True)
             return
 
-        role_info = (
-            f"**Role Name:** {role.name}\n"
-            f"**Role ID:** {role.id}\n"
-            f"**Role Color:** {role.color}\n"
-            f"**Role Position:** {role.position}\n"
-            f"**Role Permissions:** {role.permissions}\n"
-            f"**Role Created At:** {role.created_at}\n"
-            f"**Role Members:** {len(role.members)}"
-        )
+        embed = nextcord.Embed(title="Role Information", color=role.color)
+        embed.add_field(name=":label: Role Name", value=role.name, inline=False)
+        embed.add_field(name=":id: Role ID", value=role.id, inline=False)
+        embed.add_field(name=":art: Role Color", value=str(role.color), inline=False)
+        embed.add_field(name=":arrow_double_down: Role Position", value=role.position, inline=False)
+        embed.add_field(name=":lock: Role Permissions", value=str(role.permissions), inline=False)
+        embed.add_field(name=":calendar: Role Created At", value=role.created_at, inline=False)
+        embed.add_field(name=":busts_in_silhouette: Role Members", value=str(len(role.members)), inline=False)
 
-        await interaction.response.send_message(role_info)
+        await interaction.response.send_message(embed=embed)
 
 def setup(bot):
     bot.add_cog(RoleInfoCog(bot))
