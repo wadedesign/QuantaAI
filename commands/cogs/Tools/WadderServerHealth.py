@@ -4,14 +4,15 @@ from datetime import datetime, timedelta
 from nextcord import File
 import os
 
-class Helpful(commands.Cog): #** RFP, Slash Commands
-
+class Helpful(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    
-        
-        
+    def add_gif_to_embed(self, embed, gif_path):
+        """Helper function to add a GIF to an embed"""
+        gif_file = File(gif_path, filename='animated.gif')
+        embed.set_image(url="attachment://animated.gif")
+
     @commands.command()
     async def channel_status(self, ctx, channel: nextcord.TextChannel = None):
         if not channel:
@@ -30,7 +31,6 @@ class Helpful(commands.Cog): #** RFP, Slash Commands
             if count >= 5000:
                 average = "OVER 5000!"
                 healthiness = "VERY HEALTHY \U0001F60D"  # Emoji: 😍
-
             else:
                 try:
                     average = round(count / 100, 2)
@@ -53,8 +53,14 @@ class Helpful(commands.Cog): #** RFP, Slash Commands
             embed.add_field(name="­", value=f" Number of members: {server_id.member_count}", inline=False)
             embed.add_field(name="­", value=f'Number of messages per day on average in "{channel}" is: {average}', inline=False)
             embed.add_field(name="­", value=f"Channel health: {healthiness}", inline=False)
-            
-            await ctx.send(embed=embed)
+
+            # Get the path to the GIF file in your project's directory
+            gif_path = os.path.join(os.getcwd(), 'images', 'quanta.gif')
+
+            # Load and attach the GIF file
+            self.add_gif_to_embed(embed, gif_path)
+
+            await ctx.send(file=File(gif_path), embed=embed)
 
 
 def setup(bot):
