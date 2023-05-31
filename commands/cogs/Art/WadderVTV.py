@@ -192,7 +192,7 @@ class WadderVTV(commands.Cog):
     
     # ** Give a url image link and have it explain it and what it means 
     # ! Works still
-    @main.subcommand(name="scenexplain", description="Explain a scene with a url image")
+    @main.subcommand(name="scenexplain", description="Explain a scene with a URL image")
     async def scene_explain(self, interaction: nextcord.Interaction, *, image_url: str):
         await interaction.response.defer()
 
@@ -208,9 +208,12 @@ class WadderVTV(commands.Cog):
             input=f"What is in this image {image_url}? "
         )
 
-        # Send the result in the chat
-        response = f"Result:\n{output}" # ! This always has to be the same each command or you will get an error using anything else
-        await interaction.send(response)
+        # Create an embed to display the result
+        embed = nextcord.Embed(title="Scene Explanation", color=nextcord.Color.blue())
+        embed.add_field(name="Result", value=f"{output} :camera:", inline=False)  # Add the camera emoji
+
+        await interaction.send(embed=embed)
+
         
         
     # ** All Search Types work, but the web search does not. Make all embeds

@@ -1,7 +1,7 @@
 import nextcord
 from nextcord.ext import commands
 
-class EmbedModal(nextcord.ui.Modal):
+class EmbedModal(nextcord.ui.Modal): # make send to a channel option
     def __init__(self):
         super().__init__(
             "Embed Maker",
