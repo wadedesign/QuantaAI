@@ -55,7 +55,7 @@ class WeatherCog(commands.Cog):
             await interaction.response.send_message("Failed to fetch weather data. Please try again later.")
             
     @q1.subcommand(name="onlinestatus", description="Print how many people are using each type of device.")
-    async def onlinestatus(self, ctx: commands.Context):
+    async def onlinestatus(self, interaction: nextcord.Interaction):
         """Print how many people are using each type of device."""
         device = {
             (True, True, True): 0,
@@ -68,7 +68,7 @@ class WeatherCog(commands.Cog):
             (False, False, False): 7,
         }
         store = [0, 0, 0, 0, 0, 0, 0, 0]
-        for m in ctx.guild.members:
+        for m in interaction.guild.members:
             value = (
                 m.desktop_status == nextcord.Status.offline,
                 m.web_status == nextcord.Status.offline,
@@ -85,7 +85,7 @@ class WeatherCog(commands.Cog):
             f"\ndesktop mobile: {store[6]}"
             f"\nonline all: {store[7]}"
         )
-        await ctx.send(f"```py\n{msg}```")
+        await interaction.send(f"```py\n{msg}```")
 
 def setup(bot):
     bot.add_cog(WeatherCog(bot))
