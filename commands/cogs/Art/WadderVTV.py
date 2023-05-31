@@ -172,9 +172,10 @@ class WadderVTV(commands.Cog):
             #await interaction.send(f"Sorry, I couldn't find a result for '{query}'.")
     # 
     # ** Serp Google Search  (Works Very Well, this was a bitch) **
-    @main.subcommand(name="serp")
+    @main.subcommand(name="serp", description="Perform a Google search")
     async def search_google(self, interaction: nextcord.Interaction, *, query: str):
         await interaction.response.defer()
+
         # Initialize the OpenAI language model
         llm = OpenAI(temperature=0,openai_api_key=os.environ['OPENAI_API_KEY'])
 
@@ -186,9 +187,12 @@ class WadderVTV(commands.Cog):
         result = agent.run(query)
         print("Result:", result)
 
-        # Send the search result in the chat
-        response = f"Result:\n{result}"
-        await interaction.send(response)
+        # Create an embed to display the search result
+        embed = nextcord.Embed(title="Google Search Result", color=nextcord.Color.blue())
+        embed.add_field(name="Result", value=f"{result} :mag:", inline=False)  # Add the magnifying glass emoji
+
+        await interaction.send(embed=embed)
+
     
     # ** Give a url image link and have it explain it and what it means 
     # ! Works still
