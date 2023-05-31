@@ -58,8 +58,10 @@ async def on_ready():
             view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.secondary, label="GitHub Repo", emoji="🔗", url="https://github.com/your_username/your_repo"))
             view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.success, label="Documentation", emoji="📚", url="https://example.com/docs"))
             view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.danger, label="Bug Report", emoji="🐛", url="https://example.com/bug-report"))
+                        
+            allowed_mentions = nextcord.AllowedMentions.none()  # Disable mention parsing
 
-            await channel.send(embed=embed, view=view)
+            await channel.send(embed=embed, view=view, allowed_mentions=allowed_mentions)
         else:
             print(f"Unable to find channel with ID: {channel_id}")
     except Exception as e:
