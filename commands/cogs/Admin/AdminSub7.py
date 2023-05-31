@@ -136,10 +136,11 @@ class AwayFromKeyboard(commands.Cog):
             except:
                 print(f'I was not able to edit [{interac.user}].')
             
-            await interac.response.send_message(content=interac.user.mention, content="Your AFK status has been removed.")
+            await interac.response.send_message(content=f"{interac.user.mention} Your AFK status has been removed.")
         else:
-            await interac.response.send_message(content=interac.user.mention, content="You are not currently AFK.")
+            await interac.response.send_message(content=f"{interac.user.mention} You are not currently AFK.")
 
 def setup(bot):
     bot.add_cog(AwayFromKeyboard(bot))
     print('AFK Cog is loaded')
+
