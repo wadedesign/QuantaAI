@@ -492,8 +492,8 @@ class Developer1(commands.Cog):
 
 
 
-    @dev2.subcommand(name="quantaweather", description="Fetch weather information from 7Timer API")
-    async def weatherq(self, interaction: nextcord.Interaction):
+    @dev2.subcommand(name="weather", description="Fetch weather information from 7Timer API")
+    async def weather(self, interaction: nextcord.Interaction):
         try:
             url = "http://www.7timer.info/bin/api.pl"
             params = {
@@ -502,22 +502,35 @@ class Developer1(commands.Cog):
                 "product": "astro",
                 "output": "json"
             }
-            
+
             response = requests.get(url, params=params)
-            response.raise_for_status()
+            response.raise_for_status()  # Check for any HTTP errors
 
             data = response.json()
-            
-            # Extract relevant information from the response
-            weather_info = data["dataseries"][0]["weather"]
-            temperature = data["dataseries"][0]["temp2m"]
-            precipitation = data["dataseries"][0]["prec_amount"]
+
+            # Extract relevant weather information
+            timepoint = data["dataseries"][0]["timepoint"]
+            cloudcover = data["dataseries"][0]["cloudcover"]
+            seeing = data["dataseries"][0]["seeing"]
+            transparency = data["dataseries"][0]["transparency"]
+            lifted_index = data["dataseries"][0]["lifted_index"]
+            rh2m = data["dataseries"][0]["rh2m"]
+            wind_direction = data["dataseries"][0]["wind10m"]["direction"]
+            wind_speed = data["dataseries"][0]["wind10m"]["speed"]
+            temp2m = data["dataseries"][0]["temp2m"]
+            prec_type = data["dataseries"][0]["prec_type"]
 
             # Create an embed to display the weather information
-            embed = nextcord.Embed(title="7Timer Weather Information", color=nextcord.Color.blue())
-            embed.add_field(name="Weather", value=weather_info, inline=False)
-            embed.add_field(name="Temperature", value=f"{temperature}°C", inline=False)
-            embed.add_field(name="Precipitation", value=precipitation, inline=False)
+            embed = nextcord.Embed(title="Weather Information", color=nextcord.Color.blue())
+            embed.add_field(name="Timepoint", value=str(timepoint), inline=False)
+            embed.add_field(name="Cloud Cover", value=str(cloudcover), inline=False)
+            embed.add_field(name="Seeing", value=str(seeing), inline=False)
+            embed.add_field(name="Transparency", value=str(transparency), inline=False)
+            embed.add_field(name="Lifted Index", value=str(lifted_index), inline=False)
+            embed.add_field(name="Relative Humidity", value=str(rh2m), inline=False)
+            embed.add_field(name="Wind", value=f"Direction: {wind_direction}\nSpeed: {wind_speed}", inline=False)
+            embed.add_field(name="Temperature", value=str(temp2m), inline=False)
+            embed.add_field(name="Precipitation Type", value=str(prec_type), inline=False)
 
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
@@ -525,7 +538,7 @@ class Developer1(commands.Cog):
             print(str(e))
             error_embed = nextcord.Embed(
                 title="Error Occurred",
-                description="An error occurred while fetching weather information from 7Timer API.",
+                description="An error occurred while fetching the weather information.",
                 color=nextcord.Color.red()
             )
             await interaction.response.send_message(embed=error_embed, ephemeral=True)
