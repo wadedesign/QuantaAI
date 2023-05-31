@@ -116,8 +116,8 @@ class LocalSearchCog(commands.Cog):
         else:
             await interaction.send("No video results found.")
             
-    @main.subcommand(name="googlevideos2", description="Searches for videos based on a query")
-    async def youtubesearch(self, interaction: nextcord. Interaction, query: str):
+    @main.subcommand(name="ytvideos", description="Searches for videos based on a query")
+    async def youtubesearch(self, interaction: nextcord.Interaction, query: str):
         await interaction.response.defer()
         params = {
             "engine": "youtube",
@@ -127,15 +127,16 @@ class LocalSearchCog(commands.Cog):
 
         search = GoogleSearch(params)
         results = search.get_dict()
-        movie_results = results["movie_results"]
+        video_results = results.get("video_results")
 
-        if movie_results:
-            await interaction.send("Movie results found:")
-            for movie in movie_results[:5]:  # Limit to 5 results to avoid exceeding message limit
-                response = f"{movie['title']} - {movie['link']}"
+        if video_results:
+            await interaction.send("Video results found:")
+            for video in video_results[:5]:  # Limit to 5 results to avoid exceeding message limit
+                response = f"{video['title']} - {video['link']}"
                 await interaction.send(response)
         else:
-            await interaction.send("No movie results found.") #movie_resutls error 
+            await interaction.send("No video results found.")
+
             
     @main.subcommand(name="bing", description="Searches for things on bing")
     async def bingsearch(self, interaction: nextcord.Interaction, query: str):
