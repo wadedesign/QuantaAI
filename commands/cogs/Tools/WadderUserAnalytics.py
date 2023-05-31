@@ -34,14 +34,15 @@ class UserAnalyticsCog(commands.Cog):
 
         if user:
             message_count = self.message_count.get(guild_id, {}).get(user.id, 0)
-            message_count_embed = nextcord.Embed(title=f"Message Count for {user.display_name}", description=message_count)
+            message_count_embed = nextcord.Embed(title=f"Message Count for {user.display_name}")
+            message_count_embed.add_field(name="Message Count", value=f"{message_count} \U0001F4AC")  # Emoji: 💬
             await ctx.send(embed=message_count_embed)
         else:
             message_count_embed = nextcord.Embed(title="Message Count")
             for user_id, count in self.message_count.get(guild_id, {}).items():
                 user = self.bot.get_user(user_id)
                 if user:
-                    message_count_embed.add_field(name=user.display_name, value=count)
+                    message_count_embed.add_field(name=user.display_name, value=f"{count} \U0001F4AC")  # Emoji: 💬
             await ctx.send(embed=message_count_embed)
 
 def setup(bot):
