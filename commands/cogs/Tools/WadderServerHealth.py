@@ -1,12 +1,17 @@
 import nextcord
 from nextcord.ext import commands
 from datetime import datetime, timedelta
+from nextcord import File
+import os
 
 class Helpful(commands.Cog): #** RFP, Slash Commands
 
     def __init__(self, bot):
         self.bot = bot
 
+    
+        
+        
     @commands.command()
     async def channel_status(self, ctx, channel: nextcord.TextChannel = None):
         if not channel:
@@ -48,7 +53,7 @@ class Helpful(commands.Cog): #** RFP, Slash Commands
             embed.add_field(name="­", value=f" Number of members: {server_id.member_count}", inline=False)
             embed.add_field(name="­", value=f'Number of messages per day on average in "{channel}" is: {average}', inline=False)
             embed.add_field(name="­", value=f"Channel health: {healthiness}", inline=False)
-
+            
             await ctx.send(embed=embed)
 
 
