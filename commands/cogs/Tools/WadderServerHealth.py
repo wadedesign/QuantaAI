@@ -56,11 +56,16 @@ class Helpful(commands.Cog):
             gif_file = nextcord.File(gif_path, filename='animated.gif')
             embed.set_image(url="attachment://animated.gif")
 
+            # Additional information in the embed
+            embed.set_footer(text=f"Requested by {ctx.author.display_name}")
+            embed.timestamp = datetime.now()
+
             # Send the embed with the GIF as an attachment
             await ctx.send(file=gif_file, embed=embed)
 
 
 def setup(bot):
     bot.add_cog(Helpful(bot))
+
 
 
