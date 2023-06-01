@@ -45,9 +45,17 @@ class Helpful(commands.Cog):
                     average = 0
                     healthiness = "VERY UNHEALTHY \U0001F625"  # Emoji: 😥
 
-            embed.add_field(name="­", value=f" Number of members: {server_id.member_count}", inline=False)
+            embed.add_field(name="­", value=f"Number of members: {server_id.member_count}", inline=False)
             embed.add_field(name="­", value=f'Number of messages per day on average in "{channel}" is: {average}', inline=False)
             embed.add_field(name="­", value=f"Channel health: {healthiness}", inline=False)
+
+            # Additional information in the embed
+            embed.add_field(name="Channel", value=channel.mention, inline=True)
+            embed.add_field(name="Created at", value=channel.created_at.strftime("%Y-%m-%d %H:%M:%S"), inline=True)
+            embed.add_field(name="Category", value=channel.category.name if channel.category else "None", inline=True)
+            embed.add_field(name="Channel ID", value=channel.id, inline=True)
+            embed.add_field(name="NSFW", value=channel.is_nsfw(), inline=True)
+            embed.add_field(name="Slowmode", value=channel.slowmode_delay if channel.slowmode_delay else "Not Enabled", inline=True)
 
             # Get the path to the GIF file in your project's directory
             gif_path = os.path.join(os.getcwd(), 'images', 'quanta.gif')
@@ -56,16 +64,11 @@ class Helpful(commands.Cog):
             gif_file = nextcord.File(gif_path, filename='animated.gif')
             embed.set_image(url="attachment://animated.gif")
 
-            # Additional information in the embed
-            embed.set_footer(text=f"Requested by {ctx.author.display_name}")
-            embed.timestamp = datetime.now()
-
             # Send the embed with the GIF as an attachment
             await ctx.send(file=gif_file, embed=embed)
 
 
 def setup(bot):
     bot.add_cog(Helpful(bot))
-
 
 
