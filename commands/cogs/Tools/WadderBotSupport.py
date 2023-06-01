@@ -6,6 +6,7 @@ from nextcord.ext import commands
 import glob
 import os
 
+# ** RFP ** #
 
 class InfoCmd(commands.Cog):
     def __init__(self, bot):
