@@ -12,6 +12,7 @@ class Helpful(commands.Cog):
         """Helper function to add a GIF to an embed"""
         gif_file = File(gif_path, filename='animated.gif')
         embed.set_image(url="attachment://animated.gif")
+        embed.set_footer(text="GIF provided by Quanta")  # Optional: Set a footer for the embed
 
     @commands.command()
     async def channel_status(self, ctx, channel: nextcord.TextChannel = None):
@@ -57,10 +58,10 @@ class Helpful(commands.Cog):
             # Get the path to the GIF file in your project's directory
             gif_path = os.path.join(os.getcwd(), 'images', 'quanta.gif')
 
-            # Load and attach the GIF file
+            # Attach the GIF file to the embed
             self.add_gif_to_embed(embed, gif_path)
 
-            await ctx.send(file=File(gif_path), embed=embed)
+            await ctx.send(embed=embed)
 
 
 def setup(bot):
