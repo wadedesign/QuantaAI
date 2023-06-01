@@ -80,15 +80,18 @@ class Stocks2(commands.Cog):
         
         
         
-    @main.subcommand(name="wtweet", description="To tweet something")
-    async def tweet(self, interaction: nextcord.Interaction, *, comment, user: nextcord.Member = None):
-        print("Inside tweet function")
+    @main.command(name="wtweet", description="To tweet something")
+    async def tweet(self, ctx, *, comment, user: nextcord.Member = None):
+        print("Inside tweet command")
+        interaction = ctx.interaction
         await interaction.response.defer()
+        
         if not user:
-            user = interaction.user
-
+            user = ctx.author
+        
         url = f"https://some-random-api.ml/canvas/tweet?avatar={user.display_avatar}&username={user.name}&comment={comment}&displayname={user.display_name}"
         print("API URL:", url)
+        
         try:
             async with aiohttp.ClientSession() as session:
                 response = await session.get(url)
@@ -96,31 +99,28 @@ class Stocks2(commands.Cog):
                 file = nextcord.File(imageData, filename="tweet.png")
                 print("File created")
 
-            embed = nextcord.Embed(colour=interaction.user.color)
+            embed = nextcord.Embed(colour=ctx.author.color)
             embed.set_image(url="attachment://tweet.png")
-            embed.set_footer(text=f"Requested By {interaction.user}", icon_url=interaction.user.display_avatar)
+            embed.set_footer(text=f"Requested By {ctx.author}", icon_url=ctx.author.display_avatar)
 
-            await interaction.send(embed=embed, file=file)
+            await ctx.send(embed=embed, file=file)
             print("Response sent")
         except aiohttp.ClientConnectorError:
-            await interaction.send("An error occurred while connecting to the external API. Please try again later.")
+            await ctx.send("An error occurred while connecting to the external API. Please try again later.")
             print("API connection error")
 
-    @tweet.error
-    async def tweet_error(self, ctx, error):
-        print("Inside tweet_error function")
-        if isinstance(error, commands.MissingRequiredArgument):
-            embed = await Embed.missingrequiredargument(self, ctx)
-            await ctx.respond(embed=embed, delete_after=60)
-            print("Missing required argument error")
-
-        elif isinstance(error, commands.MemberNotFound):
-            embed = await Embed.membernotfound(self, ctx)
-            await ctx.respond(embed=embed, delete_after=60)
-            print("Member not found error")
-
-        else:
-            pass
+    @commands.Cog.listener()
+    async def on_message(self, message: nextcord.Message):
+        print("on_message called")
+        ctx = await self.bot.get_context(message)
+        command_name = "wtweet"
+        
+        if ctx.command and ctx.command.name == command_name:
+            return
+        
+        if message.content.startswith(f"!{command_name}"):
+            comment = message.content.removeprefix(f"!{command_name}")
+            await self.tweet(ctx, comment)
 
 
     @main.subcommand(name="github", description="get github user") 
