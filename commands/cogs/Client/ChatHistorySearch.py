@@ -17,13 +17,13 @@ class ChatHistorySearchCog(commands.Cog):
         result_messages = "\n".join(messages)
         
         if len(result_messages) <= 2000:
-            await interaction.response.send_message(f"Search results for '{query}':\n{result_messages}")
+            await interaction.response.send_message(f"✉️ Search results for '{query}':\n{result_messages}")
         else:
-            await interaction.response.send_message(f"Search results for '{query}':")
-            await interaction.followup.send("\n".join(messages[:len(messages)//2]))
-            await interaction.followup.send("\n".join(messages[len(messages)//2:]))
+            await interaction.response.send_message(f"✉️ Search results for '{query}':")
+            await interaction.followup.send("📃 " + "\n".join(messages[:len(messages)//2]))
+            await interaction.followup.send("📃 " + "\n".join(messages[len(messages)//2:]))
 
-    @nextcord.slash_command(description="Search for messages containing a keyword in the chat history.")
+    @nextcord.slash_command(name='chatsearch',description="Search for messages containing a keyword in the chat history.")
     @commands.has_permissions(administrator=True)
     async def search(self, interaction: nextcord.Interaction, query: str):
         """Search for messages containing a keyword in the chat history."""
@@ -33,7 +33,7 @@ class ChatHistorySearchCog(commands.Cog):
         if results:
             await self.send_paginated_results(interaction, query, results)
         else:
-            await interaction.response.send_message(f"No messages found containing '{query}'.")
+            await interaction.response.send_message(f"❌ No messages found containing '{query}'.")
 
 def setup(bot):
     bot.add_cog(ChatHistorySearchCog(bot))
