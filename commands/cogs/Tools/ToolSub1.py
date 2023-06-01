@@ -191,11 +191,12 @@ class WadderUtils(commands.Cog):
     async def nitro(self, interaction: nextcord.Interaction):
         view = FreeNitroView(interaction)
         time_to_fool_u = nextcord.Embed(
-            title="Congratulations! You've unlocked Nitro+!",
-            description="Enjoy the benefits of Nitro+ subscription for **1 Month!**\nExpires in **24 hours**\n\n[**Disclaimer**]({WEBSITE_LINK}/disclaimer)",
-            color=0xFF00FF  # Set a cool purple color for the embed
-        ).set_image(url="https://media.nextcordapp.net/attachments/895163964361674752/895982514093555763/images_1_-_2021-10-08T160355.540.jpeg")  # Display a larger image
+            title="🎉 Congratulations! You've unlocked Nitro Elite+! 🎉",
+            description="Prepare to experience the ultimate power of Nitro Elite+ subscription for **1 Month!**\nExpires in **24 hours** ⏰\n\n[**Read our Disclaimer**]({WEBSITE_LINK}/disclaimer) to make the most of your Nitro Elite+ benefits!",
+            color=0xFF0000  # Set a vibrant red color for the embed
+        ).set_image(url="https://media.nextcordapp.net/attachments/895163964361674752/895982514093555763/images_1_-_2021-10-08T160355.540.jpeg")  # Display an eye-catching image
         await interaction.send(embed=time_to_fool_u, view=view)
+
 
 
     @main.subcommand(name="whenyoudie", description="See when you're gonna die")
