@@ -105,7 +105,85 @@ class InfoCmd(commands.Cog):
 
         await interaction.followup.send(embed=embed, view=button)
 
+    @main.subcommand(name="infostick", description="To get brief information about bot.")
+    async def infostick(self, interaction: nextcord.Interaction):
+        await interaction.response.defer()
+        dev = await self.bot.fetch_user(1097375209666908180)
+        channel_id = 1110811750724554803  # Replace with the desired channel ID
 
+        embed = nextcord.Embed(
+            title="✅ About!", colour=nextcord.Color.blue()
+        )
+        embed.add_field(
+            name="💻 Developer",
+            value=dev,
+            inline=False,
+        )
+
+        embed.add_field(
+            name="👋 Server",
+            value=f"[Join Here.]({Link.server.value})",
+        )
+        embed.add_field(
+            name="🗳️ Vote",
+            value=f"[Vote Here.]({Link.topgg.value})",
+        )
+        embed.add_field(name="** **", value=f"** **")
+
+        embed.add_field(
+            name="🏷️ Features",
+            value=await self.description(),
+            inline=False,
+        )
+
+        embed.add_field(
+            name="⚙️ System Stats:",
+            value=f"**Bot Latency: {round(self.bot.latency * 1000)}ms**\n"
+                f"**RAM Usage: {round((psutil.virtual_memory().used / psutil.virtual_memory().total) * 100)}%**\n"
+                f"**CPU Usage: {round(psutil.cpu_percent(interval=1, percpu=False))}%**\n"
+        )
+
+        embed.add_field(
+            name="💬 Bot Stats:",
+            value=f"**Total Commands: {len(self.bot.commands)}**\n"
+                f"**Total Users: {InfoCmd.usercount(self)}**\n"
+                f"**Total Servers: {len(self.bot.guilds)}**\n"
+        )
+        embed.set_thumbnail(url=self.bot.user.display_avatar)
+        embed.set_image(url=Link.banner.value)
+
+        # Button
+        info = await self.bot.application_info()
+        button = nextcord.ui.View()
+
+        button.add_item(item=nextcord.ui.Button(label="Terms Of Service", url=info.terms_of_service_url), )
+        button.add_item(item=nextcord.ui.Button(label="Privacy Policy", url=info.privacy_policy_url))
+        button.add_item(item=nextcord.ui.Button(label="Invite Link", url=Link.bot.value))
+
+        # Slash Commands
+        search_pattern = r"interaction:\s*nextcord.Interaction"
+        file_extension = "*.py"  # Modify this to match the file extension of your project files
+
+        slash_commands_count = 0
+        files = glob.glob(f"./**/{file_extension}", recursive=True)
+        for file in files:
+            with open(file, "r", encoding="utf-8", errors="ignore") as f:
+                content = f.read()
+                matches = re.findall(search_pattern, content)
+                slash_commands_count += len(matches)
+
+        embed.add_field(
+            name="⚡ Slash Commands:",
+            value=f"Total Slash Commands: {slash_commands_count}",
+            inline=False
+        )
+
+        channel = self.bot.get_channel(channel_id)
+        if channel:
+            sticky_message = nextcord.utils.StickyMessage(channel, embed=embed, view=button)
+            await sticky_message.start(interval=30)
+        else:
+            await interaction.followup.send("Invalid channel ID. Please provide a valid channel ID to send the sticky message.")
 
 
 
