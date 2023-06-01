@@ -32,6 +32,7 @@ class InfoCmd(commands.Cog):
 
     @main.subcommand(name="info", description="To get brief information about bot.")
     async def info(self, interaction: nextcord.Interaction):
+        await interaction.response.defer()
         dev = await self.bot.fetch_user(1097375209666908180)
 
         embed = nextcord.Embed(
