@@ -2,7 +2,8 @@ import psutil
 import nextcord
 from utils.WF1 import Var, Link
 from nextcord.ext import commands
-
+import re
+import inspect
 
 
 class InfoCmd(commands.Cog):
@@ -28,6 +29,7 @@ class InfoCmd(commands.Cog):
     
     
     
+
     @main.subcommand(name="info", description="To get brief information about bot.")
     async def info(self, interaction: nextcord.Interaction):
         dev = await self.bot.fetch_user(1097375209666908180)
@@ -82,10 +84,20 @@ class InfoCmd(commands.Cog):
         button.add_item(item=nextcord.ui.Button(label="Invite Link", url=Link.bot.value))
 
         # Slash Commands
-        slash_commands = await self.bot.get_global_commands()
+        code = inspect.getsource(self.info)  # Get the source code of the info function
+        pattern = r'interaction:\s*nextcord.Interaction'  # Regular expression pattern to search for "interaction: nextcord.Interaction"
+        matches = re.findall(pattern, code)
+
+        slash_commands = []
+        for match in matches:
+            slash_command = match.split(':')[0].strip()
+            slash_commands.append(slash_command)
 
         if slash_commands:
-            slash_commands_str = '\n'.join(f'/{command.name}' for command in slash_commands)
+            for command in slash_commands:
+                await self.bot.application_command(interaction.guild_id).create(name=command)
+
+            slash_commands_str = '\n'.join(slash_commands)
             embed.add_field(
                 name="⚡ Slash Commands:",
                 value=slash_commands_str,
@@ -93,6 +105,7 @@ class InfoCmd(commands.Cog):
             )
 
         await interaction.send(embed=embed, view=button)
+
 
 
 
