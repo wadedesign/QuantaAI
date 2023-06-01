@@ -1,3 +1,4 @@
+import re
 import psutil
 import nextcord
 from utils.WF1 import Var, Link
@@ -85,30 +86,24 @@ class InfoCmd(commands.Cog):
         button.add_item(item=nextcord.ui.Button(label="Invite Link", url=Link.bot.value))
 
         # Slash Commands
-        search_pattern = "interaction: nextcord.Interaction"
+        search_pattern = r"interaction:\s*nextcord.Interaction"
         file_extension = "*.py"  # Modify this to match the file extension of your project files
 
-        slash_commands = []
+        slash_commands_count = 0
         files = glob.glob(f"./**/{file_extension}", recursive=True)
         for file in files:
-            with open(file, "r", encoding="utf-8") as f:
+            with open(file, "r", encoding="utf-8", errors="ignore") as f:
                 content = f.read()
-                count = content.count(search_pattern)
-                for i in range(count):
-                    slash_commands.append(f"slash_command{i+1}")
+                matches = re.findall(search_pattern, content)
+                slash_commands_count += len(matches)
 
-        if slash_commands:
-            for command in slash_commands:
-                await self.bot.application_command(interaction.guild_id).create(name=command)
+        embed.add_field(
+            name="⚡ Slash Commands:",
+            value=f"Total Slash Commands: {slash_commands_count}",
+            inline=False
+        )
 
-            slash_commands_str = '\n'.join(slash_commands)
-            embed.add_field(
-                name="⚡ Slash Commands:",
-                value=slash_commands_str,
-                inline=False
-            )
-
-        await interaction.send(embed=embed, view=button)
+        await interaction.followup.send(embed=embed, view=button)
 
 
 
