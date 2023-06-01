@@ -15,11 +15,15 @@ class XKCD(BaseCog):
 
     def __init__(self, bot):
         self.bot = bot
+        
+    @nextcord.slash_command(name='dev3')
+    async def dev3(self, interaction: nextcord.Interaction):
+       pass
 
-    @commands.command()
-    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
-    async def xkcd(self, ctx, *, entry_number=None):
-        """Post a random xkcd"""
+    @dev3.subcommand(name="xkcd", description="To get xkcd comics")
+    async def xkcd(self, interaction: nextcord.Interaction, *, entry_number=None):
+        await interaction.response.defer()
+
 
         # Creates random number between 0 and 2190 (number of xkcd comics at time of writing) and queries xkcd
         headers = {"content-type": "application/json"}
@@ -46,7 +50,7 @@ class XKCD(BaseCog):
         embed.description = xkcd["alt"]
         embed.set_image(url=xkcd["img"])
         embed.set_footer(text="Powered by xkcd")
-        await ctx.send(embed=embed)
+        await interaction.send(embed=embed)
 
 
 def setup(bot):
