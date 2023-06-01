@@ -2,8 +2,8 @@ import psutil
 import nextcord
 from utils.WF1 import Var, Link
 from nextcord.ext import commands
-import re
-import inspect
+import glob
+import os
 
 
 class InfoCmd(commands.Cog):
@@ -28,7 +28,7 @@ class InfoCmd(commands.Cog):
         pass
     
     
-    
+  
 
     @main.subcommand(name="info", description="To get brief information about bot.")
     async def info(self, interaction: nextcord.Interaction):
@@ -84,14 +84,17 @@ class InfoCmd(commands.Cog):
         button.add_item(item=nextcord.ui.Button(label="Invite Link", url=Link.bot.value))
 
         # Slash Commands
-        code = inspect.getsource(self.info)  # Get the source code of the info function
-        pattern = r'interaction:\s*nextcord.Interaction'  # Regular expression pattern to search for "interaction: nextcord.Interaction"
-        matches = re.findall(pattern, code)
+        search_pattern = "interaction: nextcord.Interaction"
+        file_extension = "*.py"  # Modify this to match the file extension of your project files
 
         slash_commands = []
-        for match in matches:
-            slash_command = match.split(':')[0].strip()
-            slash_commands.append(slash_command)
+        files = glob.glob(f"./**/{file_extension}", recursive=True)
+        for file in files:
+            with open(file, "r", encoding="utf-8") as f:
+                content = f.read()
+                count = content.count(search_pattern)
+                for i in range(count):
+                    slash_commands.append(f"slash_command{i+1}")
 
         if slash_commands:
             for command in slash_commands:
