@@ -28,9 +28,8 @@ class InfoCmd(commands.Cog):
     
     
     
-    @main.subcommand(name = "info", description = "To get brief information about bot.")
+    @main.subcommand(name="info", description="To get brief information about bot.")
     async def info(self, interaction: nextcord.Interaction):
-
         dev = await self.bot.fetch_user(1097375209666908180)
 
         embed = nextcord.Embed(
@@ -54,16 +53,15 @@ class InfoCmd(commands.Cog):
 
         embed.add_field(
             name="🏷️ Features",
-            value= await self.description(),
+            value=await self.description(),
             inline=False,
         )
 
         embed.add_field(
             name="⚙️ System Stats:",
-            value=f"**Bot Latency: {round(self.bot.latency* 1000)}ms**\n"
+            value=f"**Bot Latency: {round(self.bot.latency * 1000)}ms**\n"
                 f"**RAM Usage: {round((psutil.virtual_memory().used / psutil.virtual_memory().total) * 100)}%**\n"
                 f"**CPU Usage: {round(psutil.cpu_percent(interval=1, percpu=False))}%**\n"
-            
         )
 
         embed.add_field(
@@ -75,15 +73,27 @@ class InfoCmd(commands.Cog):
         embed.set_thumbnail(url=self.bot.user.display_avatar)
         embed.set_image(url=Link.banner.value)
 
-        # button
+        # Button
         info = await self.bot.application_info()
         button = nextcord.ui.View()
 
-        button.add_item(item=nextcord.ui.Button(label="Terms Of Service", url=info.terms_of_service_url),)
+        button.add_item(item=nextcord.ui.Button(label="Terms Of Service", url=info.terms_of_service_url), )
         button.add_item(item=nextcord.ui.Button(label="Privacy Policy", url=info.privacy_policy_url))
         button.add_item(item=nextcord.ui.Button(label="Invite Link", url=Link.bot.value))
 
+        # Slash Commands
+        slash_commands = await self.bot.fetch_all_commands()
+        if slash_commands:
+            slash_commands_str = '\n'.join(f'/{command.name}' for command in slash_commands)
+            embed.add_field(
+                name="⚡ Slash Commands:",
+                value=slash_commands_str,
+                inline=False
+            )
+
         await interaction.send(embed=embed, view=button)
+
+
 
     @main.subcommand(name = "waddervote", description = "To get information about voting the bot.")
     @commands.is_owner()
