@@ -169,14 +169,18 @@ class ServerEmojisCog(commands.Cog):
     @main.subcommand()
     async def memberlist(self, interaction: nextcord.Interaction):
         """See all the members of this server sorted by their top role"""
-        guild = interaction.guild
-        people = sorted(guild.members, key=lambda member: member.top_role, reverse=True)
+        people = sorted(interaction.guild.members, key=lambda member: member.top_role, reverse=True)
 
-        paginator = Paginator(title=f"{len(people)} Members", per_page=10)
-        for num, member in enumerate(people, 1):
-            paginator.add_line(f"[{num}] {member.name}\n    [ID] {member.id} [TOP ROLE] {member.top_role.name}")
+        peoples = commands.Paginator(max_size=500, prefix="```ini\n", suffix="```")
+        for num, i in enumerate(people, 1):
+            peoples.add_line(f"[{num}] {i.name}\n    [ID] {i.id} [TOP ROLE] {i.top_role.name}")
 
-        await paginator.start(interaction)
+        embeds = []
+        for page in peoples.pages:
+            embeds.append(nextcord.Embed(title=f"{len(people)} Members", description=page))
+
+        paginator = Paginator(embeds)
+        await paginator.send_initial_message(interaction, interaction.channel)
         
     @main.subcommand()
     async def firstjoins(self, interaction: nextcord.Interaction):
