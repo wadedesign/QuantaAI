@@ -82,7 +82,8 @@ class InfoCmd(commands.Cog):
         button.add_item(item=nextcord.ui.Button(label="Invite Link", url=Link.bot.value))
 
         # Slash Commands
-        slash_commands = await self.bot.fetch_guild_commands(None)
+        slash_commands = await self.bot.get_global_commands()
+
         if slash_commands:
             slash_commands_str = '\n'.join(f'/{command.name}' for command in slash_commands)
             embed.add_field(
