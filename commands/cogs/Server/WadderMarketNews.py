@@ -12,11 +12,11 @@ class MarketNews(commands.Cog):
     def cog_unload(self):
         self.update_news.cancel()
 
-    @nextcord.slash_command()
-    @commands.has_permissions(administrator=True)  # Only admins can set the news channel
-    async def snewschannel(self, interaction: nextcord.Interaction, channel: nextcord.TextChannel):
+    @nextcord.slash_command(description="Set the channel to receive market news", options=[nextcord.Option("channel", description="The channel to set as the market news channel", type=nextcord.ChannelType.text)])
+    @commands.has_permissions(administrator=True)  # Only administrators can set the news channel
+    async def set_news_channel(self, interaction: nextcord.Interaction, channel: nextcord.TextChannel):
         self.channel_id = channel.id
-        await interaction.send(f"Market news channel set to {channel.mention}.")
+        await interaction.response.send_message(f"Market news channel set to {channel.mention}.", ephemeral=True)
 
     @tasks.loop(minutes=60)  # Update the news every 60 minutes
     async def update_news(self):
@@ -24,9 +24,9 @@ class MarketNews(commands.Cog):
             feed = feedparser.parse(self.feed_url)
             entries = feed.entries
             if entries:
-                embed = nextcord.Embed(title='Latest Market News', color=0x2ecc71)
+                embed = nextcord.Embed(title='📰 Latest Market News 📈', color=0xFFA500)  # Set a vibrant orange color for the embed
                 for entry in entries:
-                    embed.add_field(name=entry['title'], value=entry['link'], inline=False)
+                    embed.add_field(name=entry['title'], value=f"[Read More]({entry['link']})", inline=False)
                 channel = self.bot.get_channel(self.channel_id)
                 await channel.send(embed=embed)
 

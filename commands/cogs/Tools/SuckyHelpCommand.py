@@ -3,7 +3,7 @@ import nextcord
 from nextcord.ext import commands
 
 
-# works but still errors out.
+# works but still errors out. ! delete this file
 
 class ServerHelp(commands.Cog):
     def __init__(self, bot):

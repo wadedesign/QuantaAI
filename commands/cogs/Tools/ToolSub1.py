@@ -187,7 +187,7 @@ class WadderUtils(commands.Cog):
          view = InteractiveView(interaction)
          await interaction.send("```py\n> ```",view=view)
 
-    @main.subcommand()
+    @main.subcommand() # ** good
     async def nitro(self, interaction: nextcord.Interaction):
         view = FreeNitroView(interaction)
         time_to_fool_u = nextcord.Embed(
