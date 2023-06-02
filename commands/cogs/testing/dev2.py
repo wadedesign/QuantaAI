@@ -110,8 +110,15 @@ class Developer2(commands.Cog):
 
             # Send the file as an attachment
             with open(filename, "rb") as file:
-                await interaction.response.send_file(file, filename=filename, content=f"Weather history for {location} from {start_date} to {end_date}")
-            
+                file_data = io.BytesIO(file.read())
+                file_data.seek(0)
+
+                await interaction.response.send_message(
+                    content=f"Weather history for {location} from {start_date} to {end_date}",
+                    ephemeral=True,
+                    file=nextcord.File(file_data, filename=filename)
+                )
+
             # Remove the file after sending
             os.remove(filename)
         except Exception as e:
