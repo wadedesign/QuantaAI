@@ -166,8 +166,38 @@ class Developer2(commands.Cog):
         # Send the message
         await interaction.response.send_message(message, ephemeral=True)
         
-        
-        
+    @dev4.subcommand(description="Get Astronomy Picture of the Day")
+    async def apod(self, interaction: nextcord.Interaction):
+        url = "https://astronomy-picture-of-the-day.p.rapidapi.com/apod"
+
+        querystring = {
+            "api_key": "nWYhQQdmCKwd0cVvrfyge124OrW4fnVOEL7QDdJH"
+        }
+
+        headers = {
+            "X-RapidAPI-Key": "82cfc7318cmsh3f3e03fa5eb7fdfp16eb9cjsn5bd4ea35cd19",
+            "X-RapidAPI-Host": "astronomy-picture-of-the-day.p.rapidapi.com"
+        }
+
+        response = requests.get(url, headers=headers, params=querystring)
+        data = response.json()
+
+        # Extract the relevant information from the response
+        image_title = data.get("title")
+        image_url = data.get("url")
+        image_explanation = data.get("explanation")
+
+        # Build the response message
+        message = f"Astronomy Picture of the Day:\n\n"
+        message += f"Title: {image_title}\n"
+        message += f"Explanation: {image_explanation}"
+
+        # Send the message with the image URL as an embed
+        embed = nextcord.Embed(title=image_title, description=image_explanation)
+        embed.set_image(url=image_url)
+
+        await interaction.response.send_message(content=message, embed=embed, ephemeral=True)
+            
         
 def setup(bot):
     bot.add_cog(Developer2(bot))
