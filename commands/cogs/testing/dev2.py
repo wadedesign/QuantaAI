@@ -238,8 +238,9 @@ class Developer2(commands.Cog):
         
         
     @dev4.subcommand(description="Get information about a D&D spell")
-    async def dnd_spell_info(self, interaction: nextcord.Interaction):
-        url = "https://dungeons-and-dragon-5e.p.rapidapi.com/spell/fireball"
+    async def dnd_spell_info(self, interaction: nextcord.Interaction, spell_name: str):
+        base_url = "https://dungeons-and-dragon-5e.p.rapidapi.com/spell/"
+        url = base_url + spell_name.lower().replace(" ", "-")
 
         headers = {
             "X-RapidAPI-Key": "82cfc7318cmsh3f3e03fa5eb7fdfp16eb9cjsn5bd4ea35cd19",
@@ -248,6 +249,11 @@ class Developer2(commands.Cog):
 
         response = requests.get(url, headers=headers)
         data = response.json()
+
+        # Check if the spell exists in the response
+        if "name" not in data:
+            await interaction.response.send_message("The spell was not found.", ephemeral=True)
+            return
 
         # Extract the relevant information from the response
         spell_name = data.get("name")
@@ -268,5 +274,7 @@ class Developer2(commands.Cog):
 
         # Send the message
         await interaction.response.send_message(message, ephemeral=True)
+    
+    
 def setup(bot):
     bot.add_cog(Developer2(bot))
