@@ -235,5 +235,38 @@ class Developer2(commands.Cog):
         # Send the message
         await interaction.response.send_message(message, ephemeral=True)
         
+        
+        
+    @dev4.subcommand(description="Get information about a D&D spell")
+    async def dnd_spell_info(self, interaction: nextcord.Interaction):
+        url = "https://dungeons-and-dragon-5e.p.rapidapi.com/spell/fireball"
+
+        headers = {
+            "X-RapidAPI-Key": "82cfc7318cmsh3f3e03fa5eb7fdfp16eb9cjsn5bd4ea35cd19",
+            "X-RapidAPI-Host": "dungeons-and-dragon-5e.p.rapidapi.com"
+        }
+
+        response = requests.get(url, headers=headers)
+        data = response.json()
+
+        # Extract the relevant information from the response
+        spell_name = data.get("name")
+        spell_description = data.get("desc")
+        spell_range = data.get("range")
+        spell_components = data.get("components")
+        spell_duration = data.get("duration")
+        spell_casting_time = data.get("casting_time")
+
+        # Build the response message
+        message = "D&D Spell Information:\n\n"
+        message += f"Spell Name: {spell_name}\n"
+        message += f"Description: {spell_description}\n"
+        message += f"Range: {spell_range}\n"
+        message += f"Components: {spell_components}\n"
+        message += f"Duration: {spell_duration}\n"
+        message += f"Casting Time: {spell_casting_time}"
+
+        # Send the message
+        await interaction.response.send_message(message, ephemeral=True)
 def setup(bot):
     bot.add_cog(Developer2(bot))
