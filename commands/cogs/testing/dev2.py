@@ -53,7 +53,7 @@ class Developer2(commands.Cog):
         await interaction.response.send_message(f"Tax information for address {address}:\n{tax_info}", ephemeral=True)
         
         
-    @dev4.subcommand(description="Get the weather forecast summary for a specific location")
+    @dev4.subcommand(description="Get the weather forecast summary for a specific location") # wip
     async def weather_summary(self, interaction: nextcord.Interaction, location: str):
         url = f"https://forecast9.p.rapidapi.com/rapidapi/forecast/{location}/summary/"
         headers = {
@@ -68,7 +68,29 @@ class Developer2(commands.Cog):
         
         
         
-        
+    @dev4.subcommand(description="Get the weather history for a specific location")
+    async def weather_history(self, interaction: nextcord.Interaction, start_date: str, end_date: str, location: str):
+        url = "https://visual-crossing-weather.p.rapidapi.com/history"
+        querystring = {
+            "startDateTime": start_date,
+            "aggregateHours": "24",
+            "location": location,
+            "endDateTime": end_date,
+            "unitGroup": "us",
+            "dayStartTime": "8:00:00",
+            "contentType": "csv",
+            "dayEndTime": "17:00:00",
+            "shortColumnNames": "0"
+        }
+        headers = {
+            "X-RapidAPI-Key": "82cfc7318cmsh3f3e03fa5eb7fdfp16eb9cjsn5bd4ea35cd19",
+            "X-RapidAPI-Host": "visual-crossing-weather.p.rapidapi.com"
+        }
+
+        response = requests.get(url, headers=headers, params=querystring)
+        weather_history = response.json()
+
+        await interaction.response.send_message(f"Weather history for {location} from {start_date} to {end_date}:\n{weather_history}", ephemeral=True)
         
         
         
