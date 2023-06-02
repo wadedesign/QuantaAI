@@ -14,8 +14,8 @@ class Developer2(commands.Cog):
        pass
    
    
-    @dev3.subcommand(name="sales_tax",description="Get the sales tax rate for a specific location")
-    async def sales_tax(self, interaction: nextcord.Interaction, city: str, state: str, street: str, zip_code: str):
+    @dev3.subcommand(name="tax",description="Get the sales tax rate for a specific location")
+    async def tax(self, interaction: nextcord.Interaction, city: str, state: str, street: str, zip_code: str):
         url = "https://sales-tax-calculator.p.rapidapi.com/rates"
         payload = {
             "city": city,
