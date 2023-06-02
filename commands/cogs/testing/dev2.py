@@ -1,3 +1,4 @@
+import json
 import nextcord
 from nextcord.ext import commands
 import requests
@@ -88,11 +89,12 @@ class Developer2(commands.Cog):
         }
 
         response = requests.get(url, headers=headers, params=querystring)
-        weather_history = response.json()
-
-        await interaction.response.send_message(f"Weather history for {location} from {start_date} to {end_date}:\n{weather_history}", ephemeral=True)
-        
-        
+        try:
+            response_data = response.json()
+            await interaction.response.send_message(f"Weather history for {location} from {start_date} to {end_date}:\n{json.dumps(response_data)}", ephemeral=True)
+        except json.JSONDecodeError as e:
+            await interaction.response.send_message(f"An error occurred while fetching the weather history. Error: {str(e)}", ephemeral=True)
+            print(response.content)  # Print the response content for troubleshooting purposes
         
         
 def setup(bot):
