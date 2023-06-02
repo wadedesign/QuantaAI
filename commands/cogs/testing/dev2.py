@@ -1,6 +1,7 @@
 import csv
 import io
 import json
+import os
 import nextcord
 from nextcord.ext import commands
 import requests
@@ -94,25 +95,25 @@ class Developer2(commands.Cog):
         try:
             weather_history_csv = response.content.decode("utf-8")
             reader = csv.DictReader(weather_history_csv.splitlines())
-            
-            formatted_weather_history = io.StringIO()  # Use StringIO to build the formatted output
+
+            formatted_weather_history = ""
             for row in reader:
                 formatted_row = ""
                 for key, value in row.items():
                     formatted_row += f"{key}: {value}\n"
-                formatted_weather_history.write(formatted_row + "\n")
+                formatted_weather_history += f"\n{formatted_row}"
+
+            # Save the weather history to a file
+            filename = "weather_history.txt"
+            with open(filename, "w", encoding="utf-8") as file:
+                file.write(formatted_weather_history)
+
+            # Send the file as an attachment
+            with open(filename, "rb") as file:
+                await interaction.response.send_file(file, filename=filename, content=f"Weather history for {location} from {start_date} to {end_date}")
             
-            # Create a file with the weather history data
-            weather_history_file = nextcord.File(formatted_weather_history.getvalue(), filename="weather_history.txt")
-            
-            # Send the message with the file attachment
-            await interaction.response.send_message(
-                f"Weather history for {location} from {start_date} to {end_date}",
-                ephemeral=True,
-                files=[weather_history_file]
-            )
-            
-            formatted_weather_history.close()  # Close the StringIO object
+            # Remove the file after sending
+            os.remove(filename)
         except Exception as e:
             await interaction.response.send_message(f"An error occurred while fetching the weather history. Error: {str(e)}", ephemeral=True)
             print(response.content)  # Print the response content for troubleshooting purposes
