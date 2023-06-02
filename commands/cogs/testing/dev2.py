@@ -183,12 +183,12 @@ class Developer2(commands.Cog):
         data = response.json()
 
         # Extract the relevant information from the response
-        image_title = data.get("title")
+        image_title = data.get("title", "Untitled")
         image_url = data.get("url")
         image_explanation = data.get("explanation", "No explanation available.")
 
         # Build the response message
-        message = f"Astronomy Picture of the Day:\n\n"
+        message = "Astronomy Picture of the Day:\n\n"
         message += f"Title: {image_title}\n"
         message += f"Explanation: {image_explanation}"
 
