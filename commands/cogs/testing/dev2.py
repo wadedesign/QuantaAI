@@ -139,18 +139,19 @@ class Developer2(commands.Cog):
         data = response.json()
 
         # Extract the relevant information from the response
-        sun_sign = data["sun_sign"]
-        moon_sign = data["moon_sign"]
-        mercury_retrograde = data["mercury_retrograde"]
+        astrology_data = data.get("astrology", {})
+        sun_sign = astrology_data.get("sun_sign")
+        moon_sign = astrology_data.get("moon_sign")
+        mercury_retrograde = astrology_data.get("mercury_retrograde")
 
         # Build the response message
-        message = f"Current astrological information:\n\n"
-        message += f"Sun Sign: {sun_sign}\n"
-        message += f"Moon Sign: {moon_sign}\n"
+        message = "Current astrological information:\n\n"
+        message += f"Sun Sign: {sun_sign}\n" if sun_sign else ""
+        message += f"Moon Sign: {moon_sign}\n" if moon_sign else ""
         message += f"Mercury Retrograde: {'Yes' if mercury_retrograde else 'No'}"
 
         # Send the message
-        await interaction.response.send_message(message, ephemeral=True) 
+        await interaction.response.send_message(message, ephemeral=True)
         
         
         
