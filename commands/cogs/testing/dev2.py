@@ -280,6 +280,60 @@ class Developer2(commands.Cog):
         except json.JSONDecodeError:
             await interaction.response.send_message("An error occurred while parsing the API response.", ephemeral=True)
     
-    
+    # Command to save email addresses
+    @dev4.subcommand(description="Save an email address")
+    async def save_email(self, interaction: nextcord.Interaction, email: str):
+        # Read the existing email addresses from the JSON file
+        with open('email_addresses.json', 'r') as file:
+            data = json.load(file)
+        
+        # Append the new email address to the list
+        data.append(email)
+        
+        # Write the updated email addresses back to the JSON file
+        with open('email_addresses.json', 'w') as file:
+            json.dump(data, file)
+        
+        await interaction.response.send_message("Email address saved successfully!", ephemeral=True)
+
+    # Command to send emails
+    @dev4.subcommand(description="Send news email to all subscribers")
+    async def send_news_email(self, interaction: nextcord.Interaction):
+        # Read the email addresses from the JSON file
+        with open('email_addresses.json', 'r') as file:
+            email_addresses = json.load(file)
+
+        url = "https://rapidprod-sendgrid-v1.p.rapidapi.com/mail/send"
+
+        payload = {
+            "personalizations": [
+                {
+                    "to": [{"email": email} for email in email_addresses],
+                    "subject": "Hello, World!"
+                }
+            ],
+            "from": {"email": "wadderproject@gmail.com"},
+            "content": [
+                {
+                    "type": "text/plain",
+                    "value": "Hello, World!"
+                }
+            ]
+        }
+
+        headers = {
+            "content-type": "application/json",
+            "X-RapidAPI-Key": "82cfc7318cmsh3f3e03fa5eb7fdfp16eb9cjsn5bd4ea35cd19",
+            "X-RapidAPI-Host": "rapidprod-sendgrid-v1.p.rapidapi.com"
+        }
+
+        response = requests.post(url, json=payload, headers=headers)
+
+        if response.status_code == 202:
+            await interaction.response.send_message("News email sent successfully!", ephemeral=True)
+        else:
+            await interaction.response.send_message("An error occurred while sending the news email.", ephemeral=True)
+
+
 def setup(bot):
     bot.add_cog(Developer2(bot))
