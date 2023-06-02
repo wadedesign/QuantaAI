@@ -185,7 +185,7 @@ class Developer2(commands.Cog):
         # Extract the relevant information from the response
         image_title = data.get("title")
         image_url = data.get("url")
-        image_explanation = data.get("explanation")
+        image_explanation = data.get("explanation", "No explanation available.")
 
         # Build the response message
         message = f"Astronomy Picture of the Day:\n\n"
