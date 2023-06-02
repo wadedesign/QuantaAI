@@ -9,13 +9,13 @@ class Developer2(commands.Cog):
         
         
         
-    @nextcord.slash_command(name='dev3')
-    async def dev3(self, interaction: nextcord.Interaction):
+    @nextcord.slash_command(name='dev4')
+    async def dev4(self, interaction: nextcord.Interaction):
        pass
    
    
-    @dev3.subcommand(name="tax",description="Get the sales tax rate for a specific location")
-    async def tax(self, interaction: nextcord.Interaction, city: str, state: str, street: str, zip_code: str):
+    @dev4.subcommand(name="taxzewr",description="Get the sales tax rate for a specific location")
+    async def taxzxer(self, interaction: nextcord.Interaction, city: str, state: str, street: str, zip_code: str):
         url = "https://sales-tax-calculator.p.rapidapi.com/rates"
         payload = {
             "city": city,
