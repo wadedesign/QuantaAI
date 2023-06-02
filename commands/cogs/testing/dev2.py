@@ -53,7 +53,18 @@ class Developer2(commands.Cog):
         await interaction.response.send_message(f"Tax information for address {address}:\n{tax_info}", ephemeral=True)
         
         
-        
+    @dev4.subcommand(description="Get the weather forecast status")
+    async def weather_status2(self, interaction: nextcord.Interaction):
+        url = "https://forecast9.p.rapidapi.com/status/"
+        headers = {
+            "X-RapidAPI-Key": "82cfc7318cmsh3f3e03fa5eb7fdfp16eb9cjsn5bd4ea35cd19",
+            "X-RapidAPI-Host": "forecast9.p.rapidapi.com"
+        }
+
+        response = requests.get(url, headers=headers)
+        status = response.json().get("status", "Unknown")
+
+        await interaction.response.send_message(f"The weather forecast status is currently: {status}", ephemeral=True)
         
         
         
