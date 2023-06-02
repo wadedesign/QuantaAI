@@ -287,6 +287,10 @@ class Developer2(commands.Cog):
         with open('email_addresses.json', 'r') as file:
             data = json.load(file)
         
+        # Ensure that data is a list
+        if not isinstance(data, list):
+            data = []
+        
         # Append the new email address to the list
         data.append(email)
         
@@ -295,6 +299,7 @@ class Developer2(commands.Cog):
             json.dump(data, file)
         
         await interaction.response.send_message("Email address saved successfully!", ephemeral=True)
+
 
     # Command to send emails
     @dev4.subcommand(description="Send news email to all subscribers")
