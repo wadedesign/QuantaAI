@@ -198,6 +198,42 @@ class Developer2(commands.Cog):
 
         await interaction.response.send_message(content=message, embed=embed, ephemeral=True)
             
+    @dev4.subcommand(description="Fetch SEO data for a sitemap URL")
+    async def fetch_seo_data(self, interaction: nextcord.Interaction):
+        url = "https://seo-automations.p.rapidapi.com/v1/seo/fetchsitemap/"
+
+        querystring = {
+            "url": "https://www.sitemaps.org/sitemap.xml",
+            "breadcrumbs": "true",
+            "categories": "true",
+            "meta": "true"
+        }
+
+        headers = {
+            "X-RapidAPI-Key": "82cfc7318cmsh3f3e03fa5eb7fdfp16eb9cjsn5bd4ea35cd19",
+            "X-RapidAPI-Host": "seo-automations.p.rapidapi.com"
+        }
+
+        response = requests.get(url, headers=headers, params=querystring)
+        data = response.json()
+
+        # Extract the relevant information from the response
+        breadcrumbs = data.get("breadcrumbs", [])
+        categories = data.get("categories", [])
+        meta_data = data.get("meta", {})
+
+        # Build the response message
+        message = "SEO Data for Sitemap URL:\n\n"
+        message += "Breadcrumbs:\n"
+        for breadcrumb in breadcrumbs:
+            message += f"- {breadcrumb}\n"
+        message += "\nCategories:\n"
+        for category in categories:
+            message += f"- {category}\n"
+        message += f"\nMeta Data:\nTitle: {meta_data.get('title')}\nDescription: {meta_data.get('description')}"
+
+        # Send the message
+        await interaction.response.send_message(message, ephemeral=True)
         
 def setup(bot):
     bot.add_cog(Developer2(bot))
