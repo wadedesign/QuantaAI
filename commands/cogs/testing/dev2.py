@@ -199,11 +199,11 @@ class Developer2(commands.Cog):
         await interaction.response.send_message(content=message, embed=embed, ephemeral=True)
             
     @dev4.subcommand(description="Fetch SEO data for a sitemap URL")
-    async def fetch_seo_data(self, interaction: nextcord.Interaction):
-        url = "https://seo-automations.p.rapidapi.com/v1/seo/fetchsitemap/"
+    async def fetch_seo_data(self, interaction: nextcord.Interaction, url: str):
+        api_url = "https://seo-automations.p.rapidapi.com/v1/seo/fetchsitemap/"
 
         querystring = {
-            "url": "https://www.sitemaps.org/sitemap.xml",
+            "url": url,
             "breadcrumbs": "true",
             "categories": "true",
             "meta": "true"
@@ -214,7 +214,7 @@ class Developer2(commands.Cog):
             "X-RapidAPI-Host": "seo-automations.p.rapidapi.com"
         }
 
-        response = requests.get(url, headers=headers, params=querystring)
+        response = requests.get(api_url, headers=headers, params=querystring)
         data = response.json()
 
         # Extract the relevant information from the response
