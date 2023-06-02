@@ -139,16 +139,29 @@ class Developer2(commands.Cog):
         data = response.json()
 
         # Extract the relevant information from the response
-        astrology_data = data.get("astrology", {})
-        sun_sign = astrology_data.get("sun_sign")
-        moon_sign = astrology_data.get("moon_sign")
-        mercury_retrograde = astrology_data.get("mercury_retrograde")
+        sun = data["data"]["sun"]
+        moon = data["data"]["moon"]
+        mercury = data["data"]["mercury"]
+        venus = data["data"]["venus"]
+        mars = data["data"]["mars"]
+        jupiter = data["data"]["jupiter"]
+        saturn = data["data"]["saturn"]
+        uranus = data["data"]["uranus"]
+        neptune = data["data"]["neptune"]
+        pluto = data["data"]["pluto"]
 
         # Build the response message
         message = "Current astrological information:\n\n"
-        message += f"Sun Sign: {sun_sign}\n" if sun_sign else ""
-        message += f"Moon Sign: {moon_sign}\n" if moon_sign else ""
-        message += f"Mercury Retrograde: {'Yes' if mercury_retrograde else 'No'}"
+        message += f"Sun Sign: {sun['sign']}\n"
+        message += f"Moon Sign: {moon['sign']}\n"
+        message += f"Mercury Sign: {mercury['sign']}\n"
+        message += f"Venus Sign: {venus['sign']}\n"
+        message += f"Mars Sign: {mars['sign']}\n"
+        message += f"Jupiter Sign: {jupiter['sign']}\n"
+        message += f"Saturn Sign: {saturn['sign']}\n"
+        message += f"Uranus Sign: {uranus['sign']}\n"
+        message += f"Neptune Sign: {neptune['sign']}\n"
+        message += f"Pluto Sign: {pluto['sign']}"
 
         # Send the message
         await interaction.response.send_message(message, ephemeral=True)
