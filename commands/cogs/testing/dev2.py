@@ -73,7 +73,7 @@ class Developer2(commands.Cog):
     @dev4.subcommand(description="Get the weather history for a specific location")
     async def weather_history(self, interaction: nextcord.Interaction, start_date: str, end_date: str, location: str):
         url = "https://visual-crossing-weather.p.rapidapi.com/history"
-        querystring = {
+        payload = {
             "startDateTime": start_date,
             "aggregateHours": "24",
             "location": location,
@@ -89,18 +89,18 @@ class Developer2(commands.Cog):
             "X-RapidAPI-Host": "visual-crossing-weather.p.rapidapi.com"
         }
 
-        response = requests.get(url, headers=headers, params=querystring)
+        response = requests.post(url, headers=headers, data=payload)
         try:
             weather_history_csv = response.content.decode("utf-8")
-            reader = csv.DictReader(weather_history_csv.splitlines())
-            formatted_weather_history = ""
-            for row in reader:
-                formatted_row = ""
-                for key, value in row.items():
-                    formatted_row += f"{key}: {value}\n"
-                formatted_weather_history += f"\n{formatted_row}"
+            formatted_weather_history = f"Weather history for {location} from {start_date} to {end_date}:\n"
             
-            await interaction.response.send_message(f"Weather history for {location} from {start_date} to {end_date}:{formatted_weather_history}", ephemeral=True)
+            # Split the weather history into two messages
+            split_index = len(weather_history_csv) // 2
+            message1 = weather_history_csv[:split_index]
+            message2 = weather_history_csv[split_index:]
+            
+            await interaction.response.send_message(formatted_weather_history + message1, ephemeral=True)
+            await interaction.followup.send_message(message2, ephemeral=True)
         except Exception as e:
             await interaction.response.send_message(f"An error occurred while fetching the weather history. Error: {str(e)}", ephemeral=True)
             print(response.content)  # Print the response content for troubleshooting purposes
