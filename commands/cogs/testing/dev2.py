@@ -102,11 +102,14 @@ class Developer2(commands.Cog):
                     formatted_row += f"{key}: {value}\n"
                 formatted_weather_history.write(formatted_row + "\n")
             
-            # Move the message sending outside the loop
+            # Create a file with the weather history data
+            weather_history_file = nextcord.File(formatted_weather_history.getvalue(), filename="weather_history.txt")
+            
+            # Send the message with the file attachment
             await interaction.response.send_message(
-                f"Weather history for {location} from {start_date} to {end_date}:",
+                f"Weather history for {location} from {start_date} to {end_date}",
                 ephemeral=True,
-                files=[nextcord.File(formatted_weather_history.getvalue(), filename="weather_history.txt")]
+                files=[weather_history_file]
             )
             
             formatted_weather_history.close()  # Close the StringIO object
