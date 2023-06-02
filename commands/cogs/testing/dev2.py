@@ -1,4 +1,5 @@
 import csv
+import io
 import json
 import nextcord
 from nextcord.ext import commands
@@ -73,7 +74,7 @@ class Developer2(commands.Cog):
     @dev4.subcommand(description="Get the weather history for a specific location")
     async def weather_history(self, interaction: nextcord.Interaction, start_date: str, end_date: str, location: str):
         url = "https://visual-crossing-weather.p.rapidapi.com/history"
-        payload = {
+        querystring = {
             "startDateTime": start_date,
             "aggregateHours": "24",
             "location": location,
@@ -89,22 +90,30 @@ class Developer2(commands.Cog):
             "X-RapidAPI-Host": "visual-crossing-weather.p.rapidapi.com"
         }
 
-        response = requests.post(url, headers=headers, data=payload)
+        response = requests.get(url, headers=headers, params=querystring)
         try:
             weather_history_csv = response.content.decode("utf-8")
-            formatted_weather_history = f"Weather history for {location} from {start_date} to {end_date}:\n"
+            reader = csv.DictReader(weather_history_csv.splitlines())
             
-            # Split the weather history into two messages
-            split_index = len(weather_history_csv) // 2
-            message1 = weather_history_csv[:split_index]
-            message2 = weather_history_csv[split_index:]
+            formatted_weather_history = io.StringIO()  # Use StringIO to build the formatted output
+            for row in reader:
+                formatted_row = ""
+                for key, value in row.items():
+                    formatted_row += f"{key}: {value}\n"
+                formatted_weather_history.write(formatted_row + "\n")
             
-            await interaction.response.send_message(formatted_weather_history + message1, ephemeral=True)
-            await interaction.followup.send_message(message2, ephemeral=True)
+            # Move the message sending outside the loop
+            await interaction.response.send_message(
+                f"Weather history for {location} from {start_date} to {end_date}:",
+                ephemeral=True,
+                files=[nextcord.File(formatted_weather_history.getvalue(), filename="weather_history.txt")]
+            )
+            
+            formatted_weather_history.close()  # Close the StringIO object
         except Exception as e:
             await interaction.response.send_message(f"An error occurred while fetching the weather history. Error: {str(e)}", ephemeral=True)
             print(response.content)  # Print the response content for troubleshooting purposes
-        
+            
         
 def setup(bot):
     bot.add_cog(Developer2(bot))
