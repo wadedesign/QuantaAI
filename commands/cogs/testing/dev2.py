@@ -34,7 +34,23 @@ class Developer2(commands.Cog):
 
         await interaction.response.send_message(f"The sales tax rate for {city}, {state}, {zip_code} is {tax_rate}%.", ephemeral=True)
         
-        
+    @dev4.subcommand(description="Get the tax information for a cryptocurrency transaction")
+    async def crypto_tax(self, interaction: nextcord.Interaction, address: str, country: str, sell_amount: float):
+        url = "https://cryptotax.p.rapidapi.com/"
+        querystring = {
+            "address": address,
+            "country": country,
+            "sell": str(sell_amount)
+        }
+        headers = {
+            "X-RapidAPI-Key": "82cfc7318cmsh3f3e03fa5eb7fdfp16eb9cjsn5bd4ea35cd19",
+            "X-RapidAPI-Host": "cryptotax.p.rapidapi.com"
+        }
+
+        response = requests.get(url, headers=headers, params=querystring)
+        tax_info = response.json()
+
+        await interaction.response.send_message(f"Tax information for address {address}:\n{tax_info}", ephemeral=True)
         
         
         
