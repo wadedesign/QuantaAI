@@ -126,5 +126,34 @@ class Developer2(commands.Cog):
             print(response.content)  # Print the response content for troubleshooting purposes
             
         
+    @dev4.subcommand(description="Get current astrological information")
+    async def astro_info(self, interaction: nextcord.Interaction):
+        url = "https://astrologer.p.rapidapi.com/api/v3/now"
+
+        headers = {
+            "X-RapidAPI-Key": "82cfc7318cmsh3f3e03fa5eb7fdfp16eb9cjsn5bd4ea35cd19",
+            "X-RapidAPI-Host": "astrologer.p.rapidapi.com"
+        }
+
+        response = requests.get(url, headers=headers)
+        data = response.json()
+
+        # Extract the relevant information from the response
+        sun_sign = data["sun_sign"]
+        moon_sign = data["moon_sign"]
+        mercury_retrograde = data["mercury_retrograde"]
+
+        # Build the response message
+        message = f"Current astrological information:\n\n"
+        message += f"Sun Sign: {sun_sign}\n"
+        message += f"Moon Sign: {moon_sign}\n"
+        message += f"Mercury Retrograde: {'Yes' if mercury_retrograde else 'No'}"
+
+        # Send the message
+        await interaction.response.send_message(message, ephemeral=True) 
+        
+        
+        
+        
 def setup(bot):
     bot.add_cog(Developer2(bot))
