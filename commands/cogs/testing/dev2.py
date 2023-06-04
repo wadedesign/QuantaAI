@@ -2,6 +2,7 @@ import csv
 import io
 import json
 import os
+from bs4 import BeautifulSoup
 import nextcord
 from nextcord.ext import commands
 import requests
@@ -360,16 +361,13 @@ class Developer2(commands.Cog):
 
         try:
             response.raise_for_status()
-            response_json = response.json()
-            if response.status_code == 200:
-                await interaction.response.send_message(response_json["content"], ephemeral=True)
-            else:
-                await interaction.response.send_message("An error occurred while converting the text.", ephemeral=True)
+            soup = BeautifulSoup(response.content, "html.parser")
+            formatted_text = soup.select_one(".bionic-reader-container").get_text()
+            await interaction.response.send_message(formatted_text, ephemeral=True)
         except requests.HTTPError as e:
             await interaction.response.send_message(f"An HTTP error occurred: {str(e)}", ephemeral=True)
-        except json.JSONDecodeError:
-            response_content = response.content.decode("utf-8")
-            await interaction.response.send_message(f"An error occurred while processing the API response. Response content: {response_content}", ephemeral=True)
+        except Exception:
+            await interaction.response.send_message("An error occurred while processing the API response.", ephemeral=True)
 
 def setup(bot):
     bot.add_cog(Developer2(bot))
