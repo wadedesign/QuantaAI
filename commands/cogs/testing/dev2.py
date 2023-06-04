@@ -403,15 +403,19 @@ class Developer2(commands.Cog):
 
         if response.status_code == 200:
             video_game_news = response.json()
-            news_message = ""
 
             for news in video_game_news:
                 title = news.get("title")
                 description = news.get("description")
                 link = news.get("link")
-                news_message += f"Title: {title}\nDescription: {description}\nLink: {link}\n\n"
 
-            await interaction.response.send_message(news_message, ephemeral=True)
+                news_message = f"Title: {title}\nDescription: {description}\nLink: {link}"
+
+                # Split the news message into chunks of 2000 characters or less
+                chunks = [news_message[i:i+2000] for i in range(0, len(news_message), 2000)]
+
+                for chunk in chunks:
+                    await interaction.response.send_message(chunk, ephemeral=True)
         else:
             await interaction.response.send_message("An error occurred while retrieving video game news.", ephemeral=True)
             
