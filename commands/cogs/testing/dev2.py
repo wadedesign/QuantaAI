@@ -369,5 +369,27 @@ class Developer2(commands.Cog):
         except Exception:
             await interaction.response.send_message("An error occurred while processing the API response.", ephemeral=True)
 
+
+
+    @dev4.subcommand(description="Get information about a place")
+    async def get_place_info(self, interaction: nextcord.Interaction, *, place_name: str):
+        url = "https://opentripmap-places-v1.p.rapidapi.com/en/places/geoname"
+
+        querystring = {"name": place_name}
+
+        headers = {
+            "X-RapidAPI-Key": "82cfc7318cmsh3f3e03fa5eb7fdfp16eb9cjsn5bd4ea35cd19",
+            "X-RapidAPI-Host": "opentripmap-places-v1.p.rapidapi.com"
+        }
+
+        response = requests.get(url, headers=headers, params=querystring)
+
+        if response.status_code == 200:
+            place_info = response.json()
+            await interaction.response.send_message(place_info, ephemeral=True)
+        else:
+            await interaction.response.send_message("An error occurred while retrieving place information.", ephemeral=True)
+
+
 def setup(bot):
     bot.add_cog(Developer2(bot))
