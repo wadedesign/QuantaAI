@@ -415,9 +415,9 @@ class Developer2(commands.Cog):
                 chunks = [news_message[i:i+2000] for i in range(0, len(news_message), 2000)]
 
                 for chunk in chunks:
-                    await interaction.response.send_message(chunk, ephemeral=True)
+                    await interaction.response.send_message(chunk)
         else:
-            await interaction.response.send_message("An error occurred while retrieving video game news.", ephemeral=True)
+            await interaction.response.send_message("An error occurred while retrieving video game news.")
             
             
 def setup(bot):
