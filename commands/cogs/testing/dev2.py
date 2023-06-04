@@ -392,6 +392,7 @@ class Developer2(commands.Cog):
 
     @dev4.subcommand(description="Get recent video game news")
     async def get_video_game_news(self, interaction: nextcord.Interaction):
+        await interaction.response.defer()
         url = "https://videogames-news2.p.rapidapi.com/videogames_news/recent"
 
         headers = {
