@@ -409,15 +409,11 @@ class Developer2(commands.Cog):
                 description = news.get("description")
                 link = news.get("link")
 
-                news_message = f"Title: {title}\nDescription: {description}\nLink: {link}"
-
-                # Split the news message into chunks of 2000 characters or less
-                chunks = [news_message[i:i+2000] for i in range(0, len(news_message), 2000)]
-
-                for chunk in chunks:
-                    await interaction.response.send_message(chunk)
+                await interaction.response.send_message(f"Title: {title}", ephemeral=True)
+                await interaction.response.send_message(f"Description: {description}", ephemeral=True)
+                await interaction.response.send_message(f"Link: {link}", ephemeral=True)
         else:
-            await interaction.response.send_message("An error occurred while retrieving video game news.")
+            await interaction.response.send_message("An error occurred while retrieving video game news.", ephemeral=True)
             
             
 def setup(bot):
