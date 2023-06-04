@@ -390,6 +390,21 @@ class Developer2(commands.Cog):
         else:
             await interaction.response.send_message("An error occurred while retrieving place information.", ephemeral=True)
 
+    @dev4.subcommand(description="Get recent video game news")
+    async def get_video_game_news(self, interaction: nextcord.Interaction):
+        url = "https://videogames-news2.p.rapidapi.com/videogames_news/recent"
 
+        headers = {
+            "X-RapidAPI-Key": "82cfc7318cmsh3f3e03fa5eb7fdfp16eb9cjsn5bd4ea35cd19",
+            "X-RapidAPI-Host": "videogames-news2.p.rapidapi.com"
+        }
+
+        response = requests.get(url, headers=headers)
+
+        if response.status_code == 200:
+            video_game_news = response.json()
+            await interaction.response.send_message(video_game_news, ephemeral=True)
+        else:
+            await interaction.response.send_message("An error occurred while retrieving video game news.", ephemeral=True)
 def setup(bot):
     bot.add_cog(Developer2(bot))
