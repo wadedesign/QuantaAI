@@ -338,7 +338,30 @@ class Developer2(commands.Cog):
             await interaction.response.send_message("News email sent successfully!", ephemeral=True)
         else:
             await interaction.response.send_message("An error occurred while sending the news email.", ephemeral=True)
+    @dev4.subcommand(description="Convert text to a formatted HTML response")
+    async def convert_text(self, interaction: nextcord.Interaction, *, text: str):
+        url = "https://bionic-reading1.p.rapidapi.com/convert"
 
+        payload = {
+            "content": text,
+            "response_type": "html",
+            "request_type": "html",
+            "fixation": "1",
+            "saccade": "10"
+        }
+
+        headers = {
+            "content-type": "application/x-www-form-urlencoded",
+            "X-RapidAPI-Key": "82cfc7318cmsh3f3e03fa5eb7fdfp16eb9cjsn5bd4ea35cd19",
+            "X-RapidAPI-Host": "bionic-reading1.p.rapidapi.com"
+        }
+
+        response = requests.post(url, data=payload, headers=headers)
+
+        if response.status_code == 200:
+            await interaction.response.send_message(response.json()["content"], ephemeral=True)
+        else:
+            await interaction.response.send_message("An error occurred while converting the text.", ephemeral=True)
 
 def setup(bot):
     bot.add_cog(Developer2(bot))
