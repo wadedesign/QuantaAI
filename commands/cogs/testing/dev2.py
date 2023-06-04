@@ -406,13 +406,10 @@ class Developer2(commands.Cog):
             news_summary = ""
             for news in video_game_news:
                 title = news.get("title")
-                description = news.get("description")
+                description = news.get("description")[:200] + "..."  # Limit the description length
                 link = news.get("link")
                 news_summary += f"\nTitle: {title}\nDescription: {description}\nLink: {link}\n\n"
 
-            if len(news_summary) > 2000:
-                news_summary = news_summary[:2000] + "..."
-            
             await interaction.response.send_message(news_summary, ephemeral=True)
         else:
             await interaction.response.send_message("An error occurred while retrieving video game news.", ephemeral=True)
