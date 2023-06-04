@@ -403,8 +403,19 @@ class Developer2(commands.Cog):
 
         if response.status_code == 200:
             video_game_news = response.json()
-            await interaction.response.send_message(video_game_news, ephemeral=True)
+            news_summary = ""
+            for news in video_game_news:
+                title = news.get("title")
+                summary = news.get("summary")
+                news_summary += f"\nTitle: {title}\nSummary: {summary}\n\n"
+
+            if len(news_summary) > 2000:
+                news_summary = news_summary[:2000] + "..."
+            
+            await interaction.response.send_message(news_summary, ephemeral=True)
         else:
             await interaction.response.send_message("An error occurred while retrieving video game news.", ephemeral=True)
+            
+            
 def setup(bot):
     bot.add_cog(Developer2(bot))
