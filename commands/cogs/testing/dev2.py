@@ -358,10 +358,14 @@ class Developer2(commands.Cog):
 
         response = requests.post(url, data=payload, headers=headers)
 
-        if response.status_code == 200:
-            await interaction.response.send_message(response.json()["content"], ephemeral=True)
-        else:
-            await interaction.response.send_message("An error occurred while converting the text.", ephemeral=True)
+        try:
+            response_json = response.json()
+            if response.status_code == 200:
+                await interaction.response.send_message(response_json["content"], ephemeral=True)
+            else:
+                await interaction.response.send_message("An error occurred while converting the text.", ephemeral=True)
+        except json.JSONDecodeError:
+            await interaction.response.send_message("An error occurred while processing the API response.", ephemeral=True)
 
 def setup(bot):
     bot.add_cog(Developer2(bot))
