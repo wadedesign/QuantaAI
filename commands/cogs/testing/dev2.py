@@ -423,7 +423,6 @@ class Developer2(commands.Cog):
      
     @dev4.subcommand(description="Get TikTok user info")
     async def get_tiktok_user_info(self, interaction: nextcord.Interaction, user_id: str):
-        await interaction.response.defer()
         url = "https://rapidapi.com/testendpoint"
 
         querystring = {
@@ -436,10 +435,19 @@ class Developer2(commands.Cog):
             "X-RapidAPI-Host": "rapidapi.com"
         }
 
+        print("URL:", url)
+        print("Querystring:", querystring)
+        print("Headers:", headers)
+
         response = requests.get(url, headers=headers, params=querystring)
+
+        print("Response status code:", response.status_code)
+        print("Response content:", response.content)
 
         if response.status_code == 200:
             tiktok_user_info = response.json()
+
+            print("TikTok user info:", tiktok_user_info)
 
             extra = tiktok_user_info.get("extra")
             log_pb = tiktok_user_info.get("log_pb")
@@ -466,6 +474,8 @@ class Developer2(commands.Cog):
             formatted_user_info += f"Followers: {follower_count}\nFollowing: {following_count}\nHearts: {heart_count}\nVideos: {video_count}\n\n"
             formatted_user_info += f"Avatar Larger: {avatar_larger}\nAvatar Medium: {avatar_medium}\nAvatar Thumb: {avatar_thumb}\n\n"
             formatted_user_info += f"Signature: {signature}"
+
+            print("Formatted user info:", formatted_user_info)
 
             await interaction.response.send_message(formatted_user_info)
         else:
