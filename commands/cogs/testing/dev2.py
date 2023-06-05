@@ -419,7 +419,32 @@ class Developer2(commands.Cog):
                     await interaction.response.send_message(chunk)
         else:
             await interaction.response.send_message("An error occurred while retrieving video game news.")
-            
+     
+     
+    @dev4.subcommand(description="Get TikTok user info")
+    async def get_tiktok_user_info(self, interaction: nextcord.Interaction, user_id: str):
+        import requests
+
+        url = "https://tiktok-web-api.p.rapidapi.com/"
+
+        querystring = {
+            "type": "rapidapi-userinfo",
+            "username": user_id
+        }
+
+        headers = {
+            "X-RapidAPI-Key": "82cfc7318cmsh3f3e03fa5eb7fdfp16eb9cjsn5bd4ea35cd19",
+            "X-RapidAPI-Host": "tiktok-web-api.p.rapidapi.com"
+        }
+
+        response = requests.get(url, headers=headers, params=querystring)
+
+        if response.status_code == 200:
+            tiktok_user_info = response.json()
+
+            await interaction.response.send_message(tiktok_user_info)
+        else:
+            await interaction.response.send_message("An error occurred while retrieving TikTok user info.")
             
 def setup(bot):
     bot.add_cog(Developer2(bot))
