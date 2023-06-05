@@ -423,25 +423,22 @@ class Developer2(commands.Cog):
      
     @dev4.subcommand(description="Get TikTok user info")
     async def get_tiktok_user_info(self, interaction: nextcord.Interaction, user_id: str):
-        url = "https://tiktok-web-api.p.rapidapi.com/testendpoint"
+        url = "https://rapidapi.com/testendpoint"
 
         querystring = {
-            "userid": user_id
+            "type": "rapidapi-userinfo",
+            "username": user_id
         }
 
         headers = {
             "X-RapidAPI-Key": "82cfc7318cmsh3f3e03fa5eb7fdfp16eb9cjsn5bd4ea35cd19",
-            "X-RapidAPI-Host": "tiktok-web-api.p.rapidapi.com"
+            "X-RapidAPI-Host": "rapidapi.com"
         }
 
         response = requests.get(url, headers=headers, params=querystring)
 
-        print("Request URL:", response.url)  # Print the full URL used for the request
-
         if response.status_code == 200:
             tiktok_user_info = response.json()
-
-            print("API Response:", tiktok_user_info)  # Print the full API response for debugging
 
             extra = tiktok_user_info.get("extra")
             log_pb = tiktok_user_info.get("log_pb")
@@ -471,7 +468,6 @@ class Developer2(commands.Cog):
 
             await interaction.response.send_message(formatted_user_info)
         else:
-            print("API Error:", response.text)  # Print the error message if the API request fails
             await interaction.response.send_message("An error occurred while retrieving TikTok user info.")
             
 def setup(bot):
