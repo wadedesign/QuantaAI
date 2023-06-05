@@ -425,11 +425,10 @@ class Developer2(commands.Cog):
     async def get_tiktok_user_info(self, interaction: nextcord.Interaction, user_id: str):
         import requests
 
-        url = "https://tiktok-web-api.p.rapidapi.com/"
+        url = "https://tiktok-web-api.p.rapidapi.com/testendpoint"
 
         querystring = {
-            "type": "rapidapi-userinfo",
-            "username": user_id
+            "userid": user_id
         }
 
         headers = {
