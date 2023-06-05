@@ -423,7 +423,7 @@ class Developer2(commands.Cog):
      
     @dev4.subcommand(description="Get TikTok user info")
     async def get_tiktok_user_info(self, interaction: nextcord.Interaction, user_id: str):
-        url = "https://rapidapi.com/testendpoint"
+        url = "https://tiktok-web-api.p.rapidapi.com/"
 
         querystring = {
             "type": "rapidapi-userinfo",
@@ -432,15 +432,14 @@ class Developer2(commands.Cog):
 
         headers = {
             "X-RapidAPI-Key": "82cfc7318cmsh3f3e03fa5eb7fdfp16eb9cjsn5bd4ea35cd19",
-            "X-RapidAPI-Host": "rapidapi.com"
+            "X-RapidAPI-Host": "tiktok-web-api.p.rapidapi.com"
         }
+
+        response = requests.get(url, headers=headers, params=querystring)
 
         print("URL:", url)
         print("Querystring:", querystring)
         print("Headers:", headers)
-
-        response = requests.get(url, headers=headers, params=querystring)
-
         print("Response status code:", response.status_code)
         print("Response content:", response.content)
 
