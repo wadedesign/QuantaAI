@@ -423,8 +423,6 @@ class Developer2(commands.Cog):
      
     @dev4.subcommand(description="Get TikTok user info")
     async def get_tiktok_user_info(self, interaction: nextcord.Interaction, user_id: str):
-        import requests
-
         url = "https://tiktok-web-api.p.rapidapi.com/testendpoint"
 
         querystring = {
@@ -441,7 +439,33 @@ class Developer2(commands.Cog):
         if response.status_code == 200:
             tiktok_user_info = response.json()
 
-            await interaction.response.send_message(tiktok_user_info)
+            extra = tiktok_user_info.get("extra")
+            log_pb = tiktok_user_info.get("log_pb")
+            share_meta = tiktok_user_info.get("shareMeta")
+            status_code = tiktok_user_info.get("statusCode")
+            user_info = tiktok_user_info.get("userInfo")
+
+            desc = share_meta.get("desc")
+            title = share_meta.get("title")
+
+            stats = user_info.get("stats")
+            follower_count = stats.get("followerCount")
+            following_count = stats.get("followingCount")
+            heart_count = stats.get("heartCount")
+            video_count = stats.get("videoCount")
+
+            avatar_larger = user_info.get("avatarLarger")
+            avatar_medium = user_info.get("avatarMedium")
+            avatar_thumb = user_info.get("avatarThumb")
+
+            signature = user_info.get("signature")
+
+            formatted_user_info = f"Title: {title}\nDescription: {desc}\n\n"
+            formatted_user_info += f"Followers: {follower_count}\nFollowing: {following_count}\nHearts: {heart_count}\nVideos: {video_count}\n\n"
+            formatted_user_info += f"Avatar Larger: {avatar_larger}\nAvatar Medium: {avatar_medium}\nAvatar Thumb: {avatar_thumb}\n\n"
+            formatted_user_info += f"Signature: {signature}"
+
+            await interaction.response.send_message(formatted_user_info)
         else:
             await interaction.response.send_message("An error occurred while retrieving TikTok user info.")
             
