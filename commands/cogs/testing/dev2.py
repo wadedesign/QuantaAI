@@ -423,6 +423,7 @@ class Developer2(commands.Cog):
      
     @dev4.subcommand(description="Get TikTok user info")
     async def get_tiktok_user_info(self, interaction: nextcord.Interaction, user_id: str):
+        await interaction.response.defer()
         url = "https://rapidapi.com/testendpoint"
 
         querystring = {
