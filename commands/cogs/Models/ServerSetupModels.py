@@ -7,6 +7,8 @@ import nextcord
 from nextcord.ext import commands
 from nextcord.ui import button, View
 
+#! not ready for production
+
 class MainView(View):
     def __init__(self, bot, channel_id):
         super().__init__(timeout=None)
