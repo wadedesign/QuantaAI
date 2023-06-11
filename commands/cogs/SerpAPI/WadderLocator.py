@@ -3,6 +3,9 @@ import nextcord
 from nextcord.ext import commands
 from serpapi import GoogleSearch
 
+# * Ready for Production * #
+
+
 class LocalSearchCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
