@@ -16,8 +16,8 @@ class EmbedCus(nextcord.ui.Modal):
         self.footerText = nextcord.ui.TextInput(label="Footer Text", min_length=1, max_length=2048, required=False, placeholder="Enter the footer text")
         self.add_item(self.footerText)
         self.timestamp = nextcord.ui.Select(label="Timestamp", options=[
-            nextcord.ui.SelectOption(label="Enabled", value="enabled"),
-            nextcord.ui.SelectOption(label="Disabled", value="disabled")
+            nextcord.SelectOption(label="Enabled", value="enabled"),
+            nextcord.SelectOption(label="Disabled", value="disabled")
         ], required=False)
         self.add_item(self.timestamp)
         self.footerImage = nextcord.ui.TextInput(label="Footer Image URL", required=False, placeholder="Enter the URL of the footer image")
