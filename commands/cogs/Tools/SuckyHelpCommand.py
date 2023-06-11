@@ -7,8 +7,8 @@ class ServerHelp(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @nextcord.slash_command(name="serverhelp",description="Shows a list of available commands")
-    async def serverhelp(self, interaction:nextcord.Interaction):
+    @nextcord.slash_command(name="serverhelp", description="Shows a list of available commands")
+    async def serverhelp(self, interaction: nextcord.Interaction):
         # List of commands to display in the embed
         command_list = [
             ("/add", "Calculate the sum of two numbers"),
@@ -45,18 +45,17 @@ class ServerHelp(commands.Cog):
 
         # Send the first page of commands with the view
         await interaction.send(embed=embeds[0], view=view)
-
         print("Initial message sent")
 
     async def on_help_button_click(self, embeds, page_index, button, interaction):
         # Check if the message object has a view attribute before accessing it
         if not hasattr(interaction.message, 'view'):
             return
-            
+
         # Update the message with the embed for the clicked page
         message = interaction.message
         await message.edit(embed=embeds[page_index])
-            
+
         # Update the style of the clicked button to indicate that it is selected
         view = message.view  # Access the view from the message
         for item in view.children:
@@ -64,13 +63,7 @@ class ServerHelp(commands.Cog):
                 item.style = nextcord.ButtonStyle.primary
             else:
                 item.style = nextcord.ButtonStyle.secondary
-            
-        # Log some information to help debug the issue
-        print(f"Page index: {page_index}")
-        print(f"Embeds: {len(embeds)}")
-        print(f"View children: {len(view.children)}")
-        print(f"Button label: {button.label}")
-            
+
         # Update the original message with the embed for the clicked page
         await interaction.edit_original_message(embed=embeds[page_index], view=view)
         print("Page updated")
