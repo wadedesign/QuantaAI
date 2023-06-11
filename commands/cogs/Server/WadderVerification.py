@@ -85,7 +85,7 @@ class VerificationCog(commands.Cog):
         else:
             await interaction.followup.send("The verification role for this server has not been set.", ephemeral=True)
 
-    @nextcord.slash_command()
+    @nextcord.slash_command(name='setverification', description='Set the verification role for the server.')
     async def set_verification_role(self, interaction: nextcord.Interaction, role_id: int):
         if await self.is_admin(interaction.author):
             if str(interaction.guild.id) not in self.verification_data:
