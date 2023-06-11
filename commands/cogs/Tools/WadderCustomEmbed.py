@@ -17,7 +17,11 @@ class EmbedCus(nextcord.ui.Modal):
         self.add_item(self.footerText)
         self.footerImage = nextcord.ui.TextInput(label="Footer Image URL", required=False, placeholder="Enter the URL of the footer image")
         self.add_item(self.footerImage)
-        self.color = nextcord.ui.ColorInput(label="Color", required=False, default=nextcord.Color.blurple())
+        self.color = nextcord.ui.Select(label="Color", options=[
+            nextcord.Color.red(),
+            nextcord.Color.green(),
+            nextcord.Color.blue()
+        ], required=False, default=nextcord.Color.blurple())
         self.add_item(self.color)
 
     async def callback(self, interaction: nextcord.Interaction) -> None:
@@ -29,8 +33,6 @@ class EmbedCus(nextcord.ui.Modal):
         footer_text = self.footerText.value
         if footer_text:
             em.set_footer(text=footer_text)
-
-       
 
         footer_image_url = self.footerImage.value
         if footer_image_url:
@@ -44,6 +46,7 @@ class EmbedCus(nextcord.ui.Modal):
             await interaction.response.send_message("Embed sent successfully!")
         else:
             await interaction.response.send_message("Invalid channel ID. Please try again.")
+
 
 class UserMod(commands.Cog):
     def __init__(self, bot):
