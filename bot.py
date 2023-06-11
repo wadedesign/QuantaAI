@@ -19,7 +19,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 intents = nextcord.Intents.all()
 intents.guild_messages = True
-bot = commands.Bot(command_prefix='!', intents=nextcord.Intents.all(), help_command=PrettyHelp(), activity = nextcord.Activity(type=nextcord.ActivityType.listening, name="the community"))
+bot = commands.Bot(command_prefix='!', intents=nextcord.Intents.all(), shard_count=5, shard_ids=[0, 1, 2, 3, 4], help_command=PrettyHelp(), activity = nextcord.Activity(type=nextcord.ActivityType.listening, name="the community"))
 YOUR_USER_ID = int(os.getenv("YOUR_USER_ID"))
 
 
