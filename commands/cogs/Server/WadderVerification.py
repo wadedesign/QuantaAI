@@ -5,6 +5,7 @@ from nextcord.ui import Button, View
 
 VERIFICATION_DATA_FILE = 'data/verification_data.json'
 
+# ! This is not ready for production
 
 class VerifyButton(Button):
     def __init__(self, verification_cog, *args, **kwargs):
