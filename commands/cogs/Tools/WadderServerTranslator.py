@@ -84,7 +84,7 @@ class TranslationCog(commands.Cog):
     async def main(self, interaction: nextcord.Interaction):
         pass
 
-    @main.subcommand()
+    @main.subcommand(name="toggler", description="Enable or disable server translation")
     @commands.has_permissions(administrator=True)
     async def toggle_translation(self, interaction: nextcord.Interaction):
         settings = self.load_settings()
@@ -105,7 +105,7 @@ class TranslationCog(commands.Cog):
 
 
     
-    @main.subcommand()
+    @main.subcommand(name="setchannel", description="Set the channel for server translation")
     @commands.has_permissions(administrator=True)
     async def set_translation_channel(self, interaction: nextcord.Interaction, channel: nextcord.TextChannel):
         settings = self.load_settings()
@@ -118,33 +118,19 @@ class TranslationCog(commands.Cog):
         self.save_settings(settings)
 
         await interaction.send(f"Translation channel has been set to {channel.mention}")
-
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    @main.subcommand()
+    @main.subcommand(name="setmodel", description="Set the model for server translation")
     @commands.has_permissions(administrator=True)
     async def set_chat_model(self, interaction: nextcord.Interaction, model_key):
         openai.api_key = os.getenv("OPENAI_API_KEY")
         self.chat_model = openai.Completion.create(engine=model_key)
 
-    @main.subcommand()
+    @main.subcommand(name="disabler", description="Disable server translation")
     @commands.has_permissions(administrator=True)
     async def disable(self, interaction: nextcord.Interaction):
         self.enabled = False
 
-    @main.subcommand()
+    @main.subcommand(name="enabler", description="Enable server translation")
     @commands.has_permissions(administrator=True)
     async def enable(self, interaction: nextcord.Interaction):
         self.enabled = True
