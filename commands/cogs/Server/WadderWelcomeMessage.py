@@ -44,14 +44,14 @@ class WelcomeMessage(commands.Cog):
             except nextcord.errors.Forbidden:
                 pass
 
-    @commands.command()
+    @nextcord.slash_command()
     @commands.has_permissions(administrator=True)
-    async def setwelcomechannel(self, ctx, channel: nextcord.TextChannel):
-        guild_id = str(ctx.guild.id)
+    async def setwelcomechannel(self, interaction: nextcord.Interaction, channel: nextcord.TextChannel):
+        guild_id = str(interaction.guild.id)
         self.settings.setdefault(guild_id, {})
         self.settings[guild_id]["welcome_channel_id"] = channel.id
         self.save_settings()
-        await ctx.send(f"Welcome channel set to {channel.mention}.")
+        await interaction.send(f"Welcome channel set to {channel.mention}.")
 
     @setwelcomechannel.error
     async def setwelcomechannel_error(self, ctx, error):
