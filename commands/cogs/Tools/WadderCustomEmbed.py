@@ -10,6 +10,7 @@ class EmbedCus(nextcord.ui.Modal):
         self.add_item(self.emTitle)
         self.emDesc = nextcord.ui.TextInput(label="Embed Description", min_length=5, max_length=4000, required=True, placeholder="Enter the embed description here", style=nextcord.TextInputStyle.paragraph)
         self.add_item(self.emDesc)
+        self.channelID = nextcord.ui.TextInput(label="Channel ID", required=True, placeholder="Enter the channel ID")
 
     async def callback(self, interaction: nextcord.Interaction) -> None:
         title = self.emTitle.value
