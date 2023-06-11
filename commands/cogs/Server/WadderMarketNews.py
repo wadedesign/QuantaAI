@@ -2,6 +2,8 @@ import nextcord
 from nextcord.ext import commands, tasks
 import feedparser
 
+# ! delete this one, rapid api is better dev 3 commands 
+
 class MarketNews(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

@@ -4,6 +4,8 @@ from collections import defaultdict
 
 # needs some fine tuning 
 
+# ! not ready for production !
+
 class Poll(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
