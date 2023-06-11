@@ -7,7 +7,7 @@ class LocalSearchCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @nextcord.slash_command(name="wadderserpapi")
+    @nextcord.slash_command(name="qserpapi")
     async def main(self, interaction: nextcord.Interaction):
         pass
 
