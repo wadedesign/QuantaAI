@@ -82,7 +82,7 @@ class ConnectionInfo(commands.Cog):
                 color=nextcord.Color.blue()
             )
 
-            button = Button(label="Join Support Server", url="https://discord.com/gg/milrato")
+            button = Button(label="Join Support Server", url="https://discord.gg/JJ4KAf86Vx")
             view = nextcord.ui.View()
             view.add_item(button)
 
