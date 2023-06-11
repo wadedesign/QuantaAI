@@ -85,7 +85,7 @@ class VerificationCog(commands.Cog):
         else:
             await interaction.followup.send("The verification role for this server has not been set.", ephemeral=True)
 
-    @commands.command()
+    @commands.command(name="svrole")
     async def set_verification_role(self, ctx: commands.Context, role_id: int):
         if await self.is_admin(ctx.author):
             if str(ctx.guild.id) not in self.verification_data:
