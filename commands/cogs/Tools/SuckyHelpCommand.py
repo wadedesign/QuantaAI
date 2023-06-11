@@ -46,6 +46,8 @@ class ServerHelp(commands.Cog):
         # Send the first page of commands with the view
         await interaction.send(embed=embeds[0], view=view)
 
+        print("Initial message sent")
+
     async def on_help_button_click(self, embeds, page_index, button, interaction):
         # Check if the message object has a view attribute before accessing it
         if not hasattr(interaction.message, 'view'):
@@ -71,10 +73,12 @@ class ServerHelp(commands.Cog):
             
         # Update the original message with the embed for the clicked page
         await interaction.edit_original_message(embed=embeds[page_index], view=view)
+        print("Page updated")
 
 
 def setup(bot):
     bot.add_cog(ServerHelp(bot))
+
 
 
 
