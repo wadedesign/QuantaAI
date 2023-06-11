@@ -98,6 +98,36 @@ class Currency(commands.Cog):
         embed.add_field(name=f"{user.display_name}'s New Balance", value=f"{new_balance_receiver} currency")
 
         await interaction.send(embed=embed, ephemeral=True)
+        
+    @main.subcommand(description="Buy a role")
+    async def buyquanta(self, interaction: nextcord.Interaction, role: nextcord.Role):
+        role_price = self.currency_data.get("role_prices", {}).get(str(role.id))
+        if role_price is None:
+            await interaction.send("This role is not available for purchase.", ephemeral=True)
+            return
+
+        user_balance = self.get_currency(interaction.user.id)
+        if user_balance < role_price:
+            await interaction.send("You don't have enough currency to buy this role.", ephemeral=True)
+            return
+
+        guild = interaction.guild
+        member = guild.get_member(interaction.user.id)
+        if role in member.roles:
+            await interaction.send("You already have this role.", ephemeral=True)
+            return
+
+        try:
+            await member.add_roles(role)
+        except nextcord.HTTPException:
+            await interaction.send("Failed to add the role. Please check the bot's role hierarchy.", ephemeral=True)
+            return
+
+        new_balance = self.add_currency(interaction.user.id, -role_price)
+        embed = nextcord.Embed(title=f"Bought {role.name}", color=0x00ff00)
+        embed.add_field(name="New Balance", value=f"{new_balance} currency")
+
+        await interaction.send(embed=embed, ephemeral=True)
 
 def setup(bot):
     bot.add_cog(Currency(bot))
