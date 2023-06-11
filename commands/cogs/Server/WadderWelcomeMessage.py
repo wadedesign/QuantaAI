@@ -31,12 +31,12 @@ class WelcomeMessage(commands.Cog):
                 embed = nextcord.Embed(
                     title=f"Welcome to {guild.name}!",
                     description=f"{member.mention} has joined the server.",
-                    color=0x00ff00
+                    color=0x3498DB
                 )
-                user = await self.bot.fetch_user(member.id)
-                embed.set_thumbnail(url=user.avatar.url)
-                embed.set_footer(text=f"User ID: {member.id}")
-                await channel.send(embed=embed)
+                embed.set_thumbnail(url=member.avatar.url)
+                embed.add_field(name="Member Count", value=f"We now have {guild.member_count} members!")
+                embed.set_footer(text=f"User ID: {member.id} • Joined at: {member.joined_at.strftime('%Y-%m-%d %H:%M:%S')}")
+                await channel.send(content=f"{member.mention}", embed=embed)
 
         if welcome_message:
             try:
@@ -62,7 +62,6 @@ class WelcomeMessage(commands.Cog):
         else:
             await ctx.send("An error occurred while processing this command.")
 
-    
 
 def setup(bot):
     bot.add_cog(WelcomeMessage(bot))
