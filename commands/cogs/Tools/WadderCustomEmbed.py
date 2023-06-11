@@ -17,11 +17,11 @@ class EmbedCus(nextcord.ui.Modal):
         self.add_item(self.footerText)
         self.footerImage = nextcord.ui.TextInput(label="Footer Image URL", required=False, placeholder="Enter the URL of the footer image")
         self.add_item(self.footerImage)
-        self.color = nextcord.ui.Select(label="Color", options=[
+        self.color = nextcord.ui.Select(options=[
             nextcord.Color.red(),
             nextcord.Color.green(),
             nextcord.Color.blue()
-        ], required=False, default=nextcord.Color.blurple())
+        ])
         self.add_item(self.color)
 
     async def callback(self, interaction: nextcord.Interaction) -> None:
@@ -58,4 +58,5 @@ class UserMod(commands.Cog):
 
 def setup(bot):
     bot.add_cog(UserMod(bot))
+
 
