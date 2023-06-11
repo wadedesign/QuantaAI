@@ -3,6 +3,8 @@ import nextcord
 from nextcord.ext import commands
 from nextcord.ui import button, View
 
+#! not ready for production but ALMOST THERE
+
 class ModerationView(View):
     def __init__(self, bot):
         super().__init__(timeout=None)

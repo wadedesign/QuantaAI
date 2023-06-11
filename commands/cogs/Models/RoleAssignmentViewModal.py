@@ -4,6 +4,8 @@ import nextcord
 from nextcord.ext import commands
 from nextcord.ui import button, View
 
+# ! not ready for production
+
 class RoleAssignmentView(View):
     def __init__(self, bot, roles):
         super().__init__(timeout=None)
