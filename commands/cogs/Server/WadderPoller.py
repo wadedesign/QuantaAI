@@ -28,7 +28,7 @@ class Poll(commands.Cog):
         for idx, choice in enumerate(choices):
             embed.add_field(name=f"{self.vote_emojis[idx]} {choice}", value="0 votes", inline=False)
 
-        poll_message = await interaction.send(embed=embed)
+        poll_message = await interaction.response.send_message(embed=embed)
 
         for idx in range(len(choices)):
             await poll_message.add_reaction(self.vote_emojis[idx])
