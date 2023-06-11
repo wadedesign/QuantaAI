@@ -2,6 +2,8 @@ import nextcord
 import json
 from nextcord.ext import commands
 
+#** ready for production
+
 # own cogs!
 reaction_role_channel_name = "🎭reaction-roles"
 
@@ -20,7 +22,11 @@ class ReactionRoles2(commands.Cog):
         except FileNotFoundError:
             return {}
 
-    @nextcord.slash_command(name="setup_roles", description="Sets up a reaction role channel")
+    @nextcord.slash_command(name="util_1")
+    async def main (self, interaction: nextcord.Interaction):
+        pass
+
+    @main.subcommand(name="setup_roles", description="Sets up a reaction role channel")
     @commands.has_permissions(administrator=True)
     async def setup_roles(self, interaction: nextcord.Interaction):
         reaction_role_category_name = "🔧 Server Utilities"
@@ -33,7 +39,7 @@ class ReactionRoles2(commands.Cog):
 
         await interaction.send("Reaction role channel has been set up.")
 
-    @nextcord.slash_command(name="add_role", description="Add a reaction role")
+    @main.subcommand(name="add_role", description="Add a reaction role")
     async def add_role(self, interaction: nextcord.Interaction, role: nextcord.Role, emoji: str, title: str, description: str):
         reaction_role_channel = nextcord.utils.get(interaction.guild.text_channels, name=reaction_role_channel_name)
 

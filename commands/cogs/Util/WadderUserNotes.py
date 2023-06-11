@@ -29,7 +29,7 @@ class UserNotes(commands.Cog):
     async def is_admin(self, user: nextcord.User):
         return user.guild_permissions.administrator
 
-    @nextcord.slash_command()
+    @nextcord.slash_command(name="user_memoirs", description="Store and display notes about a specified user")
     async def user_notes(self, interaction: nextcord.Interaction, action: str, user: nextcord.User, note: str = None):
         """Store and display notes about a specified user"""
 
