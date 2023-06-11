@@ -5,6 +5,9 @@ import os
 import aiosqlite
 
 
+# ** RFP ** Quick
+
+
 # works now!!!!
 
 class AddUser(nextcord.ui.Modal):
@@ -110,10 +113,26 @@ class TicketSettings(nextcord.ui.View):
             final = final + msg
         with open('data/transcripts.txt', 'w') as f:
             f.write(final)
+        print("Transcripts saved to file.")
+
         await interaction.response.send_message("Ticket Being Closed...", ephemeral=True)
         await interaction.channel.delete()
-        await interaction.user.send(f"Ticket Closed: {interaction.channel.mention}", file=nextcord.File('transcripts.txt'))
-        os.remove('data/transcripts.txt')
+        print("Channel deleted.")
+
+        file_path = 'data/transcripts.txt'
+        if not os.path.exists(file_path):
+            print("File not found:", file_path)
+            return
+
+        try:
+            await interaction.user.send(f"Ticket Closed: {interaction.channel.mention}", file=nextcord.File(file_path))
+            print("Transcripts sent to user.")
+        except nextcord.HTTPException as e:
+            print("Error sending transcripts to user:", e)
+
+        os.remove(file_path)
+        print("Transcripts file removed.")
+
 
     @nextcord.ui.button(label="Add User", style=nextcord.ButtonStyle.green, custom_id="ticket_settings:green")
     async def add_user(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
