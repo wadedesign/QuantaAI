@@ -128,6 +128,20 @@ class Currency(commands.Cog):
         embed.add_field(name="New Balance", value=f"{new_balance} currency")
 
         await interaction.send(embed=embed, ephemeral=True)
+        
+    @commands.has_permissions(administrator=True)
+    @main.subcommand(description="Set the price for a role")
+    async def set_price(self, interaction: nextcord.Interaction, role: nextcord.Role, price: int):
+        if price < 1:
+            await interaction.send("Price must be at least 1.", ephemeral=True)
+            return
+
+        self.currency_data.setdefault("role_prices", {})
+        self.currency_data["role_prices"][str(role.id)] = price
+        self.save_currency_data()
+
+        await interaction.send(f"Price for {role.name} set to {price} currency.", ephemeral=True)
+
 
 def setup(bot):
     bot.add_cog(Currency(bot))
