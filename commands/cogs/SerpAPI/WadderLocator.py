@@ -13,6 +13,7 @@ class LocalSearchCog(commands.Cog):
 
     @main.subcommand(name="local_search", description="local searches") # not very good at the moment
     async def local_search(self, interaction: nextcord.Interaction, query: str, *, location: str):
+        await interaction.response.defer()
         params = {
             "engine": "google_maps",
             "q": query,
