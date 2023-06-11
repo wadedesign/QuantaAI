@@ -2,6 +2,8 @@ import nextcord
 from nextcord.ext import commands
 from collections import defaultdict
 
+# needs some fine tunning 
+
 class Poll(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -17,9 +19,8 @@ class Poll(commands.Cog):
 
         await poll["message"].edit(embed=embed)
 
-    @nextcord.slash_command(name="cpoll", description="Create a poll with up to 10 choices.")
-    async def cpoll(self, interaction: nextcord.Interaction, question: str, choices: str):
-        choices = choices.split(",")
+    @nextcord.slash_command(name="cpoll",description="Create a poll with up to 10 choices.")
+    async def cpoll(self, interaction: nextcord.Interaction, question: str, *choices: str):
         if len(choices) > len(self.vote_emojis):
             await interaction.send("You can have a maximum of 10 choices.")
             return
@@ -28,7 +29,7 @@ class Poll(commands.Cog):
         for idx, choice in enumerate(choices):
             embed.add_field(name=f"{self.vote_emojis[idx]} {choice}", value="0 votes", inline=False)
 
-        poll_message = await interaction.response.send_message(embed=embed)
+        poll_message = await interaction.send(embed=embed)
 
         for idx in range(len(choices)):
             await poll_message.add_reaction(self.vote_emojis[idx])
