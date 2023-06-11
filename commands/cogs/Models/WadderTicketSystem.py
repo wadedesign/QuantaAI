@@ -148,7 +148,7 @@ class TicketSystem(commands.Cog):
     @commands.command(name="ticket", description="Setup the ticket system")
     @commands.has_permissions(manage_guild=True)
     async def setup_tickets(self, ctx: commands.Context):
-        embed = nextcord.Embed(title="Ticket System", description="Click the Create Ticket BUtton ", color=0x00FFFF) 
+        embed = nextcord.Embed(title="Ticket System", description="Click the Create Ticket Button ", color=0x00FFFF) 
         await ctx.send(embed=embed, view=CreateTicket(self.bot))
 
     @commands.command(name="setrole", description="Set the role to be added to the ticket")
