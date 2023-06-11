@@ -2,7 +2,9 @@ import re
 import nextcord
 from nextcord.ext import commands
 
-# * Works well lets put it in a embed!
+# * Works well lets put it in a embed! 
+
+# !not ready for production
 
 
 class YouTubeWatcher(commands.Cog):

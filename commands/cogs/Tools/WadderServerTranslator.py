@@ -6,7 +6,7 @@ from langdetect import detect
 import os
 import json
 
-
+# ** ready for production add embeds
 
 class TranslationCog(commands.Cog):
     def __init__(self, bot):
