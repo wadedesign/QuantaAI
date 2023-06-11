@@ -5,7 +5,7 @@ import os
 import aiosqlite
 
 
-# ** RFP ** Quick
+# ** RFP ** Quick make the ticket include the user who made it in the embed
 
 
 # works now!!!!

@@ -4,6 +4,8 @@ import nextcord
 from nextcord.ext import commands
 import os
 
+# ! This is a WIP cog, it is not finished yet
+
 class Dropdown(nextcord.ui.Select):
     def __init__(self, options):
         super().__init__(placeholder="Select an option", min_values=1, max_values=1, options=options)
