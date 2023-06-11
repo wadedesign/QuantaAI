@@ -4,6 +4,9 @@ import os
 import nextcord
 from nextcord.ext import commands
 
+#! come back to this later
+# TODO: change strcuture of data file
+
 class Currency(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
