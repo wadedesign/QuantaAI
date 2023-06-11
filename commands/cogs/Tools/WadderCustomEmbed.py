@@ -11,11 +11,12 @@ class EmbedCus(nextcord.ui.Modal):
         self.emDesc = nextcord.ui.TextInput(label="Embed Description", min_length=5, max_length=4000, required=True, placeholder="Enter the embed description here", style=nextcord.TextInputStyle.paragraph)
         self.add_item(self.emDesc)
         self.channelID = nextcord.ui.TextInput(label="Channel ID", required=True, placeholder="Enter the channel ID")
+        self.add_item(self.channelID)
 
     async def callback(self, interaction: nextcord.Interaction) -> None:
         title = self.emTitle.value
         desc = self.emDesc.value
-        channel_id = int(self.channelID.value)
+        channel_id = int(self.channelID.value) if self.channelID.value is not None else None
         em = nextcord.Embed(title=title, description=desc)
         target_channel = interaction.guild.get_channel(channel_id)
         if target_channel:
@@ -34,3 +35,4 @@ class UserMod(commands.Cog):
 
 def setup(bot):
     bot.add_cog(UserMod(bot))
+
