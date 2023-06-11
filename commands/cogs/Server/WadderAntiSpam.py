@@ -3,6 +3,9 @@ from collections import defaultdict
 from nextcord import Embed
 from nextcord.ext import commands
 
+# ** Ready for Production **
+
+
 class AntiSpam(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -48,3 +51,7 @@ def setup(bot):
     bot.add_cog(AntiSpam(bot))
 
 
+
+
+# TODO - Add Admin Support
+# TODO - Add Logging
