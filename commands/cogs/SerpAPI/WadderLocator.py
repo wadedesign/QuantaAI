@@ -138,7 +138,7 @@ class LocalSearchCog(commands.Cog):
             await interaction.send("No video results found.")
 
             
-    @main.subcommand(name="bing", description="Searches for things on bing")
+    @main.subcommand(name="bing", description="Searches for things on Bing")
     async def bingsearch(self, interaction: nextcord.Interaction, query: str):
         await interaction.response.defer()
         params = {
@@ -153,12 +153,18 @@ class LocalSearchCog(commands.Cog):
         organic_results = results["organic_results"]
 
         if organic_results:
-            await interaction.send("Bing search results found:")
-            for result in organic_results[:5]:  # Limit to 5 results to avoid exceeding message limit
-                response = f"{result['title']} - {result['link']}"
-                await interaction.send(response)
+            embed = nextcord.Embed(title="Bing Search Results", color=0x00ff00)
+
+            for result in organic_results[:5]:
+                title = result["title"]
+                link = result["link"]
+
+                embed.add_field(name=title, value=link, inline=False)
+
+            await interaction.send(embed=embed)
         else:
             await interaction.send("No Bing search results found.")
+
 
 def setup(bot):
     bot.add_cog(LocalSearchCog(bot))
