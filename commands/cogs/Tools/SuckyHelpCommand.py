@@ -3,8 +3,6 @@ import nextcord
 from nextcord.ext import commands
 
 
-# works but still errors out. ! delete this file
-
 class ServerHelp(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -71,10 +69,12 @@ class ServerHelp(commands.Cog):
             print(f"View children: {len(view.children)}")
             print(f"Button label: {button.label}")
             
-            await interaction.edit_original_message(embed=embeds[page_index], view=view)  # Update the embed here
+            # Update the original message with the embed for the clicked page
+            await interaction.edit_original_message(embed=embeds[page_index], view=view)
 
 
 def setup(bot):
     bot.add_cog(ServerHelp(bot))
+
 
 
