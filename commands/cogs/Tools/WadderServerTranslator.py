@@ -87,6 +87,7 @@ class TranslationCog(commands.Cog):
     @main.subcommand(name="toggler", description="Enable or disable server translation")
     @commands.has_permissions(administrator=True)
     async def toggle_translation(self, interaction: nextcord.Interaction):
+        await interaction.response.defer()
         settings = self.load_settings()
         guild_id = str(interaction.guild.id)
 
