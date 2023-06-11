@@ -11,7 +11,7 @@ class LocalSearchCog(commands.Cog):
     async def main(self, interaction: nextcord.Interaction):
         pass
 
-    @main.subcommand(name="local_search", description="local searches") # not very good at the moment
+    @main.subcommand(name="local_search", description="Local searches")
     async def local_search(self, interaction: nextcord.Interaction, query: str, *, location: str):
         await interaction.response.defer()
         params = {
@@ -27,13 +27,19 @@ class LocalSearchCog(commands.Cog):
         local_results = results.get("local_results", [])
 
         if local_results:
-            response = "Local search results:\n"
-            for index, result in enumerate(local_results, start=1):
-                response += f"{index}. {result['title']} (Data ID: {result['data_id']})\n"
-        else:
-            response = "No local results found."
+            embed = nextcord.Embed(title="Local Search Results", color=0x00ff00)
 
-        await interaction.send(response)
+            for index, result in enumerate(local_results, start=1):
+                title = result["title"]
+                data_id = result["data_id"]
+                value = f"Data ID: {data_id}"
+
+                embed.add_field(name=f"{index}. {title}", value=value, inline=False)
+
+            await interaction.send(embed=embed)
+        else:
+            await interaction.send("No local results found.")
+
 
     @main.subcommand(name="photo_meta", description="Fetches photo metadata for a local search result")
     async def photo_meta(self, interaction: nextcord.Interaction, query: str, location: str, index: int):
