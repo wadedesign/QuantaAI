@@ -33,6 +33,6 @@ class Var(enum.Enum):
 
 class Link(enum.Enum):
     bot = "https://discord.com/api/oauth2/authorize?client_id=1072418891680202824&permissions=8&scope=bot%20applications.commands"
-    server = "https://discord.gg/A9gxnwgpEN"
-    topgg = None # the link for the top.gg page
-    banner = None # the link for the banner
+    server = "https://discord.gg/JJ4KAf86Vx"
+    topgg = "https://top.gg/bot/1075144828330971186" # the link for the top.gg page
+    banner = "https://cdn.discordapp.com/attachments/1111133997897105408/1116919137789300867/2686a82709c0d3db8c2633dc89991f72.gif" # the link for the banner
