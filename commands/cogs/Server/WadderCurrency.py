@@ -99,7 +99,7 @@ class Currency(commands.Cog):
 
         await interaction.send(embed=embed, ephemeral=True)
         
-    @main.subcommand(description="Buy a role")
+    @main.subcommand(name="buyrole",description="Buy a role")
     async def buyquanta(self, interaction: nextcord.Interaction, role: nextcord.Role):
         role_price = self.currency_data.get("role_prices", {}).get(str(role.id))
         if role_price is None:
