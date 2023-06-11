@@ -32,7 +32,7 @@ class AntiSpam(commands.Cog):
     def create_spam_embed(self, author):
         embed = Embed(title="Anti-Spam", color=0xff0000)
         embed.description = f"{author.mention}, please stop spamming."
-        embed.set_thumbnail(url=author.avatar_url)
+        embed.set_thumbnail(url=author.avatar.url)
         return embed
 
 def setup(bot):
