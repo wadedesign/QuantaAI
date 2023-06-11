@@ -36,7 +36,7 @@ class Currency(commands.Cog):
             currency_per_message = 1
             self.add_currency(message.author.id, currency_per_message)
 
-    @nextcord.slash_command(name="ecocurrency", description="Economy System")
+    @nextcord.slash_command(name="quantaeco", description="Economy System")
     async def main(self, interaction: nextcord.Interaction):
         pass
 
