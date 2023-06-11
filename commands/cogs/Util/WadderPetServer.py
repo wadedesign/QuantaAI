@@ -48,16 +48,17 @@ class PetCog(commands.Cog): # good, change to where it shows the user and use em
     async def main(self, interaction: nextcord.Interaction):
         pass
 
-    @main.subcommand(description="feed your pet")
-    async def feed(self, interaction: nextcord.Interaction):
+    @main.subcommand(description="Nourish your pet")
+    async def nourish(self, interaction: nextcord.Interaction):
         self.hunger += 10
         self.happiness += 2
         if self.hunger >= 100:
             self.hunger = 100
         if self.happiness >= 100:
             self.happiness = 100
-        await interaction.send(f'Nom nom')
-        print("Fed. Current hunger: " + self.hunger)
+        await interaction.send('Nom nom')
+        print("Fed. Current hunger: " + str(self.hunger))
+
 
     @main.subcommand(description="snuggle with your pet")
     async def snuggle(self, interaction: nextcord.Interaction):
@@ -65,7 +66,7 @@ class PetCog(commands.Cog): # good, change to where it shows the user and use em
         if self.happiness >= 100:
             self.happiness = 100
         await interaction.send(f'Zzzz')
-        print("Snuggled. Current happiness: " + self.happiness)
+        print("Snuggled. Current happiness: " + str(self.happiness))
 
     @main.subcommand(description="pet your pet")
     async def pet(self, interaction: nextcord.Interaction):
@@ -73,7 +74,7 @@ class PetCog(commands.Cog): # good, change to where it shows the user and use em
         if self.happiness >= 100:
             self.happiness = 100
         await interaction.send(f'mew')
-        print("Petted. Current happiness: " + self.happiness)
+        print("Petted. Current happiness: " + str(self.happiness))
 
     @main.subcommand(description="sleep your pet")
     async def sleep(self, interaction: nextcord.Interaction):
