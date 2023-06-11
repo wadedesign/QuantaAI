@@ -19,7 +19,7 @@ class Poll(commands.Cog):
 
         await poll["message"].edit(embed=embed)
 
-    @nextcord.slash_command(description="Create a poll with up to 10 choices.")
+    @nextcord.slash_command(name="cpoll",description="Create a poll with up to 10 choices.")
     async def cpoll(self, interaction: nextcord.Interaction, question: str, *choices: str):
         if len(choices) > len(self.vote_emojis):
             await interaction.send("You can have a maximum of 10 choices.")
