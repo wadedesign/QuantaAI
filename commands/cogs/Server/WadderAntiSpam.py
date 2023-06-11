@@ -30,7 +30,7 @@ class AntiSpam(commands.Cog):
         self.user_last_message_time[user_id] = current_time
 
     def create_spam_embed(self, author):
-        embed = Embed(title="Anti-Spam", color=0xff0000)
+        embed = Embed(title="QAnti-Spam", color=0xff0000)
         embed.description = f"{author.mention}, please stop spamming."
         embed.set_thumbnail(url=author.avatar.url)
         return embed
