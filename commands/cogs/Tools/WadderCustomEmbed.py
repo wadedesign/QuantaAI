@@ -1,6 +1,9 @@
 import nextcord
 from nextcord.ext import commands
 
+
+# * Works well 
+
 class EmbedCus(nextcord.ui.Modal):
     def __init__(self):
         super().__init__(
