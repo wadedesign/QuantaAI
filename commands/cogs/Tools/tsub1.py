@@ -112,7 +112,7 @@ class CloudStorage(commands.Cog):
             if int(time.time()) > data["end_time"]:
                 await stop_giveaway(self, giveaway, data)
     
-    @nextcord.slash_command(name="cloud")
+    @nextcord.slash_command(name="tools1")
     async def main(self, interaction: nextcord.Interaction):
         pass    
     @main.subcommand()
