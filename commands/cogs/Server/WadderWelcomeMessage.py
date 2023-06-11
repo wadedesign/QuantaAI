@@ -47,7 +47,7 @@ class WelcomeMessage(commands.Cog):
             except nextcord.errors.Forbidden:
                 pass
 
-    @nextcord.slash_command()
+    @nextcord.slash_command(name="setwelcome", description="Set the welcome channel for the server.")
     @commands.has_permissions(administrator=True)
     async def setwelcomechannel(self, interaction: nextcord.Interaction, channel: nextcord.TextChannel):
         guild_id = str(interaction.guild.id)

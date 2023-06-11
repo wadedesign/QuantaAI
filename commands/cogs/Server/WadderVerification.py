@@ -85,22 +85,22 @@ class VerificationCog(commands.Cog):
         else:
             await interaction.followup.send("The verification role for this server has not been set.", ephemeral=True)
 
-    @commands.command()
-    async def set_verification_role(self, ctx: commands.Context, role_id: int):
-        if await self.is_admin(ctx.author):
-            if str(ctx.guild.id) not in self.verification_data:
-                self.verification_data[str(ctx.guild.id)] = {}
+    @nextcord.slash_command()
+    async def set_verification_role(self, interaction: commands.Context, role_id: int):
+        if await self.is_admin(interaction.author):
+            if str(interaction.guild.id) not in self.verification_data:
+                self.verification_data[str(interaction.guild.id)] = {}
 
-            self.verification_data[str(ctx.guild.id)]['role_id'] = role_id
+            self.verification_data[str(interaction.guild.id)]['role_id'] = role_id
 
-            if 'channel_id' not in self.verification_data[str(ctx.guild.id)]:
-                channel = await self.create_verification_channel(ctx.guild)
-                self.verification_data[str(ctx.guild.id)]['channel_id'] = channel.id
+            if 'channel_id' not in self.verification_data[str(interaction.guild.id)]:
+                channel = await self.create_verification_channel(interaction.guild)
+                self.verification_data[str(interaction.guild.id)]['channel_id'] = channel.id
 
             self.save_verification_data()
-            await ctx.send(f"Verification role successfully set to role ID {role_id}. A verification channel with a button has been created.")
+            await interaction.send(f"Verification role successfully set to role ID {role_id}. A verification channel with a button has been created.")
         else:
-            await ctx.send("You don't have permission to use this command.")
+            await interaction.send("You don't have permission to use this command.")
 
     @commands.Cog.listener()
     async def on_ready(self):
