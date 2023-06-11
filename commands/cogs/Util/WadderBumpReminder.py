@@ -7,6 +7,7 @@ import os
 
 from nextcord.ext import commands, tasks
 
+#  !not ready for production
 
 class ServerConfig:
     def __init__(self, file_path="data/server_configs.json"):

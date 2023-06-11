@@ -10,6 +10,8 @@ from Logs.logger import setup_logger
 
 # added by wade
 
+
+
 ending_note = "For additional assistance, contact a moderator."
 color = 0x00FF00
 

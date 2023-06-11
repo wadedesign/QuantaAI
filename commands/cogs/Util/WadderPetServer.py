@@ -6,6 +6,9 @@ import nextcord
 from nextcord.ext import commands, tasks
 import asyncio
 
+
+# ** ready for production add embeds
+
 class PetCog(commands.Cog): # good, change to where it shows the user and use embeds
     def __init__(self, bot):
         self.bot = bot
@@ -110,7 +113,12 @@ class PetCog(commands.Cog): # good, change to where it shows the user and use em
 
     @main.subcommand(description="check your pet's status")
     async def status(self, interaction: nextcord.Interaction):
-        await interaction.send(f'{self.bot.user.name}\nHealth : {self.health}\nHunger : {self.hunger}\nHappiness : {self.happiness}\nStatus : {self.currstatus} ')
+        embed = nextcord.Embed(title="Pet Status", color=nextcord.Color.blue())
+        embed.add_field(name="Health", value=str(self.health))
+        embed.add_field(name="Hunger", value=str(self.hunger))
+        embed.add_field(name="Happiness", value=str(self.happiness))
+        embed.add_field(name="Status", value=self.currstatus)
+        await interaction.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(PetCog(bot))

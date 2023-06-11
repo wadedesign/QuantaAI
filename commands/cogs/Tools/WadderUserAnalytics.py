@@ -33,10 +33,14 @@ class UserAnalyticsCog(commands.Cog):
         if message.guild.id in self.message_count and message.author.id in self.message_count[message.guild.id]:
             self.message_count[message.guild.id][message.author.id] -= 1
 
-    @commands.command()
-    async def analytics(self, ctx, user: nextcord.User = None):
+    @nextcord.slash_command(name="useranalytics", description="Displays user analytics for the server")
+    async def main (self, interaction: nextcord.Interaction):
+        pass
+    
+    @main.subcommand(description="user analytics for the server")
+    async def analytics(self, interaction: nextcord.Interaction, user: nextcord.User = None):
         """Displays user analytics for the server"""
-        guild_id = ctx.guild.id
+        guild_id = interaction.guild.id
 
         if user:
             message_count = self.message_count.get(guild_id, {}).get(user.id, 0)
@@ -52,7 +56,7 @@ class UserAnalyticsCog(commands.Cog):
             gif = File(gif_path, filename='animated.gif')
             message_count_embed.set_image(url="attachment://animated.gif")
 
-            await ctx.send(file=gif, embed=message_count_embed)
+            await interaction.send(file=gif, embed=message_count_embed)
         else:
             message_count_embed = nextcord.Embed(title="Message Count")
             for user_id, count in self.message_count.get(guild_id, {}).items():
@@ -69,7 +73,7 @@ class UserAnalyticsCog(commands.Cog):
             gif = File(gif_path, filename='animated.gif')
             message_count_embed.set_image(url="attachment://animated.gif")
 
-            await ctx.send(file=gif, embed=message_count_embed)
+            await interaction.send(file=gif, embed=message_count_embed)
 
 def setup(bot):
     bot.add_cog(UserAnalyticsCog(bot))

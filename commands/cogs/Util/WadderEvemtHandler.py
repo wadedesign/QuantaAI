@@ -3,6 +3,10 @@ import nextcord
 from nextcord.ext import commands
 from utils.WF1 import Link, Var
 
+#  !not ready for production
+
+
+
 data = {"guild": []}
 
 with open("data/ban.json", "w") as f:

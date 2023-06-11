@@ -6,6 +6,8 @@ from langdetect import detect
 import os
 import json
 
+
+
 class TranslationCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
