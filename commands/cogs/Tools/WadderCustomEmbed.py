@@ -15,7 +15,10 @@ class EmbedCus(nextcord.ui.Modal):
         self.add_item(self.channelID)
         self.footerText = nextcord.ui.TextInput(label="Footer Text", min_length=1, max_length=2048, required=False, placeholder="Enter the footer text")
         self.add_item(self.footerText)
-        self.timestamp = nextcord.ui.Checkbox(label="Timestamp", required=False)
+        self.timestamp = nextcord.ui.Select(label="Timestamp", options=[
+            nextcord.ui.SelectOption(label="Enabled", value="enabled"),
+            nextcord.ui.SelectOption(label="Disabled", value="disabled")
+        ], required=False)
         self.add_item(self.timestamp)
         self.footerImage = nextcord.ui.TextInput(label="Footer Image URL", required=False, placeholder="Enter the URL of the footer image")
         self.add_item(self.footerImage)
@@ -32,7 +35,8 @@ class EmbedCus(nextcord.ui.Modal):
         if footer_text:
             em.set_footer(text=footer_text)
         
-        if self.timestamp.checked:
+        timestamp_option = self.timestamp.values[0]
+        if timestamp_option == "enabled":
             em.timestamp = nextcord.utils.utcnow()
         
         footer_image_url = self.footerImage.value
@@ -58,3 +62,4 @@ class UserMod(commands.Cog):
 
 def setup(bot):
     bot.add_cog(UserMod(bot))
+
