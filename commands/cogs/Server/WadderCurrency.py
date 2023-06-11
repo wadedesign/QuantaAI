@@ -5,6 +5,7 @@ import nextcord
 from nextcord.ext import commands
 
 # need to come back and add roles to buy and make  a channel for this (bank) emperal=true 
+empreal = True 
 
 class Currency(commands.Cog):
     def __init__(self, bot):
