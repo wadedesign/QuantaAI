@@ -4,9 +4,6 @@ import os
 import nextcord
 from nextcord.ext import commands
 
-# need to come back and add roles to buy and make  a channel for this (bank) emperal=true 
-empreal = True 
-
 class Currency(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -36,59 +33,61 @@ class Currency(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         if not message.author.bot:
-            # Adjust this value to change how much currency is awarded per message sent
             currency_per_message = 1
             self.add_currency(message.author.id, currency_per_message)
+
     @nextcord.slash_command(name="ecocurrency", description="Economy System")
     async def main(self, interaction: nextcord.Interaction):
         pass
-    
-    
+
     @main.subcommand(description="Check your balance")
     async def balance(self, interaction: nextcord.Interaction):
         balance = self.get_currency(interaction.user.id)
         embed = nextcord.Embed(title=f"{interaction.user.display_name}'s Balance", color=0x00ff00)
         embed.add_field(name="Balance", value=f"{balance} currency")
-        await interaction.send(embed=embed)
+
+        await interaction.send(embed=embed, ephemeral=True)
 
     @commands.has_permissions(administrator=True)
     @main.subcommand(description="Award currency to a user")
     async def award(self, interaction: nextcord.Interaction, user: nextcord.Member, amount: int):
         if amount < 1:
-            await interaction.send("Amount must be at least 1.")
+            await interaction.send("Amount must be at least 1.", ephemeral=True)
             return
 
         new_balance = self.add_currency(user.id, amount)
         embed = nextcord.Embed(title=f"Awarded {amount} currency to {user.display_name}", color=0x00ff00)
         embed.add_field(name="New Balance", value=f"{new_balance} currency")
-        await interaction.send(embed=embed)
+
+        await interaction.send(embed=embed, ephemeral=True)
 
     @commands.has_permissions(administrator=True)
     @main.subcommand(description="Take currency from a user")
     async def take(self, interaction: nextcord.Interaction, user: nextcord.Member, amount: int):
         if amount < 1:
-            await interaction.send("Amount must be at least 1.")
+            await interaction.send("Amount must be at least 1.", ephemeral=True)
             return
 
         current_balance = self.get_currency(user.id)
         if current_balance < amount:
-            await interaction.send(f"{user.display_name} doesn't have enough currency.")
+            await interaction.send(f"{user.display_name} doesn't have enough currency.", ephemeral=True)
             return
 
         new_balance = self.add_currency(user.id, -amount)
         embed = nextcord.Embed(title=f"Took {amount} currency from {user.display_name}", color=0xff0000)
         embed.add_field(name="New Balance", value=f"{new_balance} currency")
-        await interaction.send(embed=embed)
+
+        await interaction.send(embed=embed, ephemeral=True)
 
     @main.subcommand(description="Transfer currency to a user")
     async def transfer(self, interaction: nextcord.Interaction, user: nextcord.Member, amount: int):
         if amount < 1:
-            await interaction.send("Amount must be at least 1.")
+            await interaction.send("Amount must be at least 1.", ephemeral=True)
             return
 
         current_balance = self.get_currency(interaction.user.id)
         if current_balance < amount:
-            await interaction.send(f"You don't have enough currency.")
+            await interaction.send("You don't have enough currency.", ephemeral=True)
             return
 
         new_balance_sender = self.add_currency(interaction.user.id, -amount)
@@ -97,8 +96,8 @@ class Currency(commands.Cog):
         embed = nextcord.Embed(title=f"Transferred {amount} currency to {user.display_name}", color=0xffff00)
         embed.add_field(name=f"{interaction.user.display_name}'s New Balance", value=f"{new_balance_sender} currency")
         embed.add_field(name=f"{user.display_name}'s New Balance", value=f"{new_balance_receiver} currency")
-        await interaction.send(embed=embed)
 
+        await interaction.send(embed=embed, ephemeral=True)
 
 def setup(bot):
     bot.add_cog(Currency(bot))
