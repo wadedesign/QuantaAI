@@ -3,6 +3,9 @@ import json
 from nextcord.ext import commands
 import os
 
+
+# ** ready for production
+
 # Set the path for the folder where the user_notes.json file will be saved
 data_folder = "data"
 os.makedirs(data_folder, exist_ok=True)
@@ -31,7 +34,6 @@ class UserNotes(commands.Cog):
 
     @nextcord.slash_command(name="user_memoirs", description="Store and display notes about a specified user")
     async def user_notes(self, interaction: nextcord.Interaction, action: str, user: nextcord.User, note: str = None):
-        """Store and display notes about a specified user"""
 
         if not await self.is_admin(interaction.user):
             await interaction.response.send_message("You don't have permission to use this command.", ephemeral=True)

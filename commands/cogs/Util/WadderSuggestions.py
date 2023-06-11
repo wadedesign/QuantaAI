@@ -2,6 +2,8 @@ import datetime
 import nextcord
 from nextcord.ext import commands
 
+# ** ready for production
+
 #own cog! 
 suggestion_channel_name = "💡suggestions"
 
