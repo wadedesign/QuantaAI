@@ -80,47 +80,7 @@ class Stocks2(commands.Cog):
         
         
         
-    @main.subcommand(name="wtweet", description="To tweet something")
-    async def tweet(self, interaction: nextcord.Interaction, *, comment, user: nextcord.Member = None):
-        print("Inside tweet command")
-        interaction = interaction.interaction
-        await interaction.response.defer()
-        
-        if not user:
-            user = interaction.user
-        
-        url = f"https://some-random-api.ml/canvas/tweet?avatar={user.display_avatar}&username={user.name}&comment={comment}&displayname={user.display_name}"
-        print("API URL:", url)
-        
-        try:
-            async with aiohttp.ClientSession() as session:
-                response = await session.get(url)
-                imageData = io.BytesIO(await response.read())
-                file = nextcord.File(imageData, filename="tweet.png")
-                print("File created")
-
-            embed = nextcord.Embed(colour=interaction.user.color)
-            embed.set_image(url="attachment://tweet.png")
-            embed.set_footer(text=f"Requested By {interaction.user}", icon_url=interaction.user.display_avatar)
-
-            await interaction.send(embed=embed, file=file)
-            print("Response sent")
-        except aiohttp.ClientConnectorError:
-            await interaction.send("An error occurred while connecting to the external API. Please try again later.")
-            print("API connection error")
-
-    @commands.Cog.listener()
-    async def on_message(self, message: nextcord.Message):
-        print("on_message called")
-        ctx = await self.bot.get_context(message)
-        command_name = "wtweet"
-        
-        if ctx.command and ctx.command.name == command_name:
-            return
-        
-        if message.content.startswith(f"!{command_name}"):
-            comment = message.content.removeprefix(f"!{command_name}")
-            await self.tweet(ctx, comment)
+    
 
 
     @main.subcommand(name="github", description="get github user") 
