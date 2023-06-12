@@ -8,6 +8,7 @@ from typing import Dict
 import nextcord
 from nextcord.ext import commands
 
+# ! almost ready fpr production
 
 class Economy(commands.Cog):
     """A cog for managing an economy within a Discord server"""
@@ -49,7 +50,7 @@ class Economy(commands.Cog):
             self.add_currency(message.author.id, currency_per_message)
 
 
-    @nextcord.slash_command(name="eco", description="Start a new game of Number Guess")
+    @nextcord.slash_command(name="eco")
     async def main(self, interaction: nextcord.Interaction):
         pass
     
