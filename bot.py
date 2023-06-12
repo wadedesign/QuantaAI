@@ -122,6 +122,12 @@ async def setuplogger_error(interaction: nextcord.Interaction, error):
     if isinstance(error, commands.MissingPermissions):
         await interaction.send("You do not have the required permissions to use this command.", ephemeral=True)
 
+@bot.slash_command()
+async def servers22(ctx):
+    servers = bot.guilds
+    server_list = "\n".join([f"{server.name} (ID: {server.id})" for server in servers])
+    embed = nextcord.Embed(title="Server List", description=server_list, color=nextcord.Color.blue())
+    await ctx.send(embed=embed)
 
 @bot.event
 async def on_application_command_error(interaction: nextcord.Interaction, error: Exception):
