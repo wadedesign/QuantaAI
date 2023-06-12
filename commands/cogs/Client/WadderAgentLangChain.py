@@ -23,6 +23,7 @@ serper_api_key = os.getenv("SERPAPI_API_KEY")
 serpapi_api_key = os.getenv("SERPAPI_API_KEY")
 openai.api_key = os.getenv("OPENAI_API_KEY")
 scenex_api_key = os.getenv("SCENEX_API_KEY")
+
 from langchain import OpenAI, ConversationChain
 from langchain.agents import load_tools, initialize_agent
 
