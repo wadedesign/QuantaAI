@@ -64,50 +64,64 @@ async def log_message(message):
     # Check if the message was sent by a bot
     if message.author.bot:
         return
-    print(f"Message content after checking for bot: {message.content}")  # Add this line
+    print(f"Message content after checking for bot: {message.content}")
 
-    # The rest of the code remains the same
+    # Log the message to the logger channel
+    logger_channel = nextcord.utils.get(message.guild.text_channels, name="logger")
+    print(f"Logger channel: {logger_channel}")
+
     if not is_private:
-        # Log the message to the logger channel
-        logger_channel = nextcord.utils.get(message.guild.text_channels, name="logger")
         if logger_channel:
             channel_name = message.channel.mention
             await log_embed(logger_channel, "Message Sent", f"{message.author.mention} said in {channel_name}: {message.content}")
+        else:
+            print("Logger channel not found.")
 
         try:
             with open("log/messages.txt", "a", encoding="utf-8") as file:
                 log_entry = f"{message.guild.name} - {message.channel.name} - {message.author.name}#{message.author.discriminator}: {message.content}\n"
                 file.write(log_entry)
+                print("Log entry written to file.")
         except Exception as e:
             print(f"Error writing to log file: {e}")
 
-        # Call the OpenAI API to analyze the message content
-        response = openai.Moderation.create(input=message.content)
+    # Call the OpenAI API to analyze the message content
+    response = openai.Moderation.create(input=message.content)
+    print("OpenAI API called.")
 
-        # Check if the API flagged the message as inappropriate
-        if response["results"][0]["flagged"]:
-            # Delete the flagged message
-            await message.delete()
+    # Check if the API flagged the message as inappropriate
+    if response["results"][0]["flagged"]:
+        print("Message flagged as inappropriate.")
 
-            # Warn the user
-            warning_message = f"{message.author.mention}, your message has been deleted because it was flagged as inappropriate. Please review our community guidelines and ensure your future messages comply with them."
-            await message.channel.send(warning_message)
+        # Delete the flagged message
+        await message.delete()
+        print("Flagged message deleted.")
 
-            # Log the flagged message to the logger channel
+        # Warn the user
+        warning_message = f"{message.author.mention}, your message has been deleted because it was flagged as inappropriate. Please review our community guidelines and ensure your future messages comply with them."
+        await message.channel.send(warning_message)
+        print("User warned about the flagged message.")
+
+        # Log the flagged message to the logger channel
+        if logger_channel:
+            await log_embed(logger_channel, "Flagged Message", f"{message.author.mention} said: {message.content}")
+        else:
+            print("Logger channel not found.")
+
+        # Log the categories and category scores associated with the flagged message
+        categories = response["results"][0]["categories"]
+        category_scores = response["results"][0]["category_scores"]
+        category_list = []
+        for category, score in category_scores.items():
+            if score > 0.987:
+                category_list.append(f"{category} ({score:.2f})")
+        if category_list:
+            category_string = ", ".join(category_list)
             if logger_channel:
-                await log_embed(logger_channel, "Flagged Message", f"{message.author.mention} said: {message.content}")
+                await log_embed(logger_channel, "Flagged Message Details", f"Flagged message: {message.content}\nCategories: {category_string}")
+            else:
+                print("Logger channel not found.")
 
-            # Log the categories and category scores associated with the flagged message
-            categories = response["results"][0]["categories"]
-            category_scores = response["results"][0]["category_scores"]
-            category_list = []
-            for category, score in category_scores.items():
-                if score > 0.987:
-                    category_list.append(f"{category} ({score:.2f})")
-            if category_list:
-                category_string = ", ".join(category_list)
-                if logger_channel:
-                    await log_embed(logger_channel, "Flagged Message Details", f"Flagged message: {message.content}\nCategories: {category_string}")
 
     """# Handle chat functionality for private messages only
     if is_private:
