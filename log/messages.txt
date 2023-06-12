@@ -18,3 +18,4 @@ QuantaAI - ⚡welcome - wade#1781: Join our vibrant community and stay connected
 Get ready to experience the future of Discord bots with QuantaAI Studios. Together, we'll redefine the boundaries of innovation!
 
 [Add a Discord Bot](https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID&scope=bot&permissions=YOUR_PERMISSIONS)
+QuantaAI - text-based - wade5#0: tes
