@@ -20,15 +20,23 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 def setup(bot):
     @bot.slash_command()
     async def setup_logger11(interaction: nextcord.Interaction):
+        print(f"Entering setup_logger11 function")  # Add this line
+        
         existing_channel = nextcord.utils.get(interaction.guild.text_channels, name="logger")
         if existing_channel:
+            print("Logger channel already exists!")  # Add this line
             await interaction.response.send_message("Logger channel already exists!", ephemeral=True)
         else:
+            print("Creating logger channel")  # Add this line
+            
             overwrites = {
                 interaction.guild.default_role: nextcord.PermissionOverwrite(read_messages=False)
             }
             channel = await interaction.guild.create_text_channel("logger", overwrites=overwrites)
+            print(f"Logger channel created: {channel.mention}")  # Add this line
+            
             await interaction.response.send_message(f"Logger channel created: {channel.mention}", ephemeral=True)
+
 
     async def log_embed(logger_channel, title, description, color=nextcord.Color.blue(), timestamp=None):
         embed = nextcord.Embed(title=title, description=description, color=color)
