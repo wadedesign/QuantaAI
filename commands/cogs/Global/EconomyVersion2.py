@@ -50,13 +50,13 @@ class Economy(commands.Cog):
             self.add_currency(message.author.id, currency_per_message)
 
 
-    @nextcord.slash_command(name="eco")
+    @nextcord.slash_command(name="qe")
     async def main(self, interaction: nextcord.Interaction):
         pass
     
     
     @main.subcommand()
-    async def cbal(self, interaction: nextcord.Interaction):
+    async def qbal(self, interaction: nextcord.Interaction):
         """Get the current balance of the user who sent the command"""
         balance = self.get_currency(interaction.user.id)
         embed = nextcord.Embed(title=f"{interaction.user.display_name}'s Balance", color=0x00ff00)
@@ -65,7 +65,7 @@ class Economy(commands.Cog):
 
     @commands.has_permissions(administrator=True)
     @main.subcommand()
-    async def award2(self, interaction: nextcord.Interaction, user: nextcord.Member, amount: int):
+    async def qaward(self, interaction: nextcord.Interaction, user: nextcord.Member, amount: int):
         """Add currency to a user's balance"""
         if amount < 1:
             await interaction.send("Amount must be at least 1.")
@@ -78,7 +78,7 @@ class Economy(commands.Cog):
 
     @commands.has_permissions(administrator=True)
     @main.subcommand()
-    async def take2(self, interaction: nextcord.Interaction, user: nextcord.Member, amount: int):
+    async def qtake(self, interaction: nextcord.Interaction, user: nextcord.Member, amount: int):
         """Remove currency from a user's balance"""
         if amount < 1:
             await interaction.send("Amount must be at least 1.")
@@ -95,7 +95,7 @@ class Economy(commands.Cog):
         await interaction.send(embed=embed)
 
     @main.subcommand()
-    async def transfer2(self, interaction: nextcord.Interaction, user: nextcord.Member, amount: int):
+    async def qtransfer(self, interaction: nextcord.Interaction, user: nextcord.Member, amount: int):
         """Transfer currency from the user who sent the command to another user"""
         if amount < 1:
             await interaction.send("Amount must be at least 1.")
@@ -115,7 +115,7 @@ class Economy(commands.Cog):
         await interaction.send(embed=embed)
 
     @main.subcommand()
-    async def curlead(self, interaction: nextcord.Interaction):
+    async def qlead(self, interaction: nextcord.Interaction):
         """Show the leaderboard of users with the most currency"""
         sorted_data = sorted(self.currency_data.items(), key=lambda x: x[1], reverse=True)
         top_10 = sorted_data[:10]
