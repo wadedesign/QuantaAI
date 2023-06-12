@@ -3,3 +3,18 @@ QuantaAI - logger - wade#1781: test
 QuantaAI - ai-model-base - wade#1781: /setup_lt
 QuantaAI - changelogs - wade#1781: test
 QuantaAI - 👥・quanta-team - wade#1781: test
+QuantaAI - ⚡welcome - wade#1781: Join our vibrant community and stay connected with us across various platforms:
+
+🔵 **DISCORD**: Connect with us on Discord ➡️ [Join Now](https://discord.gg/Z7R5ywbcZQ)
+
+🐦 **TWITTER**: Follow us on Twitter ➡️ [Twitter Link](https://twitter.com/WadderBot)
+
+🌐 **WEBSITE**: Explore our website for more information ➡️ [Visit Website](http://wadderprojects.bhweb.ws/)
+
+🌐 **TOP GG**: Check out our bot on Top.gg ➡️ [Top GG Link](https://top.gg/bot/1075144828330971186)
+
+> **QuantaAI Studios** @everyone
+
+Get ready to experience the future of Discord bots with QuantaAI Studios. Together, we'll redefine the boundaries of innovation!
+
+[Add a Discord Bot](https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID&scope=bot&permissions=YOUR_PERMISSIONS)
