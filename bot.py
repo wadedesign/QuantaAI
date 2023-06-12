@@ -6,7 +6,7 @@ import nextcord
 from dotenv import load_dotenv
 from nextcord.ext import commands
 from pretty_help import PrettyHelp
-from logger import __all__, setup_logger
+from logger import setup_logger
 
 # added by wade
 
@@ -74,14 +74,7 @@ async def on_ready():
 
 
     
-@bot.event
-async def on_guild_join(guild):
-    await update_presence()
 
-
-@bot.event
-async def on_guild_remove(guild):
-    await update_presence()
 
 
 slashcommands_dir = "commands/slash_commands"
