@@ -15,7 +15,7 @@ import openai
 
 openai_model_engine = "text-davinci-003" # You can change this to another OpenAI model engine if you'd like
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = "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"
 
 
 async def setup_logger(interaction: nextcord.Interaction):
