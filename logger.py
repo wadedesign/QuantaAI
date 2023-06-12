@@ -79,7 +79,7 @@ async def log_message(message):
             await log_embed(logger_channel, "Message Sent", f"{message.author.mention} said in {channel_name}: {message.content}")
 
         # Write the message to the log file
-        with open("logs/message.txt", "a", encoding="utf-8") as file:
+        with open("log/messages.txt", "a", encoding="utf-8") as file:
             log_entry = f"{message.guild.name} - {message.channel.name} - {message.author.name}#{message.author.discriminator}: {message.content}\n"
             file.write(log_entry)
 
