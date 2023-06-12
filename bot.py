@@ -6,7 +6,7 @@ import nextcord
 from dotenv import load_dotenv
 from nextcord.ext import commands
 from pretty_help import PrettyHelp
-from logger import setup_logger
+from Logs.logger import setup_logger
 
 # added by wade
 
