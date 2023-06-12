@@ -69,7 +69,7 @@ def setup(bot):
         # Check if the message was sent by a bot
         if message.author.bot:
             return
-        print(f"Message content after checking for bot: {message.content}")  # Add this line
+        print(f"Message content after checking for bot: {message.content}")
 
         # The rest of the code remains the same
         if not is_private:
@@ -130,6 +130,7 @@ def setup(bot):
             except Exception as e:
                 print(e)
                 await message.channel.send("Something went wrong.")
+
 
     async def log_edit(before, after):
         if before.author.bot:
