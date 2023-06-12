@@ -5,6 +5,8 @@ from bs4 import BeautifulSoup
 import nextcord
 from nextcord.ext import commands
 
+# ! not working
+
 class Anime(commands.Cog):
     """Anime commands"""
 
