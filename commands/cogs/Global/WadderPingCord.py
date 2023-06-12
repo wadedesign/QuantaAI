@@ -3,6 +3,9 @@ from nextcord.ext import commands, tasks
 import requests
 from bs4 import BeautifulSoup
 
+# ! not ready for production
+
+
 class YTNotifier(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
