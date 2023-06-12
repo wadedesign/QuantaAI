@@ -6,7 +6,7 @@ import nextcord
 from dotenv import load_dotenv
 from nextcord.ext import commands
 from pretty_help import PrettyHelp
-
+from logger import __all__, setup_logger
 
 # added by wade
 
@@ -109,6 +109,12 @@ for root, dirs, files in os.walk(cogs_dir):
             bot.load_extension(module_name)
     if "__init__.py" in files:
         loaded_folders.append(root)
+
+
+@bot.slash_command(name="setuplogger", description="Sets up the logger (Admin only)")
+@commands.has_permissions(administrator=True)
+async def setuplogger(interaction: nextcord.Interaction):
+    await setup_logger(interaction)
 
 
 
