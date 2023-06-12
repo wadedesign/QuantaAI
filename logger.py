@@ -109,7 +109,7 @@ async def log_message(message):
                 if logger_channel:
                     await log_embed(logger_channel, "Flagged Message Details", f"Flagged message: {message.content}\nCategories: {category_string}")
 
-    # Handle chat functionality for private messages only
+    """# Handle chat functionality for private messages only
     if is_private:
         try:
             chat_completion = openai.ChatCompletion.create(
@@ -126,7 +126,7 @@ async def log_message(message):
             await message.channel.send(response_text)
         except Exception as e:
             print(e)
-            await message.channel.send("Something went wrong.")
+            await message.channel.send("Something went wrong.")"""
 
 async def log_edit(before, after):
     if before.author.bot:
