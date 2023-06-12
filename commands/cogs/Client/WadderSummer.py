@@ -1,6 +1,7 @@
 
 # ! Successfully summarized the video: https://www.youtube.com/watch?v=5qap5aO4i9A
 # Todo: Make it follow the prompt? Could be missing intructions
+# ! needs work
 
 import logging
 import os
