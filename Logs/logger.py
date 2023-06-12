@@ -16,7 +16,7 @@ import openai
 openai_model_engine = "text-davinci-003" # You can change this to another OpenAI model engine if you'd like
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
-logger.add("logs/file.log", level="TRACE")
+
 
 async def setup_logger(interaction: nextcord.Interaction):
     existing_channel = nextcord.utils.get(interaction.guild.text_channels, name="logger")
