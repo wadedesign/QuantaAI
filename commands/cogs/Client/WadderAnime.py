@@ -1,5 +1,6 @@
 import ast
 import asyncio
+import aiohttp
 from bs4 import BeautifulSoup
 import nextcord
 from nextcord.ext import commands
@@ -9,6 +10,7 @@ class Anime(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.session = aiohttp.ClientSession()
 
     @nextcord.slash_command(description="Sends a waifu")
     async def waifu(self, interaction: nextcord.Interaction):
