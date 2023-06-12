@@ -15,7 +15,7 @@ openai.api_key = "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"
 
 
 async def setup_logger(interaction: nextcord.Interaction):
-    existing_channel = nextcord.utils.get(interaction.guild.text_channels, name="logger")
+    existing_channel = nextcord.utils.get(interaction.guild.text_channels, name="📝・qlogger")
     if existing_channel:
         await interaction.response.send_message("Logger channel already exists!", ephemeral=True)
     else:
