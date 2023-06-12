@@ -9,6 +9,8 @@ from nextcord.ext import commands
 
 from utils.WF0.errors import print_error
 
+# ** rfp, add more fucntions
+
 try:
     from pyparsing import (
         CaselessLiteral,

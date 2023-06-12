@@ -133,9 +133,9 @@ async def setuplogger(interaction: nextcord.Interaction):
         #await interaction.send(content="An error occurred while processing the command.")
 
 
-#@bot.event
-#async def on_bot_close():
-    #await bot.session.close()
+@bot.event
+async def on_bot_close():
+    await bot.session.close()
     
 
 bot.run(TOKEN)
