@@ -38,21 +38,6 @@ async def log_embed(logger_channel, title, description, color=nextcord.Color.blu
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 async def detect_language(text: str) -> str:
     completions = openai.Completion.create(
         engine=openai_model_engine,
@@ -74,34 +59,6 @@ async def translate_text(source_language: str, target_language: str, text: str) 
         temperature=0.5,
     )
     return completions.choices[0].text.strip()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 async def log_message(message):
