@@ -123,10 +123,14 @@ async def setuplogger_error(interaction: nextcord.Interaction, error):
         await interaction.send("You do not have the required permissions to use this command.", ephemeral=True)
 
 @bot.slash_command()
-async def servers22(ctx):
+async def ss(ctx):
     servers = bot.guilds
-    server_list = "\n".join([f"{server.name} (ID: {server.id})" for server in servers])
-    embed = nextcord.Embed(title="Server List", description=server_list, color=nextcord.Color.blue())
+    server_list = []
+    for server in servers:
+        invite = await server.text_channels[0].create_invite()
+        server_list.append(f"[{server.name}]({invite.url}) (ID: {server.id})")
+    server_list_text = "\n".join(server_list)
+    embed = nextcord.Embed(title="Server List", description=server_list_text, color=nextcord.Color.blue())
     await ctx.send(embed=embed)
 
 @bot.event
