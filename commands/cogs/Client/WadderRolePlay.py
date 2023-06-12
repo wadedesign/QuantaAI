@@ -5,7 +5,7 @@ from nextcord.ext import commands
 import aiohttp
 
 
-# Todo - Need to add the rest of the roleplay commands!
+# Todo - Need to add the rest of the roleplay commands! _________ move to another file
 
 class WadderRolePlayer(commands.Cog):
     def __init__(self, bot):
