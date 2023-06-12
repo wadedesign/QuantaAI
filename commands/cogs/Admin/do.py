@@ -136,7 +136,7 @@ class Logger(commands.Cog):
         await self.log_webhook_update(channel)
 
     async def setup_logger(self, interaction: nextcord.Interaction):
-        existing_channel = nextcord.utils.get(interaction.guild.text_channels, name="logger")
+        existing_channel = nextcord.utils.get(interaction.guild.text_channels, name="📝・qlogger")
         if existing_channel:
             await interaction.response.send_message("Logger channel already exists!", ephemeral=True)
         else:
