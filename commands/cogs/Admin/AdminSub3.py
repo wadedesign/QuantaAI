@@ -1,7 +1,7 @@
 import json
 import nextcord
 from nextcord.ext import commands   #!set_role_assignment ROLE_ID MESSAGE_COUNT_THRESHOLD
-from logger import setup_logger ,log_message, log_edit, log_delete, log_member_join, log_member_remove,log_member_update, log_member_ban, log_member_unban, log_role_create, log_role_delete,log_role_update, log_channel_create, log_channel_delete, log_channel_update,log_emoji_update, log_guild_update
+
 
 # Todo: Can utilize this for more sub commands, not utilizing the space well enough.
 
@@ -65,19 +65,7 @@ class RoleAssignmentCog(commands.Cog):
         await interaction.send(f"Role assignment has been set up. Role ID {role_id} will be assigned after {message_count_threshold} messages.")
 
 
-    @nextcord.slash_command(name="setuplogger", description="Sets up the logger (Admin only)")
-    @commands.has_permissions(administrator=True)
-    async def setuplogger(self, interaction: nextcord.Interaction):
-        print("Inside setuplogger function")
-        await setup_logger(interaction)
-
-
-    @setuplogger.error
-    async def setuplogger_error(interaction: nextcord.Interaction, error):
-        print("Inside setuplogger_error function")
-        if isinstance(error, commands.MissingPermissions):
-            print("MissingPermissions error occurred")
-            await interaction.send("You do not have the required permissions to use this command.", ephemeral=True)
+  
 
     
 def setup(bot):
