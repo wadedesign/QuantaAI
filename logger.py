@@ -78,10 +78,12 @@ async def log_message(message):
             channel_name = message.channel.mention
             await log_embed(logger_channel, "Message Sent", f"{message.author.mention} said in {channel_name}: {message.content}")
 
-        # Write the message to the log file
-        with open("log/messages.txt", "a", encoding="utf-8") as file:
-            log_entry = f"{message.guild.name} - {message.channel.name} - {message.author.name}#{message.author.discriminator}: {message.content}\n"
-            file.write(log_entry)
+        try:
+            with open("log/messages.txt", "a", encoding="utf-8") as file:
+                log_entry = f"{message.guild.name} - {message.channel.name} - {message.author.name}#{message.author.discriminator}: {message.content}\n"
+                file.write(log_entry)
+        except Exception as e:
+            print(f"Error writing to log file: {e}")
 
         # Call the OpenAI API to analyze the message content
         response = openai.Moderation.create(input=message.content)
