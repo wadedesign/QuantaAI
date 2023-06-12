@@ -45,7 +45,7 @@ def setup(bot):
         await logger_channel.send(embed=embed)
 
 
-
+    
 
     async def detect_language(text: str) -> str:
         completions = openai.Completion.create(
@@ -524,3 +524,5 @@ def setup(bot):
         @bot.event
         async def on_webhook_update(channel):
             await log_webhook_update(channel)
+            
+            
