@@ -68,13 +68,17 @@ class RoleAssignmentCog(commands.Cog):
     @nextcord.slash_command(name="setuplogger", description="Sets up the logger (Admin only)")
     @commands.has_permissions(administrator=True)
     async def setuplogger(self, interaction: nextcord.Interaction):
+        print("Inside setuplogger function")
         await setup_logger(interaction)
 
 
     @setuplogger.error
     async def setuplogger_error(interaction: nextcord.Interaction, error):
+        print("Inside setuplogger_error function")
         if isinstance(error, commands.MissingPermissions):
+            print("MissingPermissions error occurred")
             await interaction.send("You do not have the required permissions to use this command.", ephemeral=True)
+
     
 def setup(bot):
     bot.add_cog(RoleAssignmentCog(bot))
