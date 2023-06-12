@@ -1,2 +1,4 @@
 QuantaAI - logger - wade#1781: test
 QuantaAI - logger - wade#1781: test
+QuantaAI - ai-model-base - wade#1781: /setup_lt
+QuantaAI - changelogs - wade#1781: test
