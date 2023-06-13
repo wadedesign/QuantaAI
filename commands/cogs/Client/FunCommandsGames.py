@@ -610,10 +610,7 @@ class FunCommandsCog(commands.Cog):
             await loading_message.edit(content="Definition found ✅", embed=embed)
 
             # Send the file in Discord
-            await interaction.followup.send_file(
-                file=nextcord.File("definition.txt"),
-                content="Here is the definition:"
-            )
+            await interaction.followup.send(file=nextcord.File("definition.txt"), content="Here is the definition:")
         
         except Exception as error:
             print(f"An error occurred: {error}")
