@@ -44,13 +44,13 @@ class OnlineStats(commands.Cog):
         await ctx.send(f"```py\n{msg}```")
 
     @commands.guild_only()
-    @commands.command()
+    @nextcord.slash_command()
     async def onlineinfo(
-        self, ctx: commands.Context, member: nextcord.Member = None
+        self, interaction: nextcord.Interaction, member: nextcord.Member = None
     ):
         """Show what devices a member is using."""
         if member is None:
-            member = ctx.author
+            member = interaction.user
         d = str(member.desktop_status)
         m = str(member.mobile_status)
         w = str(member.web_status)
@@ -71,13 +71,13 @@ class OnlineStats(commands.Cog):
             description=(
                 f"{status[d]} Desktop\n" f"{status[m]} Mobile\n" f"{status[w]} Web"
             ),
-            color=await ctx.embed_color(),
+            color=await interaction.embed_color(),
         )
         embed.set_thumbnail(url=member.avatar.url)
         try:
-            await ctx.send(embed=embed)
+            await interaction.send(embed=embed)
         except nextcord.errors.Forbidden:
-            await ctx.send(
+            await interaction.send(
                 f"{member.display_name}'s devices:\n"
                 f"{status[d]} Desktop\n"
                 f"{status[m]} Mobile\n"
