@@ -189,7 +189,29 @@ class FunCommandsCog(commands.Cog):
         
         
     @fun.subcommand(description="Server Info")
-    async def serverinfo(self,interaction:nextcord.Interaction):
+    async def serverinfo(self, interaction: nextcord.Interaction):
+        # Define the computer animation frames
+        animation = [
+            "⠋ Gathering server info...",
+            "⠙ Gathering server info...",
+            "⠹ Gathering server info...",
+            "⠸ Gathering server info...",
+            "⠼ Gathering server info...",
+            "⠴ Gathering server info...",
+            "⠦ Gathering server info...",
+            "⠧ Gathering server info...",
+            "⠇ Gathering server info...",
+            "⠏ Gathering server info...",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message("Gathering server info...")
+
+        # Animate the loading message
+        for frame in animation:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.1)
+
         guild = interaction.guild
         embed = nextcord.Embed(title=f"Server Info: {guild.name}", color=0x00ff00)
         embed.add_field(name="Server ID", value=guild.id, inline=False)
@@ -202,7 +224,10 @@ class FunCommandsCog(commands.Cog):
         embed.add_field(name="Created At", value=guild.created_at.strftime("%Y-%m-%d %H:%M:%S"), inline=False)
         embed.set_footer(text=f"Requested by {interaction.user}")
         embed.set_thumbnail(url=guild.icon.url)
-        await interaction.response.send_message(embed=embed)    
+
+        # Update the loading message with the server info embed
+        await loading_message.edit(content="Server info", embed=embed)
+
         
         
         
