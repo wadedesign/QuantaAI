@@ -82,13 +82,31 @@ class LinkSharing(commands.Cog):
         self.bot = bot
 
 
-    @nextcord.slash_command(name="sub3")
+    @nextcord.slash_command(name="q3")
     async def main(self, interaction: nextcord.Interaction):
         pass
 
     @commands.guild_only()
     @main.subcommand(name="share_link", description="Share a link and get a preview and summary")
     async def share_link(self, interaction: nextcord.Interaction, url: str):
+        # Define the computer animation frames
+        animation = [
+            "```diff\n- Fetching link information...```",
+            "```diff\n+ Fetching link information...```",
+            "```diff\n- Fetching link information...```",
+            "```diff\n+ Fetching link information...```",
+            "```diff\n- Fetching link information...```",
+            "```diff\n+ Fetching link information...```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:] + animation[::-1]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         try:
             article = Article(url)
             article.download()
@@ -103,9 +121,11 @@ class LinkSharing(commands.Cog):
             if image_url:
                 embed.set_image(url=image_url)
 
-            await interaction.response.send_message(embed=embed)
+            # Update the loading message with the link information embed
+            await loading_message.edit(content="Link Information", embed=embed)
         except Exception as e:
-            await interaction.response.send_message(f"Error: {str(e)}")
+            await loading_message.edit(content=f"Error: {str(e)}")
+
             
             
             
