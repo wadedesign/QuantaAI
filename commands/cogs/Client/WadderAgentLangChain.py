@@ -251,7 +251,7 @@ class WadderChatText(commands.Cog):
         
     @main.subcommand(name="serp")
     async def search_google(self, interaction: nextcord.Interaction, *, query: str):
-        await interaction.response.defer()
+        
         openai.api_key = os.getenv("OPENAI_API_KEY")
         # Initialize the OpenAI language model
         llm = OpenAI(temperature=0)
