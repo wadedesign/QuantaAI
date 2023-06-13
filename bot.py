@@ -113,24 +113,24 @@ async def setuplogger(interaction: nextcord.Interaction):
 
 
 
-#@bot.slash_command()
-#async def ss(ctx):
-    #servers = bot.guilds
-    #server_list = []
-    #for server in servers:
-        #invite = await server.text_channels[0].create_invite()
-        #server_list.append(f"[{server.name}]({invite.url}) (ID: {server.id})")
-    #server_list_text = "\n".join(server_list)
-    #embed = nextcord.Embed(title="Server List", description=server_list_text, color=nextcord.Color.blue())
-   # await ctx.send(embed=embed)
+@bot.slash_command()
+async def ss(ctx):
+    servers = bot.guilds
+    server_list = []
+    for server in servers:
+        invite = await server.text_channels[0].create_invite()
+        server_list.append(f"[{server.name}]({invite.url}) (ID: {server.id})")
+    server_list_text = "\n".join(server_list)
+    embed = nextcord.Embed(title="Server List", description=server_list_text, color=nextcord.Color.blue())
+    await ctx.send(embed=embed)
 
-#@bot.event
-#async def on_application_command_error(interaction: nextcord.Interaction, error: Exception):
-    #if isinstance(error, nextcord.errors.InteractionResponded):
-        #print(f"Interaction already responded to: {interaction.command}")
-    #else:
-        #print(f"Unhandled application command error: {error}")
-        #await interaction.send(content="An error occurred while processing the command.")
+@bot.event
+async def on_application_command_error(interaction: nextcord.Interaction, error: Exception):
+    if isinstance(error, nextcord.errors.InteractionResponded):
+        print(f"Interaction already responded to: {interaction.command}")
+    else:
+        print(f"Unhandled application command error: {error}")
+        await interaction.send(content="An error occurred while processing the command.")
 
 
 @bot.event
