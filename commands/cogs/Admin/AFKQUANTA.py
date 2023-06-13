@@ -1,3 +1,4 @@
+import asyncio
 import nextcord
 from nextcord import *
 from nextcord.ext import commands
@@ -103,47 +104,66 @@ class AwayFromKeyboard(commands.Cog):
 
         if not reason:
             reason = 'None'
-        
+
         await self.update_data(afk, interac.user)
         afk[f'{interac.user.id}']['AFK'] = 'True'
         afk[f'{interac.user.id}']['reason'] = f'{reason}'
         afk[f'{interac.user.id}']['time'] = int(time.time())
         afk[f'{interac.user.id}']['mentions'] = 0
 
+        # Show loading animation
+        loading_message = await interac.response.send_message(f"Setting your AFK, {interac.user.display_name}...")
+        animation = ["⚙️ Setting your AFK", "⚙️ Setting your AFK.", "⚙️ Setting your AFK..", "⚙️ Setting your AFK..."]
+
+        for frame in animation:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         embed = nextcord.Embed(description=f"I've set your AFK, {interac.user.display_name}!\nReason: {reason}", color=0x00ff00)
-        await interac.response.send_message(content=interac.user.mention, embed=embed)
+        await interac.followup.send_message(content=interac.user.mention, embed=embed)
 
         with open('data/afk.json', 'w') as f:
             json.dump(afk, f)
-        
+
         try:
             await interac.user.edit(nick=f'[AFK]{interac.user.display_name}')
         except:
             print(f'I was not able to edit [{interac.user}].')
+
     
     @main.subcommand(name='removeafk', description='Remove your AFK status')
     async def remove_afk(self, interac: Interaction):
         with open('data/afk.json', 'r') as f:
             afk = json.load(f)
-        
+
         await self.update_data(afk, interac.user)
         if afk[f'{interac.user.id}']['AFK'] == 'True':
+
+            # Show loading animation
+            loading_message = await interac.response.send_message("Removing your AFK status...")
+            animation = ["⚙️ Removing your AFK", "⚙️ Removing your AFK.", "⚙️ Removing your AFK..", "⚙️ Removing your AFK..."]
+
+            for frame in animation:
+                await loading_message.edit(content=frame)
+                await asyncio.sleep(0.5)
+
             afk[f'{interac.user.id}']['AFK'] = 'False'
             afk[f'{interac.user.id}']['reason'] = 'None'
             afk[f'{interac.user.id}']['time'] = '0'
             afk[f'{interac.user.id}']['mentions'] = 0
-            
+
             with open('data/afk.json', 'w') as f:
                 json.dump(afk, f)
-            
+
             try:
                 await interac.user.edit(nick=f'{interac.user.display_name[5:]}')
             except:
                 print(f'I was not able to edit [{interac.user}].')
-            
-            await interac.response.send_message(content=f"{interac.user.mention} Your AFK status has been removed.")
+
+            await interac.followup.send_message(content=f"{interac.user.mention} Your AFK status has been removed.")
         else:
-            await interac.response.send_message(content=f"{interac.user.mention} You are not currently AFK.")
+            await interac.followup.send_message(content=f"{interac.user.mention} You are not currently AFK.")
+
 
 def setup(bot):
     bot.add_cog(AwayFromKeyboard(bot))

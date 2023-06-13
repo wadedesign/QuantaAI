@@ -62,16 +62,6 @@ class ScheduleCog(commands.Cog):
             await interaction.send('Succesfully sent message to {}'.format(user_id))
             
 
-    @main.subcommand(name="custom_embed", description="Create a custom embed.")
-    @commands.has_permissions(administrator=True)
-    async def custom_embed(self, interaction: nextcord.Interaction, channel: nextcord.TextChannel, title: str, description: str, color: int):
-        await interaction.response.defer()
-        
-        # Create the embed
-        embed = nextcord.Embed(title=title, description=description, color=nextcord.Color(color))
-
-        # Send the embed
-        await channel.send(embed=embed)
 
 
 def setup(bot):
