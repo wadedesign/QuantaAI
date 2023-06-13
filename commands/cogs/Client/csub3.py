@@ -53,6 +53,8 @@ class WeatherCog(commands.Cog):
             await interaction.response.send_message(embed=embed)
         else:
             await interaction.response.send_message("Failed to fetch weather data. Please try again later.")
+            
+            
     @commands.guild_only()        
     @q1.subcommand(name="onlinestatus", description="Print how many people are using each type of device.")
     async def onlinestatus(self, interaction: nextcord.Interaction):

@@ -578,16 +578,60 @@ class ServerEmojisCog(commands.Cog):
     @main.subcommand()
     async def fox(self, interaction: nextcord.Interaction):
         "Sends a random high quality fox picture"
+        # Define the computer animation frames
+        animation = [
+            "```diff\n- Fetching a fox picture...```",
+            "```diff\n+ Fetching a fox picture...```",
+            "```diff\n- Fetching a fox picture...```",
+            "```diff\n+ Fetching a fox picture...```",
+            "```diff\n- Fetching a fox picture...```",
+            "```diff\n+ Fetching a fox picture...```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         url = "https://randomfox.ca/floof/"
 
         async with self.bot.session.get(url) as response:
             parsed_json = await response.json()
         img_url = parsed_json["image"]
-        await interaction.send(embed=nextcord.Embed(title="Heres a fox picture").set_image(url=img_url))
+
+        embed = nextcord.Embed(title="Here's a fox picture")
+        embed.set_image(url=img_url)
+
+        # Delete the loading message
+        await loading_message.delete()
+
+        await interaction.followup.send(embed=embed)
+
         
     @main.subcommand()
     async def truthordare(self, interaction: nextcord.Interaction, questype: str = "random"):
         levels = ["Disgusting", "Stupid", "Normal", "Soft", "Sexy", "Hot"]
+
+        # Define the computer animation frames
+        animation = [
+            "```diff\n- Fetching a truth or dare question...```",
+            "```diff\n+ Fetching a truth or dare question...```",
+            "```diff\n- Fetching a truth or dare question...```",
+            "```diff\n+ Fetching a truth or dare question...```",
+            "```diff\n- Fetching a truth or dare question...```",
+            "```diff\n+ Fetching a truth or dare question...```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
 
         async with self.bot.session.get(
             "https://raw.githubusercontent.com/sylhare/Truth-or-Dare/master/src/output.json"
@@ -602,13 +646,20 @@ class ServerEmojisCog(commands.Cog):
             questiontype = picked["type"]
         else:
             return
+
         embed = nextcord.Embed(color=0x2F3136)
         embed.set_author(name=summary)
         embed.add_field(name="Level", value=level)
         embed.add_field(name="Type", value=questiontype)
-        await interaction.send(embed=embed)
+
+        # Delete the loading message
+        await loading_message.delete()
+
+        await interaction.followup.send(embed=embed)
+
+
+            
         
-    
 
 
 
