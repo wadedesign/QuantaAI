@@ -624,27 +624,10 @@ class FunCommandsCog(commands.Cog):
     
     
     
+
+
     @fun.subcommand(description="Lyrics for a song")
     async def lyrics(self, interaction: nextcord.Interaction, artist: str, song: str):
-        # Fetch the lyrics of the song from the API
-        response = requests.get(f'https://api.lyrics.ovh/v1/{artist}/{song}')
-        print(f"API response: {response.text}")
-
-        # Check if lyrics are found or not
-        if response.status_code == 404:
-            print("Lyrics not found.")
-            # Create an embed with the error message
-            embed = nextcord.Embed(title="Lyrics Not Found", description="Sorry, I couldn't find the lyrics for that song.", color=0xFF0000)
-
-            # Send the embed as a message
-            await interaction.response.send_message(embed=embed)
-            return
-
-        # Extract the lyrics from the response JSON
-        data = response.json()
-        lyrics = data['lyrics']
-        print(f"Message content at the beginning: {lyrics[:100]}")  # Print the first 100 characters of the lyrics
-
         # Create an animated loading message
         animation = [
             "🎵 Finding the lyrics...",
@@ -659,11 +642,17 @@ class FunCommandsCog(commands.Cog):
             await message.edit(content=frame)
             await asyncio.sleep(0.5)
 
-        # Create an embedded message with the lyrics
-        embed = nextcord.Embed(title=f"🎵 Lyrics for {song} by {artist}", description=lyrics, color=0x00ff00)
+        # Create an embed with the "We are still working on this" message
+        embed = nextcord.Embed(
+            title="Lyrics Not Available",
+            description="We are still working on this.",
+            color=0xFF0000
+        )
 
-        # Send the embedded message with the lyrics
-        await message.edit(content="Lyrics found ✅", embed=embed)
+        # Send the embed as a message
+        await message.edit(content="Lyrics not found.")
+        await message.edit(embed=embed)
+
 
 
     
