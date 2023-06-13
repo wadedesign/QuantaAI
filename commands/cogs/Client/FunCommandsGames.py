@@ -384,7 +384,7 @@ class FunCommandsCog(commands.Cog):
         await interaction.response.send_message(f"Message sent to {channel.mention}!")
         
         
-    @fun.subcommand(description="Subcommand 22")
+    @fun.subcommand(description="setup welcome and leave messages")
     @commands.has_permissions(administrator=True)
     async def setup(self,interaction: nextcord.Interaction, welcome_message: str, leave_message: str):
         guild = interaction.guild
