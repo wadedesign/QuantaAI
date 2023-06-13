@@ -6,6 +6,7 @@ from time import time
 
 
 ## Todo: Add a more sub commands (25 only)
+#!!
 
 
 class ScheduleCog(commands.Cog):
@@ -43,23 +44,38 @@ class ScheduleCog(commands.Cog):
         self.scheduled_events[event_key] = (t, function, args, {})
         asyncio.create_task(self.execute_scheduled_event(event_key))
         
-    @main.subcommand() # added 29th of May
+    @main.subcommand(name="qwhisper", description="Whispers a message to a user.")
     @commands.is_owner()
     async def whisper(self, interaction: nextcord.Interaction, user_id: int, *, msg: str):
-        """Dm users."""
         user = await self.bot.fetch_user(user_id)
         try:
-            e = nextcord.Embed(colour=nextcord.Colour.red())
-            e.title = "You've recieved a message from a developer!"
-            e.add_field(name="Developer:", value=interaction.message.author, inline=False)
-            e.add_field(name="Time:", value=datetime.datetime.now().strftime("%A, %B %-d %Y at %-I:%M%p").replace("PM", "pm").replace("AM", "am"), inline=False)
-            e.add_field(name="Message:", value=msg, inline=False)
-            e.set_thumbnail(url=interaction.message.author.avatar_url)
-            await user.send(embed=e)
+            # Show loading animation
+            loading_message = await interaction.response.send_message("Sending message...")
+
+            animation_frames = [
+                "💌 Sending message",
+                "💌 Sending message.",
+                "💌 Sending message..",
+                "💌 Sending message..."
+            ]
+
+            for frame in animation_frames:
+                await loading_message.edit(content=frame)
+                await asyncio.sleep(0.5)
+
+            # Send the message
+            embed = nextcord.Embed(colour=nextcord.Colour.red())
+            embed.title = "You've received a message from a developer!"
+            embed.add_field(name="Developer:", value=interaction.message.author, inline=False)
+            embed.add_field(name="Time:", value=datetime.datetime.now().strftime("%A, %B %-d %Y at %-I:%M%p").replace("PM", "pm").replace("AM", "am"), inline=False)
+            embed.add_field(name="Message:", value=msg, inline=False)
+            embed.set_thumbnail(url=interaction.message.author.avatar_url)
+            await user.send(embed=embed)
+
+            await interaction.followup.send_message('Successfully sent message to {}'.format(user_id))
         except:
-            await interaction.send(':x: Failed to send message to user_id `{}`.'.format(user_id))
-        else:
-            await interaction.send('Succesfully sent message to {}'.format(user_id))
+            await interaction.followup.send_message(':x: Failed to send message to user_id `{}`.'.format(user_id))
+
             
 
 
