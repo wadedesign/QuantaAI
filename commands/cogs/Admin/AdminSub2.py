@@ -131,6 +131,7 @@ class WadderCommandsV1(commands.Cog):
 
         await interaction.followup.send_message(content="Poll created successfully!", ephemeral=True)
 
+
         
     @main.subcommand(name="qhotcalc", description="Calculates the hotness of a user.")
     async def hotcalc(self, interaction: nextcord.Interaction, user: nextcord.Member = None):
