@@ -854,7 +854,6 @@ class FunCommandsCog(commands.Cog):
     
     
     
-    
 
 # Don't forget to add the cog to your bot:
 # bot.add_cog(FunCommandsCog(bot))
