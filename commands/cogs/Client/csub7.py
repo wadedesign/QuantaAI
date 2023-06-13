@@ -63,7 +63,7 @@ class Profile1(commands.Cog):
             allowed_mentions=self.nopings
         )
         
-    @main.subcommand(name="nasaapod", description="Displays NASA's Astronomy Picture of the Day.")
+    @main.subcommand(name="nasapod", description="Displays NASA's Astronomy Picture of the Day.")
     async def get_apod(self, interaction: nextcord.Interaction):
         url = f"https://api.nasa.gov/planetary/apod?api_key={self.nasa_api_key}"
         
