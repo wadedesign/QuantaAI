@@ -31,44 +31,81 @@ class Stocks2(commands.Cog):
     @nextcord.slash_command(name="sub6")
     async def main(self, interaction: nextcord.Interaction):
         pass
-    @main.subcommand()
-    async def stocks22(self, interaction: nextcord.Interaction):
-        # Replace this URL with the actual URL of your JavaScript file
-        url = 'https://github.com/wadder12/wadder12.github.io/blob/master/pages/stockgame.js'
-        stocks = self.fetch_stocks(url)
-
-        embed = nextcord.Embed(title="Stocks", color=nextcord.Color.green())
-        for stock in stocks:
-            embed.add_field(name=f"{stock['symbol']} - {stock['name']}", value=f"${stock['price']}", inline=False)
-
-        await interaction.send(embed=embed)
+    
         
-    @main.subcommand(name="wadderadvice", description="To get advice from Wadder")
+    @main.subcommand(name="qadvice", description="Get some advice!")
     async def advice(self, interaction: nextcord.Interaction):
+        # Define the computer animation frames
+        animation = [
+            "```diff\n- Fetching advice...```",
+            "```diff\n+ Fetching advice...```",
+            "```diff\n- Fetching advice...```",
+            "```diff\n+ Fetching advice...```",
+            "```diff\n- Fetching advice...```",
+            "```diff\n+ Fetching advice...```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:] + animation[::-1]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         async with aiohttp.ClientSession() as session:
             response = await session.get("https://api.adviceslip.com/advice")
             data = await response.json(content_type=None)
-            embed = nextcord.Embed(
-                title=f"👍 Advice",
-                description=data["slip"]["advice"],
-                colour=nextcord.Color.blue(),
-            )
-            await interaction.send(embed=embed)
+
+        embed = nextcord.Embed(
+            title=f"👍 Advice",
+            description=data["slip"]["advice"],
+            colour=nextcord.Color.blue(),
+        )
+
+        # Update the loading message with the advice embed
+        await loading_message.edit(content="Advice", embed=embed)
+
             
             
     @main.subcommand(name="wbored", description="To get bored")
     async def bored(self, interaction: nextcord.Interaction):
+        # Define the computer animation frames
+        animation = [
+            "```diff\n- Fetching activity...```",
+            "```diff\n+ Fetching activity...```",
+            "```diff\n- Fetching activity...```",
+            "```diff\n+ Fetching activity...```",
+            "```diff\n- Fetching activity...```",
+            "```diff\n+ Fetching activity...```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:] + animation[::-1]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         async with aiohttp.ClientSession() as session:
             response = await session.get("https://www.boredapi.com/api/activity")
             data = await response.json(content_type=None)
-            embed = nextcord.Embed(
-                title=f"🥱 Bored", 
-                description=data["activity"], 
-                colour=nextcord.Color.blue()
-            )
-            embed.add_field(name="Type", value=data["type"])
-            embed.add_field(name="Participants:", value=data["participants"])
-            await interaction.send(embed=embed)
+
+        embed = nextcord.Embed(
+            title=f"🥱 Bored", 
+            description=data["activity"], 
+            colour=nextcord.Color.blue()
+        )
+        embed.add_field(name="Type", value=data["type"])
+        embed.add_field(name="Participants:", value=data["participants"])
+
+        # Update the loading message with the activity embed
+        await loading_message.edit(content="Activity Information", embed=embed)
+
+    
+    
+    
     
     @main.subcommand(name="wallpaper", description="To get wallpaper")        
     async def wallpaper(self, interaction: nextcord.Interaction):
