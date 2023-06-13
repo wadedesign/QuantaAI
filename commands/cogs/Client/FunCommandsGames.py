@@ -452,35 +452,64 @@ class FunCommandsCog(commands.Cog):
         await interaction.response.send_message(embed=embed)
     
     @fun.subcommand(description="Add two numbers")
-    async def add(self,interaction: nextcord.Interaction, num1: int, num2: int):
-        
+    async def add(self, interaction: nextcord.Interaction, num1: int, num2: int):
+        # Create an animated loading message
+        animation = [
+            "⚙️ Calculating result...",
+            "⚙️🔢 Calculating result...",
+            "⚙️🔢📊 Calculating result...",
+            "⚙️🔢📊🔮 Calculating result...",
+            "⚙️🔢📊🔮🧮 Calculating result...",
+            "⚙️🔢📊🔮🧮🔢 Calculating result...",
+        ]
+        loading_message = await interaction.response.send_message(animation[0])
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         # Calculate the sum of the two numbers
         result = num1 + num2
 
-        # Create an embed with the result
-        embed = nextcord.Embed(title="Addition Result", description=f"The sum of {num1} and {num2} is {result}.", color=0x00ff00)
-
-        # Add more calculations to the embed
+        # Create an embedded message with the result and additional calculations
+        embed = nextcord.Embed(title="Addition Result", color=0x00ff00)
+        embed.add_field(name="Addition", value=f"The sum of {num1} and {num2} is {result}.")
         embed.add_field(name="Subtraction", value=f"The difference of {num1} and {num2} is {num1 - num2}")
         embed.add_field(name="Multiplication", value=f"The product of {num1} and {num2} is {num1 * num2}")
         embed.add_field(name="Division", value=f"The quotient of {num1} and {num2} is {num1 / num2}")
 
-        # Send the embed as a message
-        await interaction.response.send_message(embed=embed)
+        # Send the embedded message with the result and calculations
+        await loading_message.edit(content="Calculation complete ✅", embed=embed)
+
     
     @fun.subcommand(description="Convert Celsius to Fahrenheit")
-    async def celsius_to_fahrenheit(self,interaction: nextcord.Interaction, celsius: float):
-        
+    async def celsius_to_fahrenheit(self, interaction: nextcord.Interaction, celsius: float):
+        # Create a cooler animated loading message
+        animation = [
+            "🌡️ Converting temperature...",
+            "🌡️🌞 Converting temperature...",
+            "🌡️🌞🌡️ Converting temperature...",
+            "🌡️🌞🌡️🌞 Converting temperature...",
+            "🌡️🌞🌡️🌞🌡️ Converting temperature...",
+            "🌡️🌞🌡️🌞🌡️🌞 Converting temperature...",
+            "🌡️🌞🌡️🌞🌡️🌞🌡️ Converting temperature...",
+            "🌡️🌞🌡️🌞🌡️🌞🌡️🌞 Converting temperature...",
+        ]
+        loading_message = await interaction.response.send_message(animation[0])
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         # Convert the temperature from Celsius to Fahrenheit
         fahrenheit = (celsius * 9/5) + 32
 
-        # Create an embed with the converted temperature
+        # Create an embedded message with the converted temperature
         embed = nextcord.Embed(title='Temperature Conversion', color=0x00ff00)
         embed.add_field(name='Celsius', value=f'{celsius}°C', inline=True)
         embed.add_field(name='Fahrenheit', value=f'{fahrenheit}°F', inline=True)
 
-        # Send the embed as a message
-        await interaction.response.send_message(embed=embed)
+        # Send the embedded message with the converted temperature
+        await loading_message.edit(content="Temperature conversion complete ✅", embed=embed)
+
     
     
     
