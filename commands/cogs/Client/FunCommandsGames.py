@@ -596,8 +596,8 @@ class FunCommandsCog(commands.Cog):
 
             # Extract the definition from the response JSON
             data = response.json()
-            if data:
-                definition = data[0]['definition']
+            if data and 'definition' in data:
+                definition = data['definition']
             else:
                 definition = "Definition not found."
 
