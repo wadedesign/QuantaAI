@@ -599,10 +599,14 @@ class FunCommandsCog(commands.Cog):
             with open("definition.txt", "w") as file:
                 file.write(response.text)
 
+            # Send the file in Discord
+            with open("definition.txt", "rb") as file:
+                await interaction.followup.send_file(file, "definition.txt", content="Here is the definition:")
+
             # Create an embedded message to notify the user
             embed = nextcord.Embed(
                 title=f"Definition of {word}",
-                description="The definition has been saved in a text file.",
+                description="The definition has been sent as a file.",
                 color=0x00ff00
             )
 
