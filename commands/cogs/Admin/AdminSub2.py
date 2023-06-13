@@ -79,18 +79,54 @@ class WadderCommandsV1(commands.Cog):
             f"Message sent to **{str(sentCounter)}** members and not sent to **{str(notSentCounter)}** members"
             )
             
-    @main.subcommand()
-    async def yesnopoll(self, interaction: nextcord.Interaction,poll: str = nextcord.SlashOption(name="poll", description="The poll to be created",required=True)):
-        embed = nextcord.Embed(title=poll,description=f"Total Votes: 0\n\n{'🟩' * 10}\n\n(from: {interaction.user})",colour=nextcord.Colour.purple())
-        await interaction.send("Creating Poll.", ephemeral=True)
-        msg1 = await interaction.channel.send(embed=embed)
-        await msg1.add_reaction('✅')
-        await msg1.add_reaction('❌')
+    @main.subcommand(name="qyesorno", description="Creates a yes or no poll.")
+    async def yesnopoll(self, interaction: nextcord.Interaction, poll: str = nextcord.SlashOption(name="poll", description="The poll to be created", required=True)):
+        animation_frames = [
+            "Creating poll.",
+            "Creating poll..",
+            "Creating poll...",
+            "Creating poll..",
+            "Creating poll."
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation_frames[0])
+
+        # Animate the loading message
+        for frame in animation_frames[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
+        embed = nextcord.Embed(title=poll, description=f"Total Votes: 0\n\n{'🟩' * 10}\n\n(from: {interaction.user})", colour=nextcord.Colour.purple())
+        poll_message = await interaction.channel.send(embed=embed)
+        await poll_message.add_reaction('✅')
+        await poll_message.add_reaction('❌')
+
+        await loading_message.delete()
+
+        await interaction.followup.send_message(content="Poll created successfully!", ephemeral=True)
+
         
-    @main.subcommand()
+    @main.subcommand(name="qhotcalc", description="Calculates the hotness of a user.")
     async def hotcalc(self, interaction: nextcord.Interaction, user: nextcord.Member = None):
         if user is None:
             user = interaction.user
+
+        animation_frames = [
+            f"Calculating hotness for {user.name}...",
+            f"Calculating hotness for {user.name}..",
+            f"Calculating hotness for {user.name}.",
+            f"Calculating hotness for {user.name}..",
+            f"Calculating hotness for {user.name}..."
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.send(animation_frames[0])
+
+        # Animate the loading message
+        for frame in animation_frames[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
 
         random.seed(user.id)
         r = random.randint(1, 100)
@@ -105,12 +141,37 @@ class WadderCommandsV1(commands.Cog):
         else:
             emoji = "💔"
 
-        await interaction.send(f"**{user.name}** is **{hot:.2f}%** hot {emoji}")
+        embed = nextcord.Embed(title="Hotness Calculator", color=0xFF69B4)
+        embed.add_field(name=f"{user.name} is {hot:.2f}% hot {emoji}", value="Powered by LoveMeter", inline=False)
+
+        await interaction.send(embed=embed)
+
         
         
     @main.subcommand()
     async def slots(self, interaction: nextcord.Interaction):
         """ Roll the slot machine """
+        animation_frames = [
+            "**[ 🎰🎰🎰 ]\nSpinning...**",
+            "**[ 🍎🎰🎰 ]\nSpinning...**",
+            "**[ 🍎🍊🎰 ]\nSpinning...**",
+            "**[ 🍎🍊🍐 ]\nSpinning...**",
+            "**[ 🍊🍐🍋 ]\nSpinning...**",
+            "**[ 🍐🍋🍉 ]\nSpinning...**",
+            "**[ 🍋🍉🍇 ]\nSpinning...**",
+            "**[ 🍉🍇🍓 ]\nSpinning...**",
+            "**[ 🍇🍓🍒 ]\nSpinning...**",
+            "**[ 🎰🎰🎰 ]\nStopped!**"
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.send(animation_frames[0])
+
+        # Animate the loading message
+        for frame in animation_frames[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         a, b, c = [random.choice("🍎🍊🍐🍋🍉🍇🍓🍒") for _ in range(3)]
 
         if (a == b == c):
@@ -120,7 +181,11 @@ class WadderCommandsV1(commands.Cog):
         else:
             results = "No match, you lost 😢"
 
-        await interaction.send(f"**[ {a} {b} {c} ]\n{interaction.user.name}**, {results}")
+        embed = nextcord.Embed(title="Slot Machine", color=0xFFD700)
+        embed.add_field(name=f"**[ {a} {b} {c} ]**", value=f"{interaction.user.name}, {results}", inline=False)
+
+        await interaction.send(embed=embed)
+
         
         
     @main.subcommand()
@@ -133,17 +198,36 @@ class WadderCommandsV1(commands.Cog):
 
         picked_colour = picked_colour.lower()
         if picked_colour not in colour_table:
-            return await interaction.send("Please give correct color")
+            return await interaction.send("Please give a correct color")
 
         chosen_color = random.choice(colour_table)
-        msg = await interaction.send("Spinning 🔵🔴🟢🟡")
-        await asyncio.sleep(1)
+
+        animation_frames = [
+            "🔵🔴🟢🟡 Spinning",
+            "🟢🔵🟡🔴 Spinning",
+            "🟡🟢🔴🔵 Spinning",
+            "🔴🟡🔵🟢 Spinning"
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.send(animation_frames[0])
+
+        # Animate the loading message
+        for frame in animation_frames[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         result = f"Result: {chosen_color.upper()}"
 
+        embed = nextcord.Embed(title="Colours Roulette", color=0xFFD700)
+
         if chosen_color == picked_colour:
-            await msg.edit(content=f"> {result}\nCongrats, you won 🎉!")
+            embed.add_field(name=result, value="Congrats, you won 🎉!", inline=False)
         else:
-            await msg.edit(content=f"> {result}\nBetter luck next time")
+            embed.add_field(name=result, value="Better luck next time", inline=False)
+
+        await interaction.send(embed=embed)
+
             
     @main.subcommand()
     @commands.guild_only()
