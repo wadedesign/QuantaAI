@@ -384,23 +384,60 @@ class ServerEmojisCog(commands.Cog):
         
         
     @main.subcommand()
-    async def newjoins(self, interaction: nextcord.Interaction): #! member has no len()
+    async def newjoins(self, interaction: nextcord.Interaction):
         """See the newest members of this server"""
+        # Define the computer animation frames
+        animation = [
+            "```yaml\n[Generating new joins list...     ]```",
+            "```yaml\n[Generating new joins list...•    ]```",
+            "```yaml\n[Generating new joins list...••   ]```",
+            "```yaml\n[Generating new joins list...•••  ]```",
+            "```yaml\n[Generating new joins list...•••• ]```",
+            "```yaml\n[Generating new joins list...•••••]```",
+            "```yaml\n[Generating new joins list... ••••]```",
+            "```yaml\n[Generating new joins list...  •••]```",
+            "```yaml\n[Generating new joins list...   ••]```",
+            "```yaml\n[Generating new joins list...    •]```",
+            "```yaml\n[Generating new joins list...     ]```",
+            "```yaml\n[Generating new joins list...    ]```",
+            "```yaml\n[Generating new joins list...•   ]```",
+            "```yaml\n[Generating new joins list...••  ]```",
+            "```yaml\n[Generating new joins list...••• ]```",
+            "```yaml\n[Generating new joins list...••••]```",
+            "```yaml\n[Generating new joins list...•••••]```",
+            "```yaml\n[Generating new joins list...•••• ]```",
+            "```yaml\n[Generating new joins list...•••  ]```",
+            "```yaml\n[Generating new joins list...••   ]```",
+            "```yaml\n[Generating new joins list...•    ]```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         people = sorted(interaction.guild.members, key=lambda member: member.joined_at, reverse=True)
 
         embeds = []
         for chunk in split_by_slice(people, 5):
             embed = nextcord.Embed(title=f"{len(people)} Members")
-            for people in chunk:
+            for person in chunk:
                 embed.add_field(
-                    name=f"{people.name} (ID: {people.id})",
-                    value=f'Created at: {nextcord.utils.format_dt(people.created_at, "F")} ({nextcord.utils.format_dt(people.created_at, "R")})\n'
-                    f'Joined at: {nextcord.utils.format_dt(people.joined_at, "F")} ({nextcord.utils.format_dt(people.joined_at, "R")})',
+                    name=f"{person.name} (ID: {person.id})",
+                    value=f'Created at: {nextcord.utils.format_dt(person.created_at, "F")} ({nextcord.utils.format_dt(person.created_at, "R")})\n'
+                    f'Joined at: {nextcord.utils.format_dt(person.joined_at, "F")} ({nextcord.utils.format_dt(person.joined_at, "R")})',
                 )
             embeds.append(embed)
 
-        paginator = Paginator(embeds)
-        await paginator.send_initial_message(interaction, interaction.channel)
+        for embed in embeds:
+            await interaction.followup.send(embed=embed)
+
+        # Delete the loading message
+        await loading_message.delete()
+
 
     @main.subcommand()
     async def bots(self, interaction: nextcord.Interaction):
