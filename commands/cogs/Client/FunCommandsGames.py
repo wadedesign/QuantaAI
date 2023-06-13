@@ -568,19 +568,41 @@ class FunCommandsCog(commands.Cog):
     
     @fun.subcommand(description="Define a word")
     async def define(self, interaction: nextcord.Interaction, word: str):
-        
-        # Fetch the definition of the word from the API
-        response = requests.get(f'https://www.dictionaryapi.com/api/v3/references/collegiate/json/{word}?key=YOUR_API_KEY_HERE')
+        # Create an animated loading message
+        animation = [
+            "📚 Looking up the definition...",
+            "📚🔎 Looking up the definition...",
+            "📚🔎📖 Looking up the definition...",
+            "📚🔎📖🔍 Looking up the definition...",
+            "📚🔎📖🔍📚 Looking up the definition...",
+            "📚🔎📖🔍📚🔎 Looking up the definition...",
+        ]
+        loading_message = await interaction.response.send_message("Looking up the definition...")
+        for frame in animation:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
 
-        # Extract the first definition from the response JSON
+        url = "https://dictionary-by-api-ninjas.p.rapidapi.com/v1/dictionary"
+        querystring = {"word": word}
+        headers = {
+            "X-RapidAPI-Key": "82cfc7318cmsh3f3e03fa5eb7fdfp16eb9cjsn5bd4ea35cd19",
+            "X-RapidAPI-Host": "dictionary-by-api-ninjas.p.rapidapi.com"
+        }
+
+        response = requests.get(url, headers=headers, params=querystring)
+
+        # Extract the definition from the response JSON
         data = response.json()
-        definition = data[0]['shortdef'][0]
+        if data:
+            definition = data[0]['definition']
+        else:
+            definition = "Definition not found."
 
-        # Create an embed with the definition
+        # Create an embedded message with the definition
         embed = nextcord.Embed(title=f"Definition of {word}", description=definition, color=0x00ff00)
 
-        # Send the embed as a message
-        await interaction.response.send_message(embed=embed)
+        # Send the embedded message with the definition
+        await loading_message.edit(content="Definition found ✅", embed=embed)
     
     
     
