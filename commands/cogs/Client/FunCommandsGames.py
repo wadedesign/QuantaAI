@@ -49,27 +49,34 @@ class FunCommandsCog(commands.Cog):
             await asyncio.sleep(300) #should be 5 mins before the next news post
 
     @fun.subcommand(description="Advertise the bot")
-    async def advertise_bot(self,interaction: nextcord.Interaction):
-        """
-        Advertise the bot and its features.
-        """
-        # Create a message with information about the bot and its features
-        message = """
-        **Welcome to Wadder!**
-        
-        Wadder is a powerful and easy-to-use bot that can help you with a wide range of tasks. Here are some of its key features:
-        
-        - Slash commands for easy access to bot functionality
-        - Customizable settings and preferences
-        - Integration with third-party APIs for additional functionality
-        - Moderation tools to help keep your server safe and secure
-        - And much more!
-        
-        To get started with Wadder, simply invite it to your server and type `/help` to see a list of available commands.
-        """
+    async def advertise_bot(self, interaction: nextcord.Interaction):
+        # Define the computer animation frames
+        animation = [
+            "```diff\n- Gathering information...```",
+            "```diff\n+ Gathering information...```",
+            "```diff\n- Gathering information...```",
+            "```diff\n+ Gathering information...```",
+            "```diff\n- Gathering information...```",
+            "```diff\n+ Gathering information...```",
+        ]
 
-        # Send the advertisement message as a message
-        await interaction.response.send_message(message)    
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:] + animation[::-1]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
+        # Create the advertisement embed
+        embed = nextcord.Embed(title="Welcome to Wadder!", description="Wadder is a powerful and easy-to-use bot that can help you with a wide range of tasks.", color=0x00ff00)
+        embed.add_field(name="Key Features", value="- Slash commands for easy access to bot functionality\n- Customizable settings and preferences\n- Integration with third-party APIs for additional functionality\n- Moderation tools to help keep your server safe and secure\n- And much more!", inline=False)
+        embed.set_footer(text="To get started with Wadder, simply invite it to your server and type /help to see a list of available commands.")
+        embed.set_thumbnail(url="https://example.com/bot_thumbnail.png")
+
+        # Update the loading message with the advertisement embed
+        await loading_message.edit(content="Advertisement", embed=embed)
+
         
         
         
