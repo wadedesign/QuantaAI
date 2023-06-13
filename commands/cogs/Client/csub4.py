@@ -219,10 +219,43 @@ class ServerEmojisCog(commands.Cog):
     @main.subcommand()
     async def boosters(self, interaction: nextcord.Interaction):
         """Sends all the boosters of this server"""
+        # Define the computer animation frames
+        animation = [
+            "```yaml\n[Generating boosters list...     ]```",
+            "```yaml\n[Generating boosters list...•    ]```",
+            "```yaml\n[Generating boosters list...••   ]```",
+            "```yaml\n[Generating boosters list...•••  ]```",
+            "```yaml\n[Generating boosters list...•••• ]```",
+            "```yaml\n[Generating boosters list...•••••]```",
+            "```yaml\n[Generating boosters list... ••••]```",
+            "```yaml\n[Generating boosters list...  •••]```",
+            "```yaml\n[Generating boosters list...   ••]```",
+            "```yaml\n[Generating boosters list...    •]```",
+            "```yaml\n[Generating boosters list...     ]```",
+            "```yaml\n[Generating boosters list...    ]```",
+            "```yaml\n[Generating boosters list...•   ]```",
+            "```yaml\n[Generating boosters list...••  ]```",
+            "```yaml\n[Generating boosters list...••• ]```",
+            "```yaml\n[Generating boosters list...••••]```",
+            "```yaml\n[Generating boosters list...•••••]```",
+            "```yaml\n[Generating boosters list...•••• ]```",
+            "```yaml\n[Generating boosters list...•••  ]```",
+            "```yaml\n[Generating boosters list...••   ]```",
+            "```yaml\n[Generating boosters list...•    ]```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         people_who_boosted = sorted(interaction.guild.premium_subscribers, key=lambda member: member.joined_at)
 
         if not people_who_boosted:
-            await interaction.response.send_message("There are no boosters in this server.")
+            await loading_message.edit(content="There are no boosters in this server.")
             return
 
         peoples = commands.Paginator(max_size=500, prefix="```ini\n", suffix="```")
@@ -231,7 +264,8 @@ class ServerEmojisCog(commands.Cog):
 
         for page in peoples.pages:
             embed = nextcord.Embed(title=f"{len(people_who_boosted)} Boosters", description=page)
-            await interaction.response.send_message(embed=embed)
+            await loading_message.edit(content="Boosters List", embed=embed)
+
             
             
     @main.subcommand()
