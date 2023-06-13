@@ -689,36 +689,64 @@ class FunCommandsCog(commands.Cog):
     
     
     
-    @fun.subcommand(description="generate a random password")
+    @fun.subcommand(name="qpw",description="generate a random password")
     async def generatepassword(self, interaction: nextcord.Interaction, length: int = 16):
         # Generate a random password of the specified length
         password = ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
-        # Send the password as a code block
-        await interaction.response.send_message(f'```\n{password}\n```') 
+        # Define the embed
+        embed = nextcord.Embed(title="Random Password Generator 🔒", color=0x57CFF3)
+        embed.add_field(name="Generated Password", value=f'```\n{password}\n```')
+
+        # Define the animation
+        animation = [
+            "⚡⚡⚡⚡⚡",
+            "🔒⚡⚡⚡⚡",
+            "🔒🔒⚡⚡⚡",
+            "🔒🔒🔒⚡⚡",
+            "🔒🔒🔒🔒⚡",
+            "🔒🔒🔒🔒🔒"
+        ]
+
+        # Send the animated message
+        message = await interaction.response.send_message("Generating password...")
+        for frame in animation:
+            await message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
+        # Send the embedded message with the generated password
+        await message.edit(content="Password generated ✅", embed=embed)
+
     
     
-    @fun.subcommand(description="ping the bot")
+    @fun.subcommand(name="qping",description="ping the bot") #**
     async def ping(self, interaction: nextcord.Interaction):
         # Calculate the bot's websocket latency
         latency = self.bot.latency * 1000  # in milliseconds
 
         # Define the embed
-        embed = nextcord.Embed(title="Ping", color=0xFF5733)
-        embed.add_field(name="Latency", value=f"{latency:.2f} ms")
+        embed = nextcord.Embed(title="Ping 🏓", color=0xFF5733)
+        embed.add_field(name="Latency ⏱️", value=f"{latency:.2f} ms")
 
         # Define the button to refresh the ping
         async def refresh_callback(interaction: nextcord.Interaction):
             await interaction.response.edit_message(embed=embed)
 
-        refresh_button = nextcord.ui.Button(label="Refresh", style=nextcord.ButtonStyle.secondary)
+        # Create the refresh button
+        refresh_button = nextcord.ui.Button(label="🔄 Refresh", style=nextcord.ButtonStyle.secondary)
         refresh_button.callback = refresh_callback
 
-        # Send the embed with the refresh button as a response
+        # Create the view and add the refresh button
         view = nextcord.ui.View()
         view.add_item(refresh_button)
 
-        await interaction.response.send_message(embed=embed, view=view)
+        # Send the embed with the refresh button as a response
+        await interaction.response.send_message(
+            content="**Pinging the Bot** 🌐",
+            embed=embed,
+            view=view
+        )
+
     
     
     
