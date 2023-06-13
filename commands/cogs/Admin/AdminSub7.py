@@ -90,8 +90,13 @@ class AwayFromKeyboard(commands.Cog):
         
         with open('data/afk.json', 'w') as f:
             json.dump(afk, f)
+            
+            
+    @nextcord.slash_command(name="qafk")
+    async def main (self, interaction: nextcord.Interaction):
+        pass
 
-    @nextcord.slash_command(name='afk', description='Set your AFK to let others know when they ping you')
+    @main.subcommand(name='afk', description='Set your AFK to let others know when they ping you')
     async def afk(self, interac: Interaction, reason):
         with open('data/afk.json', 'r') as f:
             afk = json.load(f)
@@ -116,7 +121,7 @@ class AwayFromKeyboard(commands.Cog):
         except:
             print(f'I was not able to edit [{interac.user}].')
     
-    @nextcord.slash_command(name='removeafk', description='Remove your AFK status')
+    @main.subcommand(name='removeafk', description='Remove your AFK status')
     async def remove_afk(self, interac: Interaction):
         with open('data/afk.json', 'r') as f:
             afk = json.load(f)
