@@ -499,6 +499,39 @@ class ServerEmojisCog(commands.Cog):
     @main.subcommand()
     async def wserverinfo(self, interaction: nextcord.Interaction):
         """See the information of the current server"""
+        # Define the computer animation frames
+        animation = [
+            "```yaml\n[Generating server information...     ]```",
+            "```yaml\n[Generating server information...•    ]```",
+            "```yaml\n[Generating server information...••   ]```",
+            "```yaml\n[Generating server information...•••  ]```",
+            "```yaml\n[Generating server information...•••• ]```",
+            "```yaml\n[Generating server information...•••••]```",
+            "```yaml\n[Generating server information... ••••]```",
+            "```yaml\n[Generating server information...  •••]```",
+            "```yaml\n[Generating server information...   ••]```",
+            "```yaml\n[Generating server information...    •]```",
+            "```yaml\n[Generating server information...     ]```",
+            "```yaml\n[Generating server information...    ]```",
+            "```yaml\n[Generating server information...•   ]```",
+            "```yaml\n[Generating server information...••  ]```",
+            "```yaml\n[Generating server information...••• ]```",
+            "```yaml\n[Generating server information...••••]```",
+            "```yaml\n[Generating server information...•••••]```",
+            "```yaml\n[Generating server information...•••• ]```",
+            "```yaml\n[Generating server information...•••  ]```",
+            "```yaml\n[Generating server information...••   ]```",
+            "```yaml\n[Generating server information...•    ]```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         guild = interaction.guild
         guild_owner = self.bot.get_user(guild.owner_id)
 
@@ -535,7 +568,12 @@ class ServerEmojisCog(commands.Cog):
             ),
         )
         embed.set_thumbnail(url=guild.icon.url)
-        await interaction.send(embed=embed)
+
+        # Delete the loading message
+        await loading_message.delete()
+
+        await interaction.followup.send(embed=embed)
+
         
     @main.subcommand()
     async def fox(self, interaction: nextcord.Interaction):
