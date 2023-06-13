@@ -320,7 +320,7 @@ class ServerEmojisCog(commands.Cog):
         
    
     @main.subcommand()
-    async def firstjoins(self, interaction: nextcord.Interaction):
+    async def firstjoins(self, interaction: nextcord.Interaction): #!! good command if ones get interaction respond before error 
         """See all the members of this server sorted by their join time"""
         # Define the computer animation frames
         animation = [
