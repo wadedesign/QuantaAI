@@ -116,11 +116,11 @@ def text_to_speech(text):
 class WadderChatText(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-    @nextcord.slash_command(name="waddertts")
+    @nextcord.slash_command(name="qlangchain")
     async def main(self, interaction: nextcord.Interaction):
         pass
     
-    @main.subcommand(description="Get Voice from Text")
+    @main.subcommand(name="qsay",description="Get Voice from Text")
     async def wsay(self, interaction: nextcord.Interaction, *, text: str):
         # Generate a response using OpenAI GPT model
         response = openai.Completion.create(
@@ -172,7 +172,7 @@ class WadderChatText(commands.Cog):
         # Delete the mp3 file
         os.remove("output.mp3")
 
-    @main.subcommand(description="Speak with Wadder")
+    @main.subcommand(name="qspeak",description="Speak with Wadder")
     async def wspeak(self, interaction: nextcord.Interaction):
         
         recognizer = sr.Recognizer()
@@ -249,7 +249,7 @@ class WadderChatText(commands.Cog):
         await voice_client.disconnect()
 
         
-    @main.subcommand(name="serp")
+    @main.subcommand(name="qsearch", description="Search Google")
     async def search_google(self, interaction: nextcord.Interaction, *, query: str):
         
         openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -272,12 +272,12 @@ class WadderChatText(commands.Cog):
     
 
     
-    @main.subcommand()
+    @main.subcommand(name="qchat", description="Chat with a AI Bot")
     async def wchat(self, interaction: nextcord.Interaction, *, message: str):
         response = conversation.predict(input=message)
         await interaction.send(response)
         
-    @main.subcommand()
+    @main.subcommand(name="agents", description="chat with an AI Agent")
     async def agentquery(self, interaction: nextcord.Interaction, *, message: str):
         await interaction.response.defer()
 
