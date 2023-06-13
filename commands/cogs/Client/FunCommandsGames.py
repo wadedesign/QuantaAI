@@ -579,8 +579,8 @@ class FunCommandsCog(commands.Cog):
         ]
         loading_message = await interaction.response.send_message("Looking up the definition...")
         for frame in animation:
-            await loading_message.edit(content=frame)
             await asyncio.sleep(0.5)
+            await loading_message.edit(content=frame)
 
         url = "https://dictionary-by-api-ninjas.p.rapidapi.com/v1/dictionary"
         querystring = {"word": word}
@@ -602,7 +602,7 @@ class FunCommandsCog(commands.Cog):
         embed = nextcord.Embed(title=f"Definition of {word}", description=definition, color=0x00ff00)
 
         # Send the embedded message with the definition
-        await loading_message.edit(content="Definition found ✅", embed=embed)
+        await interaction.followup.send_message(content="Definition found ✅", embed=embed)
     
     
     
