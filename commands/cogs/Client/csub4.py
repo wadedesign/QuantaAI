@@ -355,7 +355,6 @@ class ServerEmojisCog(commands.Cog):
             await loading_message.edit(content=frame)
             await asyncio.sleep(0.5)
 
-        embeds = []
         people = sorted(interaction.guild.members, key=lambda member: member.joined_at)
 
         for chunk in split_by_slice(people, 5):
@@ -367,10 +366,8 @@ class ServerEmojisCog(commands.Cog):
                     f'Joined at: {nextcord.utils.format_dt(person.joined_at, "F")} ({nextcord.utils.format_dt(person.joined_at, "R")})',
                     inline=False,
                 )
-            embeds.append(embed)
+            await interaction.response.send_message(embed=embed)
 
-        paginator = Paginator(embeds)
-        await loading_message.edit(content="First Joins List", embed=paginator.get_page(0))
 
 
 
