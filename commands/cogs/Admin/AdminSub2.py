@@ -148,26 +148,48 @@ class WadderCommandsV1(commands.Cog):
     @main.subcommand()
     @commands.guild_only()
     async def mods(self, interaction: nextcord.Interaction):
-        """ Check which mods are online on current guild """
+        """Check which mods are online on the current guild"""
+
+        # Show loading animation
+        loading_message = await interaction.response.send_message("Checking moderator status...")
+
+        animation_frames = [
+            "⚙️ Checking moderator status",
+            "⚙️ Checking moderator status.",
+            "⚙️ Checking moderator status..",
+            "⚙️ Checking moderator status..."
+        ]
+
+        for frame in animation_frames:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         all_status = {
-            "online": {"users": [], "emoji": "🟢"},
-            "idle": {"users": [], "emoji": "🟡"},
-            "dnd": {"users": [], "emoji": "🔴"},
-            "offline": {"users": [], "emoji": "⚫"}
+            "online": {"users": [], "emoji": "🟢", "display_name": "Online"},
+            "idle": {"users": [], "emoji": "🟡", "display_name": "Idle"},
+            "dnd": {"users": [], "emoji": "🔴", "display_name": "Do Not Disturb"},
+            "offline": {"users": [], "emoji": "⚫", "display_name": "Offline"}
         }
 
         for user in interaction.guild.members:
             user_perm = interaction.channel.permissions_for(user)
             if user_perm.kick_members or user_perm.ban_members:
                 if not user.bot:
-                    all_status[str(user.status)]["users"].append(f"**{user}**")
+                    all_status[str(user.status)]["users"].append(user.mention)
 
-        embed = nextcord.Embed(title=f"Mods in {interaction.guild.name}")
-        for g in all_status:
-            if all_status[g]["users"]:
-                embed.add_field(name=f"{all_status[g]['emoji']} {g.capitalize()}", value=", ".join(all_status[g]['users']), inline=False)
+        embed = nextcord.Embed(title=f"Mods in {interaction.guild.name}", color=0x00FF00)
 
-        await interaction.send(embed=embed)
+        for status, data in all_status.items():
+            if data["users"]:
+                mod_list = ", ".join(data["users"])
+                embed.add_field(name=f"{data['emoji']} {data['display_name']} ({len(data['users'])})", value=mod_list, inline=False)
+
+        embed.set_footer(text="Powered by YourBot")
+        embed.set_thumbnail(url=interaction.guild.icon.url)
+        embed.set_author(name="Moderator Status", icon_url=interaction.author.avatar.url)
+
+        await interaction.followup.send_message(embed=embed)
+
         
         
     # Invite command
