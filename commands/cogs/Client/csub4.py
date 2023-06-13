@@ -270,6 +270,7 @@ class ServerEmojisCog(commands.Cog):
             
     @main.subcommand()
     async def memberlist(self, interaction: nextcord.Interaction):
+        """See all the members of this server sorted by their top role"""
         # Define the computer animation frames
         animation = [
             "```yaml\n[Generating member list...     ]```",
@@ -313,8 +314,12 @@ class ServerEmojisCog(commands.Cog):
         for page in peoples.pages:
             embeds.append(nextcord.Embed(title=f"{len(people)} Members", description=page))
 
-        paginator = Paginator(embeds)
-        await loading_message.edit(content="Member List", embed=paginator.get_current_page())
+        for embed in embeds:
+            await interaction.followup.send(embed=embed)
+
+        # Delete the loading message
+        await loading_message.delete()
+
 
 
         
