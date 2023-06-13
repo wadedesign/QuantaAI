@@ -271,6 +271,39 @@ class ServerEmojisCog(commands.Cog):
     @main.subcommand()
     async def memberlist(self, interaction: nextcord.Interaction):
         """See all the members of this server sorted by their top role"""
+        # Define the computer animation frames
+        animation = [
+            "```yaml\n[Generating member list...     ]```",
+            "```yaml\n[Generating member list...•    ]```",
+            "```yaml\n[Generating member list...••   ]```",
+            "```yaml\n[Generating member list...•••  ]```",
+            "```yaml\n[Generating member list...•••• ]```",
+            "```yaml\n[Generating member list...•••••]```",
+            "```yaml\n[Generating member list... ••••]```",
+            "```yaml\n[Generating member list...  •••]```",
+            "```yaml\n[Generating member list...   ••]```",
+            "```yaml\n[Generating member list...    •]```",
+            "```yaml\n[Generating member list...     ]```",
+            "```yaml\n[Generating member list...    ]```",
+            "```yaml\n[Generating member list...•   ]```",
+            "```yaml\n[Generating member list...••  ]```",
+            "```yaml\n[Generating member list...••• ]```",
+            "```yaml\n[Generating member list...••••]```",
+            "```yaml\n[Generating member list...•••••]```",
+            "```yaml\n[Generating member list...•••• ]```",
+            "```yaml\n[Generating member list...•••  ]```",
+            "```yaml\n[Generating member list...••   ]```",
+            "```yaml\n[Generating member list...•    ]```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         people = sorted(interaction.guild.members, key=lambda member: member.top_role, reverse=True)
 
         peoples = commands.Paginator(max_size=500, prefix="```ini\n", suffix="```")
@@ -282,7 +315,9 @@ class ServerEmojisCog(commands.Cog):
             embeds.append(nextcord.Embed(title=f"{len(people)} Members", description=page))
 
         paginator = Paginator(embeds)
-        await paginator.send_initial_message(interaction, interaction.channel)
+        await loading_message.edit(content="Member List", embed=paginator.get_current_page())
+
+
         
     @main.subcommand()
     async def firstjoins(self, interaction: nextcord.Interaction):
