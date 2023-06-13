@@ -485,19 +485,35 @@ class FunCommandsCog(commands.Cog):
     
     
     @fun.subcommand(description="Get a random Chuck Norris joke")
-    async def chucknorris(self,interaction: nextcord.Interaction):
-        
+    async def chucknorris(self, interaction: nextcord.Interaction):
+        # Define the computer animation frames
+        animation = [
+            "🤠 Searching for a Chuck Norris joke...",
+            "🤠💪 Looking for Chuck Norris's jokes...",
+            "🤠💪👊 Finding the most epic Chuck Norris joke...",
+            "🤠💪👊🤣 Generating the perfect Chuck Norris joke...",
+            "🤠💪👊🤣🤣 Laughing out loud at Chuck Norris's joke...",
+            "🤠💪👊🤣🤣🤠 Chuck Norris approves this joke!",
+        ]
+
+        # Create an animated loading message
+        loading_message = await interaction.response.send_message(animation[0])
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         # Fetch a random Chuck Norris joke from the API
         response = requests.get('https://api.chucknorris.io/jokes/random')
 
         # Extract the joke text from the response JSON
         joke = response.json()['value']
 
-        # Create an embed with the joke as the description
-        embed = nextcord.Embed(description=joke)
+        # Create an embedded message with the joke
+        embed = nextcord.Embed(title="Chuck Norris Joke", description=joke, color=0x00ff00)
 
-        # Send the embed as a message
-        await interaction.response.send_message(embed=embed)
+        # Send the embedded message with the joke
+        await loading_message.edit(content="Chuck Norris joke found ✅", embed=embed)
+
     
     
     
@@ -532,15 +548,15 @@ class FunCommandsCog(commands.Cog):
         for frame in animation[1:]:
             embed.description = frame
 
-            # Add random color to the codeblock text for each frame
-            codeblock_text = f'```diff\n{"".join(["█" for _ in range(len(text))])}\n{"".join([chr(0x200b + ord(c)) for c in text])}\n{"█" * len(text)}```'
+            # Add random color and blinking effect to the codeblock text for each frame
+            codeblock_text = f'```diff\n{"".join(["".join(random.choices(string.ascii_letters + string.digits, k=len(c))) for c in text.splitlines()])}```'
             embed.add_field(name="Code", value=codeblock_text, inline=False)
 
             await loading_message.edit(embed=embed)
             await asyncio.sleep(0.5)
 
-        # Create the final codeblock text with random colors
-        codeblock_text = f'```diff\n{"".join(["█" for _ in range(len(text))])}\n{"".join([chr(0x200b + ord(c)) for c in text])}\n{"█" * len(text)}```'
+        # Create the final codeblock text with random colors and blinking effect
+        codeblock_text = f'```diff\n{"".join(["".join(random.choices(string.ascii_letters + string.digits, k=len(c))) for c in text.splitlines()])}```'
 
         # Create the embedded message with the codeblock
         embed.description = "Code execution complete!"
