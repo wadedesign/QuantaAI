@@ -123,13 +123,14 @@ class WadderCommandsV1(commands.Cog):
             await asyncio.sleep(0.5)
 
         embed = nextcord.Embed(title=poll, description=f"Total Votes: 0\n\n{'🟩' * 10}\n\n(from: {interaction.user})", colour=nextcord.Colour.purple())
-        poll_message = await interaction.channel.send(embed=embed)
+        poll_message = await interaction.followup.send(embed=embed)
         await poll_message.add_reaction('✅')
         await poll_message.add_reaction('❌')
 
         await loading_message.delete()
 
         await interaction.followup.send_message(content="Poll created successfully!", ephemeral=True)
+
 
 
         
