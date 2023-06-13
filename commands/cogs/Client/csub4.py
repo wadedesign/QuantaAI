@@ -175,12 +175,46 @@ class ServerEmojisCog(commands.Cog):
         
     @main.subcommand(name="claptrap", description="Claptrap quotes")
     async def claptrap(self, interaction: nextcord.Interaction):
+        # Define the computer animation frames
+        animation = [
+            "```yaml\n[Generating Claptrap quote...     ]```",
+            "```yaml\n[Generating Claptrap quote...•    ]```",
+            "```yaml\n[Generating Claptrap quote...••   ]```",
+            "```yaml\n[Generating Claptrap quote...•••  ]```",
+            "```yaml\n[Generating Claptrap quote...•••• ]```",
+            "```yaml\n[Generating Claptrap quote...•••••]```",
+            "```yaml\n[Generating Claptrap quote... ••••]```",
+            "```yaml\n[Generating Claptrap quote...  •••]```",
+            "```yaml\n[Generating Claptrap quote...   ••]```",
+            "```yaml\n[Generating Claptrap quote...    •]```",
+            "```yaml\n[Generating Claptrap quote...     ]```",
+            "```yaml\n[Generating Claptrap quote...    ]```",
+            "```yaml\n[Generating Claptrap quote...•   ]```",
+            "```yaml\n[Generating Claptrap quote...••  ]```",
+            "```yaml\n[Generating Claptrap quote...••• ]```",
+            "```yaml\n[Generating Claptrap quote...••••]```",
+            "```yaml\n[Generating Claptrap quote...•••••]```",
+            "```yaml\n[Generating Claptrap quote...•••• ]```",
+            "```yaml\n[Generating Claptrap quote...•••  ]```",
+            "```yaml\n[Generating Claptrap quote...••   ]```",
+            "```yaml\n[Generating Claptrap quote...•    ]```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
 
         if not isinstance(self.claptraps, list):
             print_error("The [yellow]claptraps.json[/] file is not a list.")
-            return await interaction.send("An error occurred. Check the console for more information.")
+            return await loading_message.edit(content="An error occurred. Check the console for more information.")
 
-        await interaction.send(random.choice(self.claptraps))
+        # Update the loading message with a random Claptrap quote
+        await loading_message.edit(content=random.choice(self.claptraps))
+
         
     @main.subcommand()
     async def boosters(self, interaction: nextcord.Interaction):
