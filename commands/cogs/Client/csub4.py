@@ -369,7 +369,8 @@ class ServerEmojisCog(commands.Cog):
             embeds.append(embed)
 
         paginator = Paginator(embeds)
-        await loading_message.edit(content="First Joins List", embed=paginator.get_current_page())
+        await loading_message.edit(content="First Joins List", embed=paginator.get_page(0))
+
 
         
         
