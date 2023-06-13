@@ -584,13 +584,32 @@ class FunCommandsCog(commands.Cog):
     
     
     
-    @fun.subcommand(description="Encode a message in Base64")
+    @fun.subcommand(name="encode",description="Encode a message in Base64")
     async def encodebase64(self, interaction: nextcord.Interaction, message: str):
+        # Create an animated loading message with different animations
+        animation = [
+            "⌛ Encoding the message.",
+            "⏳ Encoding the message..",
+            "⌛ Encoding the message..",
+            "⏳ Encoding the message...",
+            "⌛ Encoding the message...",
+            "⏳ Encoding the message....",
+        ]
+        loading_message = await interaction.response.send_message("Encoding the message.")
+        for frame in animation:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         # Encode the message in Base64
         encoded_message = base64.b64encode(message.encode('utf-8')).decode('utf-8')
 
-        # Send the encoded message as a code block
-        await interaction.response.send_message(f'```\n{encoded_message}\n```')
+        # Create an embedded message with the encoded message
+        embed = nextcord.Embed(title="Base64 Message Encoding", color=0x00ff00)
+        embed.add_field(name="Original Message", value=message, inline=False)
+        embed.add_field(name="Encoded Message", value=f"```\n{encoded_message}\n```", inline=False)
+
+        # Send the embedded message with the encoded message
+        await loading_message.edit(content="Encoding complete ✅", embed=embed)
     
     
     
