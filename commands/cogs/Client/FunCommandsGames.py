@@ -566,7 +566,7 @@ class FunCommandsCog(commands.Cog):
     
     
     
-    @fun.subcommand(description="Define a word")
+    @fun.subcommand(name="qdefine", description="Define a word")
     async def define(self, interaction: nextcord.Interaction, word: str):
         # Create an animated loading message
         animation = [
