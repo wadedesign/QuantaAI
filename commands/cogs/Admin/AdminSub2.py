@@ -186,7 +186,7 @@ class WadderCommandsV1(commands.Cog):
 
         embed.set_footer(text="Powered by QuantaAI")
         embed.set_thumbnail(url=interaction.guild.icon.url)
-        embed.set_author(name="Moderator Status", icon_url=interaction.author.avatar.url)
+        embed.set_author(name="Moderator Status", icon_url=interaction.user.avatar.url)
 
         await interaction.followup.send_message(embed=embed)
 
@@ -218,7 +218,7 @@ class WadderCommandsV1(commands.Cog):
             url="https://discord.com/api/oauth2/authorize?client_id=1075144828330971186&permissions=8&scope=bot%20applications.commands",
             color=0x00ff00
         )
-        embed.set_footer(text="Add Wadder")
+        embed.set_footer(text="Add QuantaAI to your server today!")
 
         # Set the thumbnail using the provided image URL
         image_url = "https://top.gg/_next/image?url=https%3A%2F%2Fimages.discordapp.net%2Favatars%2F1075144828330971186%2Fd57c846e32ace943c19bd9dcbbf6e196.png%3Fsize%3D128&w=256&q=75"  # Replace with your image URL
