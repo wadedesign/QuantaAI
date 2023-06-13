@@ -1,3 +1,4 @@
+import asyncio
 import io
 import nextcord
 from nextcord.ext import commands
@@ -39,12 +40,46 @@ class TemplateCog(commands.Cog): #** RFP **#
         name = "My Server Template"
         server_structure = await self.generate_server_structure(interaction.guild)
 
+        # Define the computer animation frames
+        animation = [
+            "```yaml\n[                    ]```",
+            "```yaml\n[▉                   ]```",
+            "```yaml\n[▉▉                  ]```",
+            "```yaml\n[▉▉▉                 ]```",
+            "```yaml\n[▉▉▉▉                ]```",
+            "```yaml\n[▉▉▉▉▉               ]```",
+            "```yaml\n[▉▉▉▉▉▉              ]```",
+            "```yaml\n[▉▉▉▉▉▉▉             ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉            ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉           ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉          ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉         ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉        ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉       ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉      ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉     ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉    ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉   ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉  ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉]```",
+            "```yaml\n[Saving server template... ]```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         # Create a .txt file with the server structure
         structure_file = io.BytesIO(server_structure.encode())
         file = nextcord.File(structure_file, filename=f"{name}.txt")
 
-        await interaction.response.send_message("Sending the server template...", ephemeral=True)
-        await interaction.channel.send(file=file)
+        await loading_message.edit(content="Server Template", file=file)
+
 
 def setup(bot):
     bot.add_cog(TemplateCog(bot))
