@@ -26,7 +26,6 @@ class XKCD(BaseCog):
 
     @main.subcommand(name="xkcd", description="To get xkcd comics")
     async def xkcd(self, interaction: nextcord.Interaction, *, entry_number=None):
-        await interaction.response.defer()
 
         # Define the computer animation frames
         animation = [
@@ -90,6 +89,7 @@ class XKCD(BaseCog):
         embed.set_image(url=xkcd["img"])
         embed.set_footer(text="Powered by xkcd")
         await interaction.send(embed=embed)
+
 
         
     @main.subcommand(name="nba", description="To get nba players")
