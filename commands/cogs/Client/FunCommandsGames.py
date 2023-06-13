@@ -597,7 +597,7 @@ class FunCommandsCog(commands.Cog):
     
     
     
-    @fun.subcommand(description="Encrypt a message using the Caesar cipher")
+    @fun.subcommand(name="", description="Encrypt a message using the Caesar cipher")
     async def encrypt_caesar(self,
         interaction: nextcord.Interaction,
         text: str,
@@ -610,6 +610,20 @@ class FunCommandsCog(commands.Cog):
         alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         shifted_alphabet = alphabet[shift:] + alphabet[:shift]
 
+        # Create an animated loading message
+        animation = [
+            "🔒 Encrypting the message...",
+            "🔒🔐 Encrypting the message...",
+            "🔒🔐🔑 Encrypting the message...",
+            "🔒🔐🔑🔏 Encrypting the message...",
+            "🔒🔐🔑🔏🔒 Encrypting the message...",
+            "🔒🔐🔑🔏🔒🔐 Encrypting the message...",
+        ]
+        message = await interaction.response.send_message("Encrypting the message...")
+        for frame in animation:
+            await message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         # Encrypt the text using the Caesar cipher
         encrypted_text = ''
         for char in text:
@@ -618,8 +632,14 @@ class FunCommandsCog(commands.Cog):
             else:
                 encrypted_text += char
 
-        # Send the encrypted text to the user
-        await interaction.response.send_message(f'Encrypted text: `{encrypted_text}`')
+        # Create an embedded message with the encrypted text
+        embed = nextcord.Embed(title="Caesar Cipher Encryption", color=0x00ff00)
+        embed.add_field(name="Original Text", value=text, inline=False)
+        embed.add_field(name="Shift", value=shift, inline=False)
+        embed.add_field(name="Encrypted Text", value=f"`{encrypted_text}`", inline=False)
+
+        # Send the embedded message with the encrypted text
+        await message.edit(content="Encryption complete ✅", embed=embed)
         
     
     
