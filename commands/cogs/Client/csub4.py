@@ -115,15 +115,49 @@ class ServerEmojisCog(commands.Cog):
     async def main(self, interaction: nextcord.Interaction):
         pass
 
-    @main.subcommand()
+    @main.subcommand(name="qemojis", description="get emoji from server")
     async def list_emojis(self, interaction: nextcord.Interaction):
         """List all emojis available on the server."""
+        # Define the computer animation frames
+        animation = [
+            "```yaml\n[Listing emojis...     ]```",
+            "```yaml\n[Listing emojis...•    ]```",
+            "```yaml\n[Listing emojis...••   ]```",
+            "```yaml\n[Listing emojis...•••  ]```",
+            "```yaml\n[Listing emojis...•••• ]```",
+            "```yaml\n[Listing emojis...•••••]```",
+            "```yaml\n[Listing emojis... ••••]```",
+            "```yaml\n[Listing emojis...  •••]```",
+            "```yaml\n[Listing emojis...   ••]```",
+            "```yaml\n[Listing emojis...    •]```",
+            "```yaml\n[Listing emojis...     ]```",
+            "```yaml\n[Listing emojis...    ]```",
+            "```yaml\n[Listing emojis...•   ]```",
+            "```yaml\n[Listing emojis...••  ]```",
+            "```yaml\n[Listing emojis...••• ]```",
+            "```yaml\n[Listing emojis...••••]```",
+            "```yaml\n[Listing emojis...•••••]```",
+            "```yaml\n[Listing emojis...•••• ]```",
+            "```yaml\n[Listing emojis...•••  ]```",
+            "```yaml\n[Listing emojis...••   ]```",
+            "```yaml\n[Listing emojis...•    ]```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         emojis = interaction.guild.emojis
         if emojis:
             emoji_list = "\n".join([f"{emoji.name}: {emoji}" for emoji in emojis])
             await self.send_long_message(interaction, f"Emojis on this server:\n{emoji_list}")
         else:
-            await interaction.response.send_message("There are no emojis on this server.")
+            await loading_message.edit(content="There are no emojis on this server.")
+
 
     @main.subcommand(name="wanted", description="Wanted poster")
     async def wanted(self,interaction: nextcord.Interaction, user: nextcord.Member = None):
