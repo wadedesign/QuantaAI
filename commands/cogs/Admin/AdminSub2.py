@@ -221,7 +221,7 @@ class WadderCommandsV1(commands.Cog):
         embed.set_footer(text="Add Wadder")
 
         # Set the thumbnail using the provided image URL
-        image_url = "https://example.com/waddericon.png"  # Replace with your image URL
+        image_url = "https://top.gg/_next/image?url=https%3A%2F%2Fimages.discordapp.net%2Favatars%2F1075144828330971186%2Fd57c846e32ace943c19bd9dcbbf6e196.png%3Fsize%3D128&w=256&q=75"  # Replace with your image URL
         embed.set_thumbnail(url=image_url)
 
         await interaction.send(embed=embed)
