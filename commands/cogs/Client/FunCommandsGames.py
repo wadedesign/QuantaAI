@@ -579,7 +579,7 @@ class FunCommandsCog(commands.Cog):
                 "📚🔎📖🔍📚 Looking up the definition...",
                 "📚🔎📖🔍📚🔎 Looking up the definition...",
             ]
-            loading_message = await interaction.followup.send_message("Looking up the definition...")
+            loading_message = await interaction.response.send_message("Looking up the definition...")
             for frame in animation:
                 await asyncio.sleep(0.5)
                 await loading_message.edit(content=frame)
