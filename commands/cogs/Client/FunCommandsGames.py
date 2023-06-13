@@ -549,18 +549,38 @@ class FunCommandsCog(commands.Cog):
     
     @fun.subcommand(description="Get a random dad joke")
     async def dadjoke(self, interaction: nextcord.Interaction):
-        
-        # Fetch a random dad joke from the API
-        response = requests.get('https://icanhazdadjoke.com/', headers={'Accept': 'text/plain'})
+        try:
+            # Create an animated loading message
+            animation = [
+                "😄 Finding a random dad joke...",
+                "😄😂 Finding a random dad joke...",
+                "😄😂🤣 Finding a random dad joke...",
+                "😄😂🤣😆 Finding a random dad joke...",
+                "😄😂🤣😆😁 Finding a random dad joke...",
+                "😄😂🤣😆😁😃 Finding a random dad joke...",
+            ]
+            loading_message = await interaction.response.send_message("Finding a random dad joke...")
+            for frame in animation:
+                await asyncio.sleep(0.5)
+                await loading_message.edit(content=frame)
 
-        # Extract the joke text from the response
-        joke = response.text
+            # Fetch a random dad joke from the API
+            response = requests.get('https://icanhazdadjoke.com/', headers={'Accept': 'text/plain'})
 
-        # Create an embed with the joke as the description
-        embed = nextcord.Embed(description=joke)
+            print(f"API response: {response.text}")  # Print the response text for debugging
 
-        # Send the embed as a message
-        await interaction.response.send_message(embed=embed)
+            # Extract the joke text from the response
+            joke = response.text
+
+            # Create an embedded message with the joke as the description
+            embed = nextcord.Embed(description=joke, color=0xFFFF00)
+
+            # Send the embedded message
+            await loading_message.edit(content="Random dad joke found ✅", embed=embed)
+
+        except Exception as error:
+            print(f"An error occurred: {error}")
+            # Handle the error as per your requirement
     
     
     
