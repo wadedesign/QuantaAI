@@ -198,25 +198,58 @@ class WadderVTV(commands.Cog):
     # ! Works still
     @main.subcommand(name="scenexplain", description="Explain a scene with a URL image")
     async def scene_explain(self, interaction: nextcord.Interaction, *, image_url: str):
-        await interaction.response.defer()
+        # Define the computer animation frames
+        animation = [
+            "```yaml\n[Analyzing the scene...     ]```",
+            "```yaml\n[Analyzing the scene...•    ]```",
+            "```yaml\n[Analyzing the scene...••   ]```",
+            "```yaml\n[Analyzing the scene...•••  ]```",
+            "```yaml\n[Analyzing the scene...•••• ]```",
+            "```yaml\n[Analyzing the scene...•••••]```",
+            "```yaml\n[Analyzing the scene... ••••]```",
+            "```yaml\n[Analyzing the scene...  •••]```",
+            "```yaml\n[Analyzing the scene...   ••]```",
+            "```yaml\n[Analyzing the scene...    •]```",
+            "```yaml\n[Analyzing the scene...     ]```",
+            "```yaml\n[Analyzing the scene...    ]```",
+            "```yaml\n[Analyzing the scene...•   ]```",
+            "```yaml\n[Analyzing the scene...••  ]```",
+            "```yaml\n[Analyzing the scene...••• ]```",
+            "```yaml\n[Analyzing the scene...••••]```",
+            "```yaml\n[Analyzing the scene...•••••]```",
+            "```yaml\n[Analyzing the scene...•••• ]```",
+            "```yaml\n[Analyzing the scene...•••  ]```",
+            "```yaml\n[Analyzing the scene...••   ]```",
+            "```yaml\n[Analyzing the scene...•    ]```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
 
         # Initialize the OpenAI language model
-        llm = OpenAI(temperature=0,openai_api_key=os.environ['OPENAI_API_KEY'])
+        llm = OpenAI(temperature=0, openai_api_key=os.environ['OPENAI_API_KEY'])
         memory = ConversationBufferMemory(memory_key="chat_history")
         agent = initialize_agent(
             tools, llm, memory=memory, agent="conversational-react-description", verbose=True
         )
 
         # Use the SceneXplain tool to analyze the image
-        output = agent.run(
-            input=f"What is in this image {image_url}? "
-        )
+        output = agent.run(input=f"What is in this image {image_url}? ")
+
+        # Delete the loading message
+        await loading_message.delete()
 
         # Create an embed to display the result
         embed = nextcord.Embed(title="Scene Explanation", color=nextcord.Color.blue())
         embed.add_field(name="Result", value=f"{output} :camera:", inline=False)  # Add the camera emoji
 
         await interaction.send(embed=embed)
+
 
         
         
