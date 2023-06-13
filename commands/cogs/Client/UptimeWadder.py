@@ -52,7 +52,7 @@ class Uptime(commands.Cog, description="Uptime command"):
         memory = psutil.virtual_memory()
         embed.add_field(name=f"{ram_emoji} RAM Usage", value=f"{memory.used / (1024 * 1024):.2f} MB / {memory.total / (1024 * 1024):.2f} MB", inline=False)
         embed.add_field(name=f"{nodejs_emoji} Node.JS Version", value="v17.9.1", inline=False)
-        embed.add_field(name=f"{discordjs_emoji} Nextcord Version", value="^13.1.0", inline=False)
+        embed.add_field(name=f"{discordjs_emoji} Nextcord Version", value="^2.4.2", inline=False)
         embed.set_footer(text=f"Bot Uptime • {current_time}")
 
         await interaction.send(embed=embed)
