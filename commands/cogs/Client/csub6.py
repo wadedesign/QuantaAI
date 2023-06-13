@@ -215,6 +215,8 @@ class Stocks2(commands.Cog):
 
         except:
             raise    
+        
+        
     @main.subcommand(name="voicechannel", description="To get info about a voice channel")
     async def voicechannelinfo(self, interaction: nextcord.Interaction, *, channel: nextcord.VoiceChannel = None):
         try:
@@ -222,10 +224,44 @@ class Stocks2(commands.Cog):
             if not channel.user_limit:
                 channel.user_limit = "Infinite"
 
+            # Define the computer animation frames
+            animation = [
+                "```ini\n[Gathering channel information...     ]```",
+                "```ini\n[Gathering channel information...•    ]```",
+                "```ini\n[Gathering channel information...••   ]```",
+                "```ini\n[Gathering channel information...•••  ]```",
+                "```ini\n[Gathering channel information...•••• ]```",
+                "```ini\n[Gathering channel information...•••••]```",
+                "```ini\n[Gathering channel information... ••••]```",
+                "```ini\n[Gathering channel information...  •••]```",
+                "```ini\n[Gathering channel information...   ••]```",
+                "```ini\n[Gathering channel information...    •]```",
+                "```ini\n[Gathering channel information...     ]```",
+                "```ini\n[Gathering channel information...    ]```",
+                "```ini\n[Gathering channel information...•   ]```",
+                "```ini\n[Gathering channel information...••  ]```",
+                "```ini\n[Gathering channel information...••• ]```",
+                "```ini\n[Gathering channel information...••••]```",
+                "```ini\n[Gathering channel information...•••••]```",
+                "```ini\n[Gathering channel information...•••• ]```",
+                "```ini\n[Gathering channel information...•••  ]```",
+                "```ini\n[Gathering channel information...••   ]```",
+                "```ini\n[Gathering channel information...•    ]```",
+            ]
+
+            # Send the initial loading message
+            loading_message = await interaction.response.send_message(animation[0])
+
+            # Animate the loading message
+            for frame in animation:
+                await loading_message.edit(content=frame)
+                await asyncio.sleep(0.5)
+
+            # Create the embed
             embed = nextcord.Embed(
                 title=f"{channel.name} Info",
                 description=f"Here is some info about {channel.mention}\n"
-                f":id:**Channel ID:** `{channel.id}`\n🌀**Channel Type:** {channel.type}",
+                            f":id:**Channel ID:** `{channel.id}`\n🌀**Channel Type:** {channel.type}",
                 colour=nextcord.Color.blue(),
             )
             embed.add_field(name=f"📰 Name", value=f"{channel.name}")
@@ -241,11 +277,13 @@ class Stocks2(commands.Cog):
             if interaction.guild.icon:
                 embed.set_thumbnail(url=interaction.guild.icon)
 
-            await interaction.send(embed=embed)
+            # Update the loading message with the channel information embed
+            await loading_message.edit(content="Channel Information", embed=embed)
 
         except AttributeError:
             embed = await Embed.missingrequiredargument(self, interaction)
             await interaction.send(embed=embed)
+
     
     @main.subcommand(name="textchannelinfo", description="To get info about a text channel")
     async def textchannelinfo(self, interaction: nextcord.Interaction, channel: nextcord.TextChannel = None):
