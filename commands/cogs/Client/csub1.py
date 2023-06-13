@@ -1,3 +1,5 @@
+import asyncio
+import random
 import aiohttp
 import nextcord
 from nextcord.ext import commands
@@ -26,33 +28,69 @@ class XKCD(BaseCog):
     async def xkcd(self, interaction: nextcord.Interaction, *, entry_number=None):
         await interaction.response.defer()
 
+        # Define the computer animation frames
+        animation = [
+            "```yaml\n[Fetching xkcd comic...     ]```",
+            "```yaml\n[Fetching xkcd comic...•    ]```",
+            "```yaml\n[Fetching xkcd comic...••   ]```",
+            "```yaml\n[Fetching xkcd comic...•••  ]```",
+            "```yaml\n[Fetching xkcd comic...•••• ]```",
+            "```yaml\n[Fetching xkcd comic...•••••]```",
+            "```yaml\n[Fetching xkcd comic... ••••]```",
+            "```yaml\n[Fetching xkcd comic...  •••]```",
+            "```yaml\n[Fetching xkcd comic...   ••]```",
+            "```yaml\n[Fetching xkcd comic...    •]```",
+            "```yaml\n[Fetching xkcd comic...     ]```",
+            "```yaml\n[Fetching xkcd comic...    ]```",
+            "```yaml\n[Fetching xkcd comic...•   ]```",
+            "```yaml\n[Fetching xkcd comic...••  ]```",
+            "```yaml\n[Fetching xkcd comic...••• ]```",
+            "```yaml\n[Fetching xkcd comic...••••]```",
+            "```yaml\n[Fetching xkcd comic...•••••]```",
+            "```yaml\n[Fetching xkcd comic...•••• ]```",
+            "```yaml\n[Fetching xkcd comic...•••  ]```",
+            "```yaml\n[Fetching xkcd comic...••   ]```",
+            "```yaml\n[Fetching xkcd comic...•    ]```",
+        ]
 
-        # Creates random number between 0 and 2190 (number of xkcd comics at time of writing) and queries xkcd
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
+        # Fetch the xkcd comic
         headers = {"content-type": "application/json"}
-        url = "https://xkcd.com/info.0.json"
+        url_latest = "https://xkcd.com/info.0.json"
         async with aiohttp.ClientSession() as session:
-            async with session.get(url, headers=headers) as response:
+            async with session.get(url_latest, headers=headers) as response:
                 xkcd_latest = await response.json()
                 xkcd_max = xkcd_latest.get("num") + 1
 
         if entry_number is not None and int(entry_number) > 0 and int(entry_number) < xkcd_max:
             i = int(entry_number)
         else:
-            i = randint(0, xkcd_max)
-        headers = {"content-type": "application/json"}
-        url = "https://xkcd.com/" + str(i) + "/info.0.json"
+            i = random.randint(0, xkcd_max)
+
+        url = f"https://xkcd.com/{i}/info.0.json"
         async with aiohttp.ClientSession() as session:
             async with session.get(url, headers=headers) as response:
                 xkcd = await response.json()
 
+        # Delete the loading message
+        await loading_message.delete()
+
         # Build Embed
         embed = nextcord.Embed()
-        embed.title = xkcd["title"] + " (" + xkcd["day"] + "/" + xkcd["month"] + "/" + xkcd["year"] + ")"
-        embed.url = "https://xkcd.com/" + str(i)
+        embed.title = f"{xkcd['title']} ({xkcd['day']}/{xkcd['month']}/{xkcd['year']})"
+        embed.url = f"https://xkcd.com/{i}"
         embed.description = xkcd["alt"]
         embed.set_image(url=xkcd["img"])
         embed.set_footer(text="Powered by xkcd")
         await interaction.send(embed=embed)
+
         
     @main.subcommand(name="nba", description="To get nba players")
     async def nba_player(self, interaction: nextcord.Interaction, name: str):
