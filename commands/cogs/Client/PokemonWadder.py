@@ -11,10 +11,10 @@ class Pokemon(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @nextcord.slash_command()
     @cached(ttl=3600, cache=SimpleMemoryCache)
     @commands.bot_has_permissions(embed_links=True)
-    async def pokemon(self, ctx, name_or_id):
+    async def pokemon(self, interaction: nextcord.Interaction, name_or_id):
         """Show pokemon info"""
 
         try:
@@ -26,12 +26,12 @@ class Pokemon(commands.Cog):
                     response1 = await r1.json()
 
         except:
-            await ctx.send("No pokemon found")
+            await interaction.send("No pokemon found")
             return
 
         # Handles response1
         if response1.get("detail") == "Not found.":
-            await ctx.send("No pokemon found")
+            await interaction.send("No pokemon found")
         else:
             evolution_url = response1["evolution_chain"]["url"]
 
@@ -76,7 +76,7 @@ class Pokemon(commands.Cog):
             embed.add_field(name="Height", value=height)
             embed.add_field(name="Weight", value=weight)
             embed.set_footer(text="Powered by Pokeapi")
-            await ctx.send(embed=embed)
+            await interaction.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Pokemon(bot))
