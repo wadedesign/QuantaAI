@@ -398,10 +398,45 @@ class FunCommands2(commands.Cog):
                     'Very doubtful',
                     'No']
 
+        # Define the computer animation frames
+        animation = [
+            "```yaml\n[Thinking...            ]```",
+            "```yaml\n[Thinking...•           ]```",
+            "```yaml\n[Thinking...••          ]```",
+            "```yaml\n[Thinking...•••         ]```",
+            "```yaml\n[Thinking...••••        ]```",
+            "```yaml\n[Thinking...•••••       ]```",
+            "```yaml\n[Thinking...••••••      ]```",
+            "```yaml\n[Thinking...•••••••     ]```",
+            "```yaml\n[Thinking...••••••••    ]```",
+            "```yaml\n[Thinking...•••••••••   ]```",
+            "```yaml\n[Thinking...••••••••••  ]```",
+            "```yaml\n[Thinking...••••••••••• ]```",
+            "```yaml\n[Thinking...••••••••••••]```",
+            "```yaml\n[Thinking... •••••••••••]```",
+            "```yaml\n[Thinking...  ••••••••••]```",
+            "```yaml\n[Thinking...   •••••••••]```",
+            "```yaml\n[Thinking...    ••••••••]```",
+            "```yaml\n[Thinking...     •••••••]```",
+            "```yaml\n[Thinking...      ••••••]```",
+            "```yaml\n[Thinking...       •••••]```",
+            "```yaml\n[Thinking...        ••••]```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
+        # Send the final response with the 8-ball answer
         message = nextcord.Embed(title="8 Ball", colour=nextcord.Colour.orange())
         message.add_field(name="Question:", value=question, inline=False)
         message.add_field(name="Answer:", value=random.choice(responses), inline=False)
-        await interaction.send(embed=message)   
+        await loading_message.edit(content="8 Ball Result", embed=message)
+
         
         
         
