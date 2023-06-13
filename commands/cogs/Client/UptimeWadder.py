@@ -31,26 +31,26 @@ class Uptime(commands.Cog, description="Uptime command"):
     async def beforeUptimeCounter(self):
         await self.bot.wait_until_ready()
 
-    @nextcord.slash_command(name="uptime", description="Shows the uptime of the bot")
+    @commands.slash_command(name="uptime", description="Shows the uptime of the bot")
     async def uptimewadder(self, interaction: nextcord.Interaction):
-        days_emoji = "📅"
-        hours_emoji = "⌛"
-        minutes_emoji = "⏳"
-        seconds_emoji = "⏰"
+        guild_count_emoji = "🏰"
+        global_users_emoji = "👥"
         cpu_emoji = "💻"
         ram_emoji = "🔒"
-        disk_emoji = "💾"
+        nodejs_emoji = "📦"
+        discordjs_emoji = "💬"
 
-        embed = nextcord.Embed(title="Bot Uptime", description="Here is the uptime of the bot", color=nextcord.Color.blue())
-        embed.add_field(name=f"{days_emoji} Days", value=self.td, inline=True)
-        embed.add_field(name=f"{hours_emoji} Hours", value=self.th, inline=True)
-        embed.add_field(name=f"{minutes_emoji} Minutes", value=self.tm, inline=True)
-        embed.add_field(name=f"{seconds_emoji} Seconds", value=self.ts, inline=True)
-        embed.add_field(name="\u200b", value="\u200b", inline=False)  # Empty field for spacing
-        embed.add_field(name=f"{cpu_emoji} CPU Usage", value=f"{psutil.cpu_percent()}%", inline=True)
-        embed.add_field(name=f"{ram_emoji} RAM Usage", value=f"{psutil.virtual_memory().percent}%", inline=True)
-        embed.add_field(name=f"{disk_emoji} Disk Usage", value=f"{psutil.disk_usage('/').percent}%", inline=True)
-        embed.set_footer(text="Powered by BotUptimeCog")
+        embed = nextcord.Embed(title="Bot Uptime", color=nextcord.Color.blue())
+        embed.add_field(name="Global Statistics", value=f"{guild_count_emoji} Guild Count - {len(self.bot.guilds)}", inline=False)
+        embed.add_field(name="\u200b", value=f"{global_users_emoji} Global Users - {len(self.bot.users)}", inline=False)
+        embed.add_field(name="System Statistics", value="\u200b", inline=False)
+        embed.add_field(name=f"{cpu_emoji} CPU", value=f"Intel(R) Xeon(R) CPU E5-2630 v4 @ 2.20GHz", inline=False)
+        embed.add_field(name=f"{cpu_emoji} CPU Usage", value=f"{psutil.cpu_percent()}%", inline=False)
+        memory = psutil.virtual_memory()
+        embed.add_field(name=f"{ram_emoji} RAM Usage", value=f"{memory.used / (1024 * 1024):.2f} MB / {memory.total / (1024 * 1024):.2f} MB", inline=False)
+        embed.add_field(name=f"{nodejs_emoji} Node.JS Version", value="v17.9.1", inline=False)
+        embed.add_field(name=f"{discordjs_emoji} Nextcord Version", value="^13.1.0", inline=False)
+        embed.set_footer(text="Bot Uptime • 09/26/2022 6:52 PM")
 
         await interaction.send(embed=embed)
 
