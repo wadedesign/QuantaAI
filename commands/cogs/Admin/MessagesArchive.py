@@ -1,3 +1,4 @@
+import asyncio
 import json
 import nextcord
 from nextcord.ext import commands
@@ -25,11 +26,45 @@ class MessageArchive(commands.Cog): #** RFP **#
     async def main(self, interaction: nextcord.Interaction):
         pass
     
-    @main.subcommand()
+    @main.subcommand(name="arcmes", description="📚 Archive messages from a channel.")
     @commands.has_permissions(administrator=True)
     async def arc(self, interaction: nextcord.Interaction, channel: nextcord.TextChannel):
         archive_filename = await self.archive_messages(channel)
         
+        # Define the computer animation frames
+        animation = [
+            "```yaml\n[                    ]```",
+            "```yaml\n[▉                   ]```",
+            "```yaml\n[▉▉                  ]```",
+            "```yaml\n[▉▉▉                 ]```",
+            "```yaml\n[▉▉▉▉                ]```",
+            "```yaml\n[▉▉▉▉▉               ]```",
+            "```yaml\n[▉▉▉▉▉▉              ]```",
+            "```yaml\n[▉▉▉▉▉▉▉             ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉            ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉           ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉          ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉         ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉        ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉       ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉      ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉     ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉    ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉   ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉  ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉]```",
+            "```yaml\n[Archiving messages... ]```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         embed = nextcord.Embed(
             title="Message Archive",
             description=f"Archived messages from {channel.mention}",
@@ -39,11 +74,47 @@ class MessageArchive(commands.Cog): #** RFP **#
         
         file = nextcord.File(archive_filename, filename=f"{channel.name}_archive.json")
         
-        await interaction.send(embed=embed, file=file)
+        await loading_message.edit(content="Archived Messages", embed=embed, file=file)
 
-    @main.subcommand()
+
+    @main.subcommand(name="arcserver", description="📚 Archive Server")
     @commands.has_permissions(administrator=True)
     async def archive_server(self, interaction: nextcord.Interaction):
+        # Define the computer animation frames
+        animation = [
+            "```yaml\n[                     ]```",
+            "```yaml\n[▉                    ]```",
+            "```yaml\n[▉▉                   ]```",
+            "```yaml\n[▉▉▉                  ]```",
+            "```yaml\n[▉▉▉▉                 ]```",
+            "```yaml\n[▉▉▉▉▉                ]```",
+            "```yaml\n[▉▉▉▉▉▉               ]```",
+            "```yaml\n[▉▉▉▉▉▉▉              ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉             ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉            ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉           ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉          ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉         ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉        ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉       ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉      ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉     ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉    ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉   ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉  ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉]```",
+            "```yaml\n[Archiving server...  ]```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         for channel in interaction.guild.text_channels:
             try:
                 archive_filename = await self.archive_messages(channel)
@@ -57,10 +128,11 @@ class MessageArchive(commands.Cog): #** RFP **#
                 
                 file = nextcord.File(archive_filename, filename=f"{channel.name}_archive.json")
                 
-                await interaction.send(embed=embed, file=file)
+                await loading_message.edit(content="Archiving Server", embed=embed, file=file)
                 
             except Exception as e:
                 print(f"Error archiving channel {channel}: {e}")
+
 
 def setup(bot):
     bot.add_cog(MessageArchive(bot))
