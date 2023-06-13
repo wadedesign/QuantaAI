@@ -480,5 +480,36 @@ class Developer2(commands.Cog):
         else:
             await interaction.response.send_message("An error occurred while retrieving TikTok user info.")
             
+    @dev4.subcommand(description="counters")
+    @commands.has_permissions(administrator=True)
+    async def setup_counters(self, interaction: nextcord.Interaction):
+        # Check if the user has administrator privileges
+        if not interaction.user.guild_permissions.administrator:
+            await interaction.response.send_message("❌ You must have administrator privileges to use this command.", ephemeral=True)
+            return
+
+        # Get the number of members in the server
+        member_count = len(interaction.guild.members)
+
+        # Create a voice channel with the member count
+        member_count_channel_name = f"👥 Members: {member_count}"
+        overwrites = {
+            interaction.guild.default_role: nextcord.PermissionOverwrite(connect=False)
+        }
+
+        # Create the member count voice channel
+        try:
+            member_count_channel = await interaction.guild.create_voice_channel(
+                name=member_count_channel_name,
+                overwrites=overwrites,
+                category=None
+            )
+        except nextcord.HTTPException:
+            await interaction.response.send_message("❌ Failed to create the member count channel.", ephemeral=True)
+            return
+
+        await interaction.response.send_message(f"✅ Member count channel created: {member_count_channel.mention}", ephemeral=True)
+
+            
 def setup(bot):
     bot.add_cog(Developer2(bot))
