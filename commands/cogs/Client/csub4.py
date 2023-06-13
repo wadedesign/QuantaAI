@@ -366,7 +366,11 @@ class ServerEmojisCog(commands.Cog):
                     f'Joined at: {nextcord.utils.format_dt(person.joined_at, "F")} ({nextcord.utils.format_dt(person.joined_at, "R")})',
                     inline=False,
                 )
-            await interaction.response.send_message(embed=embed)
+            await interaction.followup.send(embed=embed)
+
+        # Delete the loading message
+        await loading_message.delete()
+
 
 
 
