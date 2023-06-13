@@ -566,6 +566,7 @@ class FunCommandsCog(commands.Cog):
     
     
     
+    
     @fun.subcommand(description="Define a word")
     async def define(self, interaction: nextcord.Interaction, word: str):
         try:
@@ -594,18 +595,20 @@ class FunCommandsCog(commands.Cog):
 
             print(f"API response: {response.text}")  # Print the response text for debugging
 
-            # Extract the definition from the response JSON
-            data = response.json()
-            if data and 'definition' in data:
-                definition = data['definition']
-            else:
-                definition = "Definition not found."
+            # Save the response to a text file
+            with open("definition.txt", "w") as file:
+                file.write(response.text)
 
-            # Create an embedded message with the definition
-            embed = nextcord.Embed(title=f"Definition of {word}", description=definition, color=0x00ff00)
+            # Create an embedded message to notify the user
+            embed = nextcord.Embed(
+                title=f"Definition of {word}",
+                description="The definition has been saved in a text file.",
+                color=0x00ff00
+            )
 
-            # Send the embedded message with the definition
+            # Send the embedded message
             await loading_message.edit(content="Definition found ✅", embed=embed)
+        
         except Exception as error:
             print(f"An error occurred: {error}")
             # Handle the error as per your requirement
