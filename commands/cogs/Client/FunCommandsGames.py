@@ -689,7 +689,7 @@ class FunCommandsCog(commands.Cog):
     
     
     
-    @fun.subcommand(name="qpw",description="generate a random password")
+    @fun.subcommand(name="qpw",description="generate a random password") #**
     async def generatepassword(self, interaction: nextcord.Interaction, length: int = 16):
         # Generate a random password of the specified length
         password = ''.join(random.choices(string.ascii_letters + string.digits, k=length))
