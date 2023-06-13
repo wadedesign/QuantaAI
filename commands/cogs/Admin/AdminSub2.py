@@ -188,7 +188,8 @@ class WadderCommandsV1(commands.Cog):
         embed.set_thumbnail(url=interaction.guild.icon.url)
         embed.set_author(name="Moderator Status", icon_url=interaction.user.avatar.url)
 
-        await interaction.followup.send_message(embed=embed)
+        await interaction.followup.send(embed=embed)
+
 
         
         
