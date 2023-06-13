@@ -256,29 +256,61 @@ class WadderVTV(commands.Cog):
     # ** All Search Types work, but the web search does not. Make all embeds
     @main.subcommand(name="searchall", description="Perform different types of searches")
     async def search(self, interaction: nextcord.Interaction, search_type: str, *, query: str):
-        await interaction.response.defer()
-        serper_aip_key= os.environ['SERPER_API_KEY']
-        search = GoogleSerperAPIWrapper(type=search_type.lower())  # Define the search variable here
+        # Define the computer animation frames
+        animation = [
+            "```yaml\n[Performing search...     ]```",
+            "```yaml\n[Performing search...•    ]```",
+            "```yaml\n[Performing search...••   ]```",
+            "```yaml\n[Performing search...•••  ]```",
+            "```yaml\n[Performing search...•••• ]```",
+            "```yaml\n[Performing search...•••••]```",
+            "```yaml\n[Performing search... ••••]```",
+            "```yaml\n[Performing search...  •••]```",
+            "```yaml\n[Performing search...   ••]```",
+            "```yaml\n[Performing search...    •]```",
+            "```yaml\n[Performing search...     ]```",
+            "```yaml\n[Performing search...    ]```",
+            "```yaml\n[Performing search...•   ]```",
+            "```yaml\n[Performing search...••  ]```",
+            "```yaml\n[Performing search...••• ]```",
+            "```yaml\n[Performing search...••••]```",
+            "```yaml\n[Performing search...•••••]```",
+            "```yaml\n[Performing search...•••• ]```",
+            "```yaml\n[Performing search...•••  ]```",
+            "```yaml\n[Performing search...••   ]```",
+            "```yaml\n[Performing search...•    ]```",
+        ]
 
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
+        # Perform the search based on the search type
         if search_type.lower() == 'web':
+            search = GoogleSerperAPIWrapper(type=search_type.lower())
             result = search.run(query)
-            await interaction.send(result)
+            await loading_message.edit(content=result)
         elif search_type.lower() == 'self_ask_with_search':
             result = self_ask_with_search.run(query)
-            await interaction.send(result)
+            await loading_message.edit(content=result)
         elif search_type.lower() in ['images', 'news', 'places']:
             search = GoogleSerperAPIWrapper(type=search_type.lower())
             results = search.results(query)
             pprint.pp(results)
             if search_type.lower() == 'images':
-                await interaction.send('\n'.join([result['link'] for result in results['images'][:5]]))
+                await loading_message.edit(content='\n'.join([result['link'] for result in results['images'][:5]]))
             elif search_type.lower() == 'news':
-                await interaction.send('\n'.join([result['link'] for result in results['news'][:5]]))
+                await loading_message.edit(content='\n'.join([result['link'] for result in results['news'][:5]]))
             elif search_type.lower() == 'places':
                 places_info = [f"{place['title']} - {place['address']}\nRating: {place['rating']}, Category: {place['category']}" for place in results['places'][:5]]
-                await interaction.send('\n\n'.join(places_info))
-            else:
-                await interaction.send('Invalid search type. Please choose from "web", "self_ask_with_search", "images", "news", or "places".')
+                await loading_message.edit(content='\n\n'.join(places_info))
+        else:
+            await loading_message.edit(content='Invalid search type. Please choose from "web", "self_ask_with_search", "images", "news", or "places".')
+
             
 def setup(bot):
     bot.add_cog(WadderVTV(bot))
