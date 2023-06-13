@@ -667,8 +667,19 @@ class FunCommandsCog(commands.Cog):
         clf = svm.SVC(kernel='linear')
         clf.fit(X, target)
 
-        # Make predictions based on the model
-        await interaction.response.send_message("Please enter some data to make predictions on.")
+        # Send an animated message to prompt for new data
+        animation = [
+            "🔮 Analyzing...",
+            "🔮🔍 Analyzing...",
+            "🔮🔍📊 Analyzing...",
+            "🔮🔍📊💭 Analyzing...",
+            "🔮🔍📊💭🧠 Analyzing...",
+            "🔮🔍📊💭🧠🔮 Analyzing..."
+        ]
+        message = await interaction.response.send_message("Please enter some data to make predictions on...")
+        for frame in animation:
+            await message.edit(content=frame)
+            await asyncio.sleep(0.5)
 
         # Wait for the user to enter new data to make predictions on
         new_data_message = await self.bot.wait_for("message", check=lambda m: m.author == interaction.author and m.channel == interaction.channel)
@@ -683,8 +694,16 @@ class FunCommandsCog(commands.Cog):
             prediction_text = "positive"
         else:
             prediction_text = "negative"
-        embed = nextcord.Embed(title=f"The prediction for '{new_data_message.content}' is {prediction_text}.")
-        await interaction.response.send_message(embed=embed)
+
+        # Create the embedded message with the prediction
+        embed = nextcord.Embed(title=f"🔮 Prediction Result")
+        embed.add_field(name="New Data", value=new_data_message.content)
+        embed.add_field(name="Prediction", value=f"The prediction is {prediction_text}.")
+        embed.set_footer(text="Machine Learning Model")
+
+        # Send the embedded message with the prediction
+        await message.edit(content="Prediction complete ✅", embed=embed)
+
     
     
     
