@@ -41,17 +41,21 @@ class Uptime(commands.Cog, description="Uptime command"):
         ram_emoji = "🔒"
         disk_emoji = "💾"
 
-        embed = nextcord.Embed(title="Uptime", description="Here is the uptime of the bot", color=nextcord.Color.blue())
+        embed = nextcord.Embed(title="Bot Uptime", description="Here is the uptime of the bot", color=nextcord.Color.blue())
         embed.add_field(name=f"{days_emoji} Days", value=self.td, inline=True)
         embed.add_field(name=f"{hours_emoji} Hours", value=self.th, inline=True)
         embed.add_field(name=f"{minutes_emoji} Minutes", value=self.tm, inline=True)
         embed.add_field(name=f"{seconds_emoji} Seconds", value=self.ts, inline=True)
-        embed.add_field(name=f"{cpu_emoji} CPU", value=f"{psutil.cpu_percent()}%", inline=True)
-        embed.add_field(name=f"{ram_emoji} RAM", value=f"{psutil.virtual_memory().percent}%", inline=True)
-        embed.add_field(name=f"{disk_emoji} Disk", value=f"{psutil.disk_usage('/').percent}%", inline=True)
+        embed.add_field(name="\u200b", value="\u200b", inline=False)  # Empty field for spacing
+        embed.add_field(name=f"{cpu_emoji} CPU Usage", value=f"{psutil.cpu_percent()}%", inline=True)
+        embed.add_field(name=f"{ram_emoji} RAM Usage", value=f"{psutil.virtual_memory().percent}%", inline=True)
+        embed.add_field(name=f"{disk_emoji} Disk Usage", value=f"{psutil.disk_usage('/').percent}%", inline=True)
+        embed.set_footer(text="Powered by BotUptimeCog")
+
         await interaction.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Uptime(bot))
+
 
     
