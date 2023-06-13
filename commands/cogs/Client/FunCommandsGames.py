@@ -434,8 +434,34 @@ class FunCommandsCog(commands.Cog):
         await interaction.response.send_message("Setup complete.", ephemeral=True)
         
     @fun.subcommand(description="Calculate average")
-    async def calculate_average(self,interaction: nextcord.Interaction, numbers: str):
-        
+    async def calculate_average(self, interaction: nextcord.Interaction, numbers: str):
+        # Define the computer animation frames
+        animation = [
+            "⠋ Calculating average...",
+            "⠙ Calculating average...",
+            "⠹ Calculating average...",
+            "⠸ Calculating average...",
+            "⠼ Calculating average...",
+            "⠴ Calculating average...",
+            "⠦ Calculating average...",
+            "⠧ Calculating average...",
+            "⠇ Calculating average...",
+            "⠏ Calculating average...",
+        ]
+
+        # Send the initial loading message with an embedded message
+        embed = nextcord.Embed(title='Average and Sum', color=0x00ff00)
+        embed.add_field(name='Average', value='Calculating...', inline=False)
+        embed.add_field(name='Sum', value='Calculating...', inline=False)
+        loading_message = await interaction.response.send_message(embed=embed)
+
+        # Animate the loading message
+        for frame in animation:
+            embed.set_field_at(index=0, name='Average', value=frame)
+            embed.set_field_at(index=1, name='Sum', value=frame)
+            await loading_message.edit(embed=embed)
+            await asyncio.sleep(0.1)
+
         # Convert the comma-separated string of numbers to a list of floats
         numbers_list = [float(n) for n in numbers.split(',')]
 
@@ -443,13 +469,13 @@ class FunCommandsCog(commands.Cog):
         average = sum(numbers_list) / len(numbers_list)
         total_sum = sum(numbers_list)
 
-        # Create an embed with the calculated average and sum
-        embed = nextcord.Embed(title='Average and Sum', color=0x00ff00)
-        embed.add_field(name='Average', value=average, inline=False)
-        embed.add_field(name='Sum', value=total_sum, inline=False)
+        # Create the final embedded message with the calculated average and sum
+        embed.set_field_at(index=0, name='Average', value=f'**Average:** {average:.2f}')
+        embed.set_field_at(index=1, name='Sum', value=f'**Sum:** {total_sum:.2f}')
 
-        # Send the embed as a message
-        await interaction.response.send_message(embed=embed)
+        # Edit the loading message with the final embedded message
+        await loading_message.edit(content='Calculation complete ✅', embed=embed)
+
     
     @fun.subcommand(description="Add two numbers")
     async def add(self, interaction: nextcord.Interaction, num1: int, num2: int):
