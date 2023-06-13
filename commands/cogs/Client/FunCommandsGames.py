@@ -643,6 +643,7 @@ class FunCommandsCog(commands.Cog):
         # Extract the lyrics from the response JSON
         data = response.json()
         lyrics = data['lyrics']
+        print(f"Message content at the beginning: {lyrics[:100]}")  # Print the first 100 characters of the lyrics
 
         # Create an animated loading message
         animation = [
@@ -663,6 +664,7 @@ class FunCommandsCog(commands.Cog):
 
         # Send the embedded message with the lyrics
         await message.edit(content="Lyrics found ✅", embed=embed)
+
 
     
     
