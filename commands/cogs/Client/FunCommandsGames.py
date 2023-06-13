@@ -592,6 +592,8 @@ class FunCommandsCog(commands.Cog):
 
             response = requests.get(url, headers=headers, params=querystring)
 
+            print(f"API response: {response.text}")  # Print the response text for debugging
+
             # Extract the definition from the response JSON
             data = response.json()
             if data:
