@@ -324,8 +324,42 @@ class Stocks2(commands.Cog):
 
     @main.subcommand(name="wembed", description="To create an embed wip") 
     async def wembed(self, interaction: nextcord.Interaction, *, message: str = None):
-        embed = nextcord.Embed(colour=nextcord.Color.blue(), description=f"""{message}""")
-        await interaction.send(embed=embed)
+        # Define the computer animation frames
+        animation = [
+            "```md\n# Creating embed... [     ]```",
+            "```md\n# Creating embed... [•    ]```",
+            "```md\n# Creating embed... [••   ]```",
+            "```md\n# Creating embed... [•••  ]```",
+            "```md\n# Creating embed... [•••• ]```",
+            "```md\n# Creating embed... [•••••]```",
+            "```md\n# Creating embed... [ ••••]```",
+            "```md\n# Creating embed... [  •••]```",
+            "```md\n# Creating embed... [   ••]```",
+            "```md\n# Creating embed... [    •]```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:] + animation[::-1]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.3)
+
+        # Create the embed
+        embed = nextcord.Embed(title="Custom Embed", color=nextcord.Color.blue())
+        embed.set_author(name=interaction.user.display_name, icon_url=interaction.user.avatar.url)
+        embed.description = message if message else "No message provided."
+
+        # Add a timestamp
+        embed.timestamp = nextcord.utils.utcnow()
+
+        # Add a footer
+        embed.set_footer(text="Embed created by QuantaAI", icon_url="http://wadderprojects.bhweb.ws/assets/images/logo/logo-no-background.png")
+
+        # Send the embed
+        await loading_message.edit(content="Embed Created", embed=embed)
+
     
     @main.subcommand(name="addemoji", description="To add an emoji to the server wip")  #! Unhandled application command error: Command raised an exception: InvalidArgument: Unsupported image type given
     async def addemoji(self,  interaction: nextcord.Interaction, emojiurl: str = None , name:  str = None, required=True, default=None):
