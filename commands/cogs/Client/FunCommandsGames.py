@@ -628,9 +628,11 @@ class FunCommandsCog(commands.Cog):
     async def lyrics(self, interaction: nextcord.Interaction, artist: str, song: str):
         # Fetch the lyrics of the song from the API
         response = requests.get(f'https://api.lyrics.ovh/v1/{artist}/{song}')
+        print(f"API response: {response.text}")
 
         # Check if lyrics are found or not
         if response.status_code == 404:
+            print("Lyrics not found.")
             # Create an embed with the error message
             embed = nextcord.Embed(title="Lyrics Not Found", description="Sorry, I couldn't find the lyrics for that song.", color=0xFF0000)
 
