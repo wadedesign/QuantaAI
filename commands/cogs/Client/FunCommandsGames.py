@@ -504,8 +504,36 @@ class FunCommandsCog(commands.Cog):
     
     @fun.subcommand(description="Codeblock text")
     async def codeblock(self, interaction: nextcord.Interaction, text: str):
+        # Define the computer animation frames
+        animation = [
+            "```diff\n- Loading codeblock...\n```",
+            "```fix\n- Loading codeblock...\n```",
+            "```css\n- Loading codeblock...\n```",
+            "```yaml\n- Loading codeblock...\n```",
+            "```diff\n+ Loading codeblock...\n```",
+            "```fix\n+ Loading codeblock...\n```",
+            "```css\n+ Loading codeblock...\n```",
+            "```yaml\n+ Loading codeblock...\n```",
+        ]
+
+        # Send the initial loading message with an embedded message
+        embed = nextcord.Embed(title="Codeblock", description=animation[0], color=0x00ff00)
+        loading_message = await interaction.response.send_message(embed=embed)
+
+        # Animate the loading message
+        for frame in animation[1:]:
+            embed.description = frame
+            await loading_message.edit(embed=embed)
+            await asyncio.sleep(0.5)
+
+        # Create the final codeblock text
         codeblock_text = f'```{text}```'
-        await interaction.response.send_message(codeblock_text)
+
+        # Create the embedded message with the codeblock
+        embed.description = codeblock_text
+
+        # Send the embedded message with the codeblock
+        await loading_message.edit(embed=embed)
     
     
     
