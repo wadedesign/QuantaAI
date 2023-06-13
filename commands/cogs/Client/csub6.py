@@ -251,26 +251,62 @@ class Stocks2(commands.Cog):
     async def textchannelinfo(self, interaction: nextcord.Interaction, channel: nextcord.TextChannel = None):
         channel = channel or interaction.channel
 
+        # Define the computer animation frames
+        animation = [
+            "```ini\n[Gathering channel information...     ]```",
+            "```ini\n[Gathering channel information...•    ]```",
+            "```ini\n[Gathering channel information...••   ]```",
+            "```ini\n[Gathering channel information...•••  ]```",
+            "```ini\n[Gathering channel information...•••• ]```",
+            "```ini\n[Gathering channel information...•••••]```",
+            "```ini\n[Gathering channel information... ••••]```",
+            "```ini\n[Gathering channel information...  •••]```",
+            "```ini\n[Gathering channel information...   ••]```",
+            "```ini\n[Gathering channel information...    •]```",
+            "```ini\n[Gathering channel information...     ]```",
+            "```ini\n[Gathering channel information...    ]```",
+            "```ini\n[Gathering channel information...•   ]```",
+            "```ini\n[Gathering channel information...••  ]```",
+            "```ini\n[Gathering channel information...••• ]```",
+            "```ini\n[Gathering channel information...••••]```",
+            "```ini\n[Gathering channel information...•••••]```",
+            "```ini\n[Gathering channel information...•••• ]```",
+            "```ini\n[Gathering channel information...•••  ]```",
+            "```ini\n[Gathering channel information...••   ]```",
+            "```ini\n[Gathering channel information...•    ]```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
+        # Create the embed
         embed = nextcord.Embed(
             title=f"{str(channel.name).title()} Info",
             description=f"Here is some info about {channel.mention}\n"
-            f":id:**Channel ID:** `{channel.id}`\n🌀**Channel Type:** {channel.type}",
+                        f":id:**Channel ID:** `{channel.id}`\n🌀**Channel Type:** {channel.type}",
             colour=nextcord.Color.blue(),
         )
         embed.add_field(name=f"📰 Name", value=f"{channel.name}")
         embed.add_field(name=f"📃 Category", value=f"{channel.category}")
         embed.add_field(name=f"📜 Topic", value=f"{channel.topic}")
-        embed.add_field(name=f"🔢 Position", value=f"{channel.position+1}")
+        embed.add_field(name=f"🔢 Position", value=f"{channel.position + 1}")
         embed.add_field(name=f"⌛ Slowmode", value=f"{channel.slowmode_delay} seconds")
         embed.add_field(name=f"👤 Members", value=f"{len(channel.members)}")
         embed.add_field(name=f"🔞 NSFW", value=f"{channel.is_nsfw()}")
         date = channel.created_at.timestamp()
         embed.add_field(name=f"📆 Created On", value=f"<t:{round(date)}:D>")
 
-        if not interaction.guild.icon:
+        if interaction.guild.icon:
             embed.set_thumbnail(url=interaction.guild.icon)
 
-        await interaction.send(embed=embed)
+        # Update the loading message with the channel information embed
+        await loading_message.edit(content="Channel Information", embed=embed)
+
     
   
 ## ** /wpoller "What is your favorite color?" "Red" "Green" "Blue"
