@@ -241,19 +241,7 @@ class Profile1(commands.Cog):
             await ctx.send("An error occurred while processing the response from the API. Please try again later.")
             print(f"Error parsing JSON response: {str(e)}")
 
-    @main.subcommand(name="spacex")
-    async def get_latest_spacex_launch(self, ctx, mission_name: str):
-        launch = await self.get_launch_by_name(mission_name)
-        embed = await self.get_embed_for_launch(launch)
-        await ctx.respond(embed=embed)
-
-    async def get_launch_by_name(self, mission_name):
-        response = requests.get("https://api.spacexdata.com/v5/launches/?mission_name={}".format(mission_name))
-        if response.status_code == 200:
-            data = response.json()
-            return data[0]
-        else:
-            raise Exception("Could not get launch data for {}".format(mission_name))
+    
 
 def setup(bot):
     bot.add_cog(Profile1(bot))
