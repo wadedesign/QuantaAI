@@ -533,14 +533,14 @@ class FunCommandsCog(commands.Cog):
             embed.description = frame
 
             # Add random color to the codeblock text for each frame
-            codeblock_text = f'```diff\n{"".join(["█" for _ in range(len(line))])}\n{"".join([chr(0x200b + ord(c)) for c in line])}\n{"█" * len(line)}```'
+            codeblock_text = f'```diff\n{"".join(["█" for _ in range(len(text))])}\n{"".join([chr(0x200b + ord(c)) for c in text])}\n{"█" * len(text)}```'
             embed.add_field(name="Code", value=codeblock_text, inline=False)
 
             await loading_message.edit(embed=embed)
             await asyncio.sleep(0.5)
 
         # Create the final codeblock text with random colors
-        codeblock_text = f'```diff\n{"".join(["█" for _ in range(len(line))])}\n{"".join([chr(0x200b + ord(c)) for c in line])}\n{"█" * len(line)}```'
+        codeblock_text = f'```diff\n{"".join(["█" for _ in range(len(text))])}\n{"".join([chr(0x200b + ord(c)) for c in text])}\n{"█" * len(text)}```'
 
         # Create the embedded message with the codeblock
         embed.description = "Code execution complete!"
