@@ -174,16 +174,43 @@ class WadderVTV(commands.Cog):
     # ** Serp Google Search  (Works Very Well, this was a bitch) **
     @main.subcommand(name="serp", description="Perform a Google search")
     async def search_google(self, interaction: nextcord.Interaction, *, query: str):
-        await interaction.response.defer()
+        # Define the computer animation frames
+        animation = [
+            "```yaml\n[Performing Google search...     ]```",
+            "```yaml\n[Performing Google search...•    ]```",
+            "```yaml\n[Performing Google search...••   ]```",
+            "```yaml\n[Performing Google search...•••  ]```",
+            "```yaml\n[Performing Google search...•••• ]```",
+            "```yaml\n[Performing Google search...•••••]```",
+            "```yaml\n[Performing Google search... ••••]```",
+            "```yaml\n[Performing Google search...  •••]```",
+            "```yaml\n[Performing Google search...   ••]```",
+            "```yaml\n[Performing Google search...    •]```",
+            "```yaml\n[Performing Google search...     ]```",
+            "```yaml\n[Performing Google search...    ]```",
+            "```yaml\n[Performing Google search...•   ]```",
+            "```yaml\n[Performing Google search...••  ]```",
+            "```yaml\n[Performing Google search...••• ]```",
+            "```yaml\n[Performing Google search...••••]```",
+            "```yaml\n[Performing Google search...•••••]```",
+            "```yaml\n[Performing Google search...•••• ]```",
+            "```yaml\n[Performing Google search...•••  ]```",
+            "```yaml\n[Performing Google search...••   ]```",
+            "```yaml\n[Performing Google search...•    ]```",
+        ]
 
-        # Initialize the OpenAI language model
-        llm = OpenAI(temperature=0,openai_api_key=os.environ['OPENAI_API_KEY'])
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
 
-        # Load tools and initialize the agent
-        tools = load_tools(["google-serper"], llm=llm)
-        agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
+        # Animate the loading message
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
 
         # Perform the Google search
+        llm = OpenAI(temperature=0,openai_api_key=os.environ['OPENAI_API_KEY'])
+        tools = load_tools(["google-serper"], llm=llm)
+        agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
         result = agent.run(query)
         print("Result:", result)
 
@@ -191,7 +218,8 @@ class WadderVTV(commands.Cog):
         embed = nextcord.Embed(title="Google Search Result", color=nextcord.Color.blue())
         embed.add_field(name="Result", value=f"{result} :mag:", inline=False)  # Add the magnifying glass emoji
 
-        await interaction.send(embed=embed)
+        await loading_message.edit(content="Google Search Result", embed=embed)
+
 
     
     # ** Give a url image link and have it explain it and what it means 
