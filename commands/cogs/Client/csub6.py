@@ -1,3 +1,4 @@
+import asyncio
 import io
 import aiohttp
 import nextcord
@@ -379,6 +380,24 @@ class Stocks2(commands.Cog):
     async def roleinfo(self, interaction: nextcord.Interaction, role: nextcord.Role = None):
         role = role or interaction.user.top_role
 
+        # Define the computer animation frames
+        animation = [
+            "```diff\n- Gathering role information...```",
+            "```diff\n+ Gathering role information...```",
+            "```diff\n- Gathering role information...```",
+            "```diff\n+ Gathering role information...```",
+            "```diff\n- Gathering role information...```",
+            "```diff\n+ Gathering role information...```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:] + animation[::-1]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         embed = nextcord.Embed(
             title=f"{role.name} Info",
             description=f"Here is some info about {role.mention}"
@@ -407,7 +426,9 @@ class Stocks2(commands.Cog):
         if interaction.guild.icon:
             embed.set_thumbnail(url=interaction.guild.icon)
 
-        await interaction.send(embed=embed)
+        # Update the loading message with the role information embed
+        await loading_message.edit(content="Role Information", embed=embed)
+
     
     
     
