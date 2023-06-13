@@ -270,7 +270,6 @@ class ServerEmojisCog(commands.Cog):
             
     @main.subcommand()
     async def memberlist(self, interaction: nextcord.Interaction):
-        """See all the members of this server sorted by their top role"""
         # Define the computer animation frames
         animation = [
             "```yaml\n[Generating member list...     ]```",
@@ -322,22 +321,56 @@ class ServerEmojisCog(commands.Cog):
     @main.subcommand()
     async def firstjoins(self, interaction: nextcord.Interaction):
         """See all the members of this server sorted by their join time"""
+        # Define the computer animation frames
+        animation = [
+            "```yaml\n[Generating first joins list...     ]```",
+            "```yaml\n[Generating first joins list...•    ]```",
+            "```yaml\n[Generating first joins list...••   ]```",
+            "```yaml\n[Generating first joins list...•••  ]```",
+            "```yaml\n[Generating first joins list...•••• ]```",
+            "```yaml\n[Generating first joins list...•••••]```",
+            "```yaml\n[Generating first joins list... ••••]```",
+            "```yaml\n[Generating first joins list...  •••]```",
+            "```yaml\n[Generating first joins list...   ••]```",
+            "```yaml\n[Generating first joins list...    •]```",
+            "```yaml\n[Generating first joins list...     ]```",
+            "```yaml\n[Generating first joins list...    ]```",
+            "```yaml\n[Generating first joins list...•   ]```",
+            "```yaml\n[Generating first joins list...••  ]```",
+            "```yaml\n[Generating first joins list...••• ]```",
+            "```yaml\n[Generating first joins list...••••]```",
+            "```yaml\n[Generating first joins list...•••••]```",
+            "```yaml\n[Generating first joins list...•••• ]```",
+            "```yaml\n[Generating first joins list...•••  ]```",
+            "```yaml\n[Generating first joins list...••   ]```",
+            "```yaml\n[Generating first joins list...•    ]```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         embeds = []
         people = sorted(interaction.guild.members, key=lambda member: member.joined_at)
 
         for chunk in split_by_slice(people, 5):
             embed = nextcord.Embed()
-            for people in chunk:
+            for person in chunk:
                 embed.add_field(
-                    name=f"{people.name} (ID: {people.id})",
-                    value=f'Created at: {nextcord.utils.format_dt(people.created_at, "F")} ({nextcord.utils.format_dt(people.created_at, "R")})\n'
-                    f'Joined at: {nextcord.utils.format_dt(people.joined_at, "F")} ({nextcord.utils.format_dt(people.joined_at, "R")})',
+                    name=f"{person.name} (ID: {person.id})",
+                    value=f'Created at: {nextcord.utils.format_dt(person.created_at, "F")} ({nextcord.utils.format_dt(person.created_at, "R")})\n'
+                    f'Joined at: {nextcord.utils.format_dt(person.joined_at, "F")} ({nextcord.utils.format_dt(person.joined_at, "R")})',
                     inline=False,
                 )
             embeds.append(embed)
 
         paginator = Paginator(embeds)
-        await paginator.send_initial_message(interaction, interaction.channel)
+        await loading_message.edit(content="First Joins List", embed=paginator.get_current_page())
+
         
         
         
