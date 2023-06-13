@@ -600,8 +600,10 @@ class FunCommandsCog(commands.Cog):
                 file.write(response.text)
 
             # Send the file in Discord
-            with open("definition.txt", "rb") as file:
-                await interaction.followup.send_file(file, "definition.txt", content="Here is the definition:")
+            await interaction.response.send_file(
+                file=nextcord.File("definition.txt"),
+                content="Here is the definition:"
+            )
 
             # Create an embedded message to notify the user
             embed = nextcord.Embed(
