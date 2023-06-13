@@ -84,13 +84,46 @@ class Stocks2(commands.Cog):
     
 
 
-    @main.subcommand(name="github", description="get github user") 
-    async def github(self,interaction: nextcord.Interaction, username: str = None):
+    @main.subcommand(name="github", description="Get GitHub user information")
+    async def github(self, interaction: nextcord.Interaction, username: str = None):
         try:
             async with aiohttp.ClientSession() as session:
                 url = f"https://api.github.com/users/{username}"
                 response = await session.get(url)
                 data = await response.json(content_type=None)
+
+            # Define the computer animation frames
+            animation = [
+                "```yaml\n[Fetching user information...     ]```",
+                "```yaml\n[Fetching user information...•    ]```",
+                "```yaml\n[Fetching user information...••   ]```",
+                "```yaml\n[Fetching user information...•••  ]```",
+                "```yaml\n[Fetching user information...•••• ]```",
+                "```yaml\n[Fetching user information...•••••]```",
+                "```yaml\n[Fetching user information... ••••]```",
+                "```yaml\n[Fetching user information...  •••]```",
+                "```yaml\n[Fetching user information...   ••]```",
+                "```yaml\n[Fetching user information...    •]```",
+                "```yaml\n[Fetching user information...     ]```",
+                "```yaml\n[Fetching user information...    ]```",
+                "```yaml\n[Fetching user information...•   ]```",
+                "```yaml\n[Fetching user information...••  ]```",
+                "```yaml\n[Fetching user information...••• ]```",
+                "```yaml\n[Fetching user information...••••]```",
+                "```yaml\n[Fetching user information...•••••]```",
+                "```yaml\n[Fetching user information...•••• ]```",
+                "```yaml\n[Fetching user information...•••  ]```",
+                "```yaml\n[Fetching user information...••   ]```",
+                "```yaml\n[Fetching user information...•    ]```",
+            ]
+
+            # Send the initial loading message
+            loading_message = await interaction.response.send_message(animation[0])
+
+            # Animate the loading message
+            for frame in animation:
+                await loading_message.edit(content=frame)
+                await asyncio.sleep(0.5)
 
             name = data["name"]
             if not name:
@@ -118,9 +151,7 @@ class Stocks2(commands.Cog):
             company = data.get("company")
             if company:
                 if company.startswith("@"):
-                    company = (
-                        f"[{company}](https://github.com/{company.replace('@','')})"
-                    )
+                    company = f"[{company}](https://github.com/{company.replace('@','')})"
                 embed.add_field(name="🏢 Company", value=company)
 
             email = data.get("email")
@@ -150,20 +181,21 @@ class Stocks2(commands.Cog):
                     )
                 )
 
-            await interaction.send(embed=embed, view=button)
+            await loading_message.edit(content="User Information", embed=embed, view=button)
 
         except KeyError:
             embed = nextcord.Embed(
                 title=f"<:oh:881566351783780352> Data Not Found",
                 colour=nextcord.Color.red(),
-                description=f"{interaction.user.mention} I don't seem to find data for `{username}`",
+                description=f"{interaction.user.mention} I couldn't find data for `{username}`",
             )
-            embed.set_footer(text=f"Join My Server For Additional Help!")
+            embed.set_footer(text="Join My Server For Additional Help!")
             embed.set_author(name=interaction.user, icon_url=interaction.user.display_avatar)
-            await interaction.send(embed=embed)
+            await loading_message.edit(content="Error", embed=embed)
 
         except:
-            raise    
+            raise
+
         
     @main.subcommand(name="pypi", description="To get info about a python module")
     async def pypi(self, interaction: nextcord.Interaction, module: str = None):
