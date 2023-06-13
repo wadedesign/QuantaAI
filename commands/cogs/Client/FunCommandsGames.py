@@ -625,20 +625,43 @@ class FunCommandsCog(commands.Cog):
     
     
     @fun.subcommand(description="Lyrics for a song")
-    async def lyrics(self,interaction: nextcord.Interaction, artist: str, song: str):
-        
+    async def lyrics(self, interaction: nextcord.Interaction, artist: str, song: str):
         # Fetch the lyrics of the song from the API
         response = requests.get(f'https://api.lyrics.ovh/v1/{artist}/{song}')
+
+        # Check if lyrics are found or not
+        if response.status_code == 404:
+            # Create an embed with the error message
+            embed = nextcord.Embed(title="Lyrics Not Found", description="Sorry, I couldn't find the lyrics for that song.", color=0xFF0000)
+
+            # Send the embed as a message
+            await interaction.response.send_message(embed=embed)
+            return
 
         # Extract the lyrics from the response JSON
         data = response.json()
         lyrics = data['lyrics']
 
-        # Create an embed with the lyrics
-        embed = nextcord.Embed(title=f"Lyrics for {song} by {artist}", description=lyrics, color=0x00ff00)
+        # Create an animated loading message
+        animation = [
+            "🎵 Finding the lyrics...",
+            "🎵📡 Finding the lyrics...",
+            "🎵📡🔎 Finding the lyrics...",
+            "🎵📡🔎🎵 Finding the lyrics...",
+            "🎵📡🔎🎵🔎 Finding the lyrics...",
+            "🎵📡🔎🎵🔎📡 Finding the lyrics...",
+        ]
+        message = await interaction.response.send_message("Finding the lyrics...")
+        for frame in animation:
+            await message.edit(content=frame)
+            await asyncio.sleep(0.5)
 
-        # Send the embed as a message
-        await interaction.response.send_message(embed=embed)
+        # Create an embedded message with the lyrics
+        embed = nextcord.Embed(title=f"🎵 Lyrics for {song} by {artist}", description=lyrics, color=0x00ff00)
+
+        # Send the embedded message with the lyrics
+        await message.edit(content="Lyrics found ✅", embed=embed)
+
     
     
     
