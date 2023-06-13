@@ -578,7 +578,7 @@ class FunCommandsCog(commands.Cog):
                 "📚🔎📖🔍📚 Looking up the definition...",
                 "📚🔎📖🔍📚🔎 Looking up the definition...",
             ]
-            loading_message = await interaction.response.send_message("Looking up the definition...")
+            loading_message = await interaction.followup.send_message("Looking up the definition...")
             for frame in animation:
                 await asyncio.sleep(0.5)
                 await loading_message.edit(content=frame)
@@ -605,7 +605,7 @@ class FunCommandsCog(commands.Cog):
             embed = nextcord.Embed(title=f"Definition of {word}", description=definition, color=0x00ff00)
 
             # Send the embedded message with the definition
-            await interaction.followup.send_message(content="Definition found ✅", embed=embed)
+            await loading_message.edit(content="Definition found ✅", embed=embed)
         except Exception as error:
             print(f"An error occurred: {error}")
             # Handle the error as per your requirement
