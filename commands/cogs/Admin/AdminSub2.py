@@ -196,6 +196,22 @@ class WadderCommandsV1(commands.Cog):
 
     @main.subcommand(description="Add the bot to your server")
     async def invite(self, interaction: nextcord.Interaction):
+        # Show loading animation
+        loading_message = await interaction.response.send_message("Generating invitation link...")
+
+        # Define the computer animation frames
+        animation = [
+            "⚙️ Generating invitation link",
+            "⚙️ Generating invitation link.",
+            "⚙️ Generating invitation link..",
+            "⚙️ Generating invitation link..."
+        ]
+
+        # Animate the loading message
+        for frame in animation:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         embed = nextcord.Embed(
             title="Add the bot to your server",
             description="Click the link below to add the bot to your server. Thanks!",
@@ -204,14 +220,12 @@ class WadderCommandsV1(commands.Cog):
         )
         embed.set_footer(text="Add Wadder")
 
-        # Load the image file from your local directory
-        image_path = "images\waddericon.png"
-        with open(image_path, "rb") as f:
-            image_file = nextcord.File(f, filename="waddericon.png")
-            embed.set_thumbnail(url=f"attachment://{image_file.filename}")
+        # Set the thumbnail using the provided image URL
+        image_url = "https://example.com/waddericon.png"  # Replace with your image URL
+        embed.set_thumbnail(url=image_url)
 
-        # Send the embed and attach the file object to the message
-        await interaction.send(embed=embed, file=image_file)
+        await interaction.send(embed=embed)
+
         
         
         
