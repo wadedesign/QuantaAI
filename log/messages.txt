@@ -26,3 +26,4 @@ Saxon's Server - misc-stuff - mrsaxon#0: https://store.ubisoft.com/uk/ubisoftplu
 Saxon's Server - misc-stuff - mrsaxon#0: https://store.ubisoft.com/uk/ubisoftplus?ucid=EML-ID_169486&maltcode=crm_C2W_eml_email___UBISOFT____&addinfo=EMAIL&utm_source=sfmc&utm_id=93285&utm_campaign=24-WW-UBI-FWD5-WrapUpEinstein-ACQ-CRM-E-BC-230612-1135&ncid=287-3---1-eml-31-29-CRM--17-2-4--6----ID_79077-----&sfmc_id=93121946&utm_medium=email:ping_pong:
 QuantaAI - ai-model-base - wade5#0: 2023-07-15 20:00
 QuantaAI - ai-model-base - wade5#0: 2023-07-15 20:00
+QuantaAI - showoff - wade5#0: Here are some AI commands!
