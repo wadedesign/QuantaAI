@@ -2,7 +2,7 @@ import nextcord
 from nextcord.ext import commands
 import aiohttp
 from aiocache import cached, SimpleMemoryCache
-
+#** rfp 
 cache = SimpleMemoryCache()
 
 class Pokemon(commands.Cog):
@@ -75,7 +75,7 @@ class Pokemon(commands.Cog):
             embed.add_field(name="Evolutions", value=evolution_string, inline=False)
             embed.add_field(name="Height", value=height)
             embed.add_field(name="Weight", value=weight)
-            embed.set_footer(text="Powered by Pokeapi")
+            embed.set_footer(text="Powered by QuantaPoke")
             await interaction.send(embed=embed)
 
 def setup(bot):
