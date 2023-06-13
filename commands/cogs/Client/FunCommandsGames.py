@@ -367,21 +367,43 @@ class FunCommandsCog(commands.Cog):
         
     @fun.subcommand(description="Talk in a channel")
     @commands.has_permissions(administrator=True)
-    async def talk(self,
-        interaction: nextcord.Interaction,
-        channel: nextcord.TextChannel,
-        message: str
-    ):
-        
+    async def talk(self, interaction: nextcord.Interaction, channel: nextcord.TextChannel, message: str):
+        # Define the computer animation frames
+        animation = [
+            "⠋ Sending message...",
+            "⠙ Sending message...",
+            "⠹ Sending message...",
+            "⠸ Sending message...",
+            "⠼ Sending message...",
+            "⠴ Sending message...",
+            "⠦ Sending message...",
+            "⠧ Sending message...",
+            "⠇ Sending message...",
+            "⠏ Sending message...",
+        ]
+
+        # Send the initial loading message with the user as the footer
+        embed = nextcord.Embed(description='Calculating...', color=0x00ff00)
+        embed.set_footer(text=f"Sent by {interaction.user.name}")
+        loading_message = await interaction.response.send_message(embed=embed)
+
+        # Animate the loading message
+        for frame in animation:
+            embed.description = frame
+            await loading_message.edit(embed=embed)
+            await asyncio.sleep(0.1)
+
         # Check if the user has permission to send messages in the specified channel
         if not interaction.user.guild_permissions.manage_messages:
-            return await interaction.response.send_message("You do not have permission to send messages in the specified channel.")
-        
+            return await loading_message.edit(content="You do not have permission to send messages in the specified channel.")
+
         # Send the message to the specified channel
         await channel.send(message)
 
-        # Send a response to the user
-        await interaction.response.send_message(f"Message sent to {channel.mention}!")
+        # Update the loading message with the completion status
+        embed.description = f"Message sent to {channel.mention}!"
+        await loading_message.edit(content="Message sent ✅", embed=embed)
+
         
         
     @fun.subcommand(description="setup welcome and leave messages")
