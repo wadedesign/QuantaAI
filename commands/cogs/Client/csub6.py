@@ -165,11 +165,45 @@ class Stocks2(commands.Cog):
         except:
             raise    
         
-    @main.subcommand(name="pypi", description="To get info about a python module")     
+    @main.subcommand(name="pypi", description="To get info about a python module")
     async def pypi(self, interaction: nextcord.Interaction, module: str = None):
         with open("data/MediaData.json") as f:
             data = json.load(f)
             gif = data["pypi"]
+
+        # Define the computer animation frames
+        animation = [
+            "```ini\n[Fetching module information...     ]```",
+            "```ini\n[Fetching module information...•    ]```",
+            "```ini\n[Fetching module information...••   ]```",
+            "```ini\n[Fetching module information...•••  ]```",
+            "```ini\n[Fetching module information...•••• ]```",
+            "```ini\n[Fetching module information...•••••]```",
+            "```ini\n[Fetching module information... ••••]```",
+            "```ini\n[Fetching module information...  •••]```",
+            "```ini\n[Fetching module information...   ••]```",
+            "```ini\n[Fetching module information...    •]```",
+            "```ini\n[Fetching module information...     ]```",
+            "```ini\n[Fetching module information...    ]```",
+            "```ini\n[Fetching module information...•   ]```",
+            "```ini\n[Fetching module information...••  ]```",
+            "```ini\n[Fetching module information...••• ]```",
+            "```ini\n[Fetching module information...••••]```",
+            "```ini\n[Fetching module information...•••••]```",
+            "```ini\n[Fetching module information...•••• ]```",
+            "```ini\n[Fetching module information...•••  ]```",
+            "```ini\n[Fetching module information...••   ]```",
+            "```ini\n[Fetching module information...•    ]```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         try:
             async with aiohttp.ClientSession() as session:
                 url = f"https://pypi.org/pypi/{module}/json"
@@ -207,14 +241,15 @@ class Stocks2(commands.Cog):
                     Link = Button(label=f"{i[0]}", url=f"{i[1]}")
                     button.add_item(Link)
 
-            await interaction.send(embed=embed, view=button)
+            await loading_message.edit(content="Module Information", embed=embed, view=button)
 
         except json.JSONDecodeError:
             embed = await Embed.datanotfound(self, interaction)
-            await interaction.send(embed=embed)
+            await loading_message.edit(content="Error", embed=embed)
 
         except:
-            raise    
+            raise
+
         
         
     @main.subcommand(name="voicechannel", description="To get info about a voice channel")
