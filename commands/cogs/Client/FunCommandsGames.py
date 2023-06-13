@@ -597,7 +597,7 @@ class FunCommandsCog(commands.Cog):
     
     
     
-    @fun.subcommand(name="", description="Encrypt a message using the Caesar cipher")
+    @fun.subcommand(name="qencrypt", description="Encrypt a message using the Caesar cipher")
     async def encrypt_caesar(self,
         interaction: nextcord.Interaction,
         text: str,
