@@ -442,19 +442,58 @@ class ServerEmojisCog(commands.Cog):
     @main.subcommand()
     async def bots(self, interaction: nextcord.Interaction):
         """See all the bots in this server sorted by their join date"""
+        # Define the computer animation frames
+        animation = [
+            "```yaml\n[Generating bots list...     ]```",
+            "```yaml\n[Generating bots list...•    ]```",
+            "```yaml\n[Generating bots list...••   ]```",
+            "```yaml\n[Generating bots list...•••  ]```",
+            "```yaml\n[Generating bots list...•••• ]```",
+            "```yaml\n[Generating bots list...•••••]```",
+            "```yaml\n[Generating bots list... ••••]```",
+            "```yaml\n[Generating bots list...  •••]```",
+            "```yaml\n[Generating bots list...   ••]```",
+            "```yaml\n[Generating bots list...    •]```",
+            "```yaml\n[Generating bots list...     ]```",
+            "```yaml\n[Generating bots list...    ]```",
+            "```yaml\n[Generating bots list...•   ]```",
+            "```yaml\n[Generating bots list...••  ]```",
+            "```yaml\n[Generating bots list...••• ]```",
+            "```yaml\n[Generating bots list...••••]```",
+            "```yaml\n[Generating bots list...•••••]```",
+            "```yaml\n[Generating bots list...•••• ]```",
+            "```yaml\n[Generating bots list...•••  ]```",
+            "```yaml\n[Generating bots list...••   ]```",
+            "```yaml\n[Generating bots list...•    ]```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         people = filter(lambda member: member.bot, interaction.guild.members)
         people = sorted(people, key=lambda member: member.joined_at)
 
-        peoples = commands.Paginator(max_size=500, prefix="```ini\n", suffix="```")
-        for n, i in enumerate(people, 1):
-            peoples.add_line(f"[{n}] {i.name} [ID] {i.id}")
-
         embeds = []
-        for page in peoples.pages:
-            embeds.append(nextcord.Embed(title=f"{len(people)} Bots", description=page))
+        for chunk in split_by_slice(people, 5):
+            embed = nextcord.Embed(title=f"{len(people)} Bots")
+            for person in chunk:
+                embed.add_field(
+                    name=f"{person.name} (ID: {person.id})",
+                    value=f"Joined at: {nextcord.utils.format_dt(person.joined_at, 'F')} ({nextcord.utils.format_dt(person.joined_at, 'R')})",
+                )
+            embeds.append(embed)
 
-        paginator = Paginator(embeds)
-        await paginator.send_initial_message(interaction, interaction.channel)
+        for embed in embeds:
+            await interaction.followup.send(embed=embed)
+
+        # Delete the loading message
+        await loading_message.delete()
+
         
         
     @main.subcommand()
