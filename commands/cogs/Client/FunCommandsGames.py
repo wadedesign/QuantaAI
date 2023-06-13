@@ -566,43 +566,47 @@ class FunCommandsCog(commands.Cog):
     
     
     
-    @fun.subcommand(name="qdefine", description="Define a word")
+    @fun.subcommand(description="Define a word")
     async def define(self, interaction: nextcord.Interaction, word: str):
-        # Create an animated loading message
-        animation = [
-            "📚 Looking up the definition...",
-            "📚🔎 Looking up the definition...",
-            "📚🔎📖 Looking up the definition...",
-            "📚🔎📖🔍 Looking up the definition...",
-            "📚🔎📖🔍📚 Looking up the definition...",
-            "📚🔎📖🔍📚🔎 Looking up the definition...",
-        ]
-        loading_message = await interaction.response.send_message("Looking up the definition...")
-        for frame in animation:
-            await asyncio.sleep(0.5)
-            await loading_message.edit(content=frame)
+        try:
+            # Create an animated loading message
+            animation = [
+                "📚 Looking up the definition...",
+                "📚🔎 Looking up the definition...",
+                "📚🔎📖 Looking up the definition...",
+                "📚🔎📖🔍 Looking up the definition...",
+                "📚🔎📖🔍📚 Looking up the definition...",
+                "📚🔎📖🔍📚🔎 Looking up the definition...",
+            ]
+            loading_message = await interaction.response.send_message("Looking up the definition...")
+            for frame in animation:
+                await asyncio.sleep(0.5)
+                await loading_message.edit(content=frame)
 
-        url = "https://dictionary-by-api-ninjas.p.rapidapi.com/v1/dictionary"
-        querystring = {"word": word}
-        headers = {
-            "X-RapidAPI-Key": "82cfc7318cmsh3f3e03fa5eb7fdfp16eb9cjsn5bd4ea35cd19",
-            "X-RapidAPI-Host": "dictionary-by-api-ninjas.p.rapidapi.com"
-        }
+            url = "https://dictionary-by-api-ninjas.p.rapidapi.com/v1/dictionary"
+            querystring = {"word": word}
+            headers = {
+                "X-RapidAPI-Key": "82cfc7318cmsh3f3e03fa5eb7fdfp16eb9cjsn5bd4ea35cd19",
+                "X-RapidAPI-Host": "dictionary-by-api-ninjas.p.rapidapi.com"
+            }
 
-        response = requests.get(url, headers=headers, params=querystring)
+            response = requests.get(url, headers=headers, params=querystring)
 
-        # Extract the definition from the response JSON
-        data = response.json()
-        if data:
-            definition = data[0]['definition']
-        else:
-            definition = "Definition not found."
+            # Extract the definition from the response JSON
+            data = response.json()
+            if data:
+                definition = data[0]['definition']
+            else:
+                definition = "Definition not found."
 
-        # Create an embedded message with the definition
-        embed = nextcord.Embed(title=f"Definition of {word}", description=definition, color=0x00ff00)
+            # Create an embedded message with the definition
+            embed = nextcord.Embed(title=f"Definition of {word}", description=definition, color=0x00ff00)
 
-        # Send the embedded message with the definition
-        await interaction.followup.send_message(content="Definition found ✅", embed=embed)
+            # Send the embedded message with the definition
+            await interaction.followup.send_message(content="Definition found ✅", embed=embed)
+        except Exception as error:
+            print(f"An error occurred: {error}")
+            # Handle the error as per your requirement
     
     
     
