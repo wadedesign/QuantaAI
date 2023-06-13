@@ -506,14 +506,22 @@ class FunCommandsCog(commands.Cog):
     async def codeblock(self, interaction: nextcord.Interaction, text: str):
         # Define the computer animation frames
         animation = [
-            "```diff\n- Loading codeblock...\n```",
-            "```fix\n- Loading codeblock...\n```",
-            "```css\n- Loading codeblock...\n```",
-            "```yaml\n- Loading codeblock...\n```",
-            "```diff\n+ Loading codeblock...\n```",
-            "```fix\n+ Loading codeblock...\n```",
-            "```css\n+ Loading codeblock...\n```",
-            "```yaml\n+ Loading codeblock...\n```",
+            "```diff\n- Compiling code...\n```",
+            "```fix\n- Optimizing code...\n```",
+            "```css\n- Running security checks...\n```",
+            "```yaml\n- Decrypting secrets...\n```",
+            "```diff\n+ Injecting code...\n```",
+            "```fix\n+ Exploiting vulnerabilities...\n```",
+            "```css\n+ Initiating hacking sequence...\n```",
+            "```yaml\n+ Bypassing firewalls...\n```",
+            "```diff\n- Analyzing user input...\n```",
+            "```fix\n- Detecting bugs...\n```",
+            "```css\n- Optimizing performance...\n```",
+            "```yaml\n- Debugging...\n```",
+            "```diff\n+ Generating artificial intelligence...\n```",
+            "```fix\n+ Breaking encryption...\n```",
+            "```css\n+ Accessing mainframe...\n```",
+            "```yaml\n+ Disabling security protocols...\n```",
         ]
 
         # Send the initial loading message with an embedded message
@@ -523,14 +531,21 @@ class FunCommandsCog(commands.Cog):
         # Animate the loading message
         for frame in animation[1:]:
             embed.description = frame
+
+            # Add random color to the codeblock text for each frame
+            codeblock_text = f'```diff\n{"".join(["█" for _ in range(len(line))])}\n{"".join([chr(0x200b + ord(c)) for c in line])}\n{"█" * len(line)}```'
+            embed.add_field(name="Code", value=codeblock_text, inline=False)
+
             await loading_message.edit(embed=embed)
             await asyncio.sleep(0.5)
 
-        # Create the final codeblock text
-        codeblock_text = f'```{text}```'
+        # Create the final codeblock text with random colors
+        codeblock_text = f'```diff\n{"".join(["█" for _ in range(len(line))])}\n{"".join([chr(0x200b + ord(c)) for c in line])}\n{"█" * len(line)}```'
 
         # Create the embedded message with the codeblock
-        embed.description = codeblock_text
+        embed.description = "Code execution complete!"
+        embed.remove_field(0)
+        embed.add_field(name="Code", value=codeblock_text, inline=False)
 
         # Send the embedded message with the codeblock
         await loading_message.edit(embed=embed)
