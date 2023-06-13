@@ -318,6 +318,7 @@ class ServerEmojisCog(commands.Cog):
 
 
         
+   
     @main.subcommand()
     async def firstjoins(self, interaction: nextcord.Interaction):
         """See all the members of this server sorted by their join time"""
@@ -370,6 +371,7 @@ class ServerEmojisCog(commands.Cog):
 
         paginator = Paginator(embeds)
         await loading_message.edit(content="First Joins List", embed=paginator.get_page(0))
+
 
 
         
