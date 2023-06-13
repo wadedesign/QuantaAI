@@ -599,12 +599,6 @@ class FunCommandsCog(commands.Cog):
             with open("definition.txt", "w") as file:
                 file.write(response.text)
 
-            # Send the file in Discord
-            await interaction.response.send_file(
-                file=nextcord.File("definition.txt"),
-                content="Here is the definition:"
-            )
-
             # Create an embedded message to notify the user
             embed = nextcord.Embed(
                 title=f"Definition of {word}",
@@ -614,11 +608,16 @@ class FunCommandsCog(commands.Cog):
 
             # Send the embedded message
             await loading_message.edit(content="Definition found ✅", embed=embed)
+
+            # Send the file in Discord
+            await interaction.followup.send_file(
+                file=nextcord.File("definition.txt"),
+                content="Here is the definition:"
+            )
         
         except Exception as error:
             print(f"An error occurred: {error}")
             # Handle the error as per your requirement
-    
     
     
     @fun.subcommand(name="encode",description="Encode a message in Base64")
