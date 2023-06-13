@@ -184,7 +184,7 @@ class WadderCommandsV1(commands.Cog):
                 mod_list = ", ".join(data["users"])
                 embed.add_field(name=f"{data['emoji']} {data['display_name']} ({len(data['users'])})", value=mod_list, inline=False)
 
-        embed.set_footer(text="Powered by YourBot")
+        embed.set_footer(text="Powered by QuantaAI")
         embed.set_thumbnail(url=interaction.guild.icon.url)
         embed.set_author(name="Moderator Status", icon_url=interaction.author.avatar.url)
 
