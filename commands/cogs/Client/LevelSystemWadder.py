@@ -84,12 +84,12 @@ class LevelSys(commands.Cog):
                             embed.set_thumbnail(url=message.author.avatar_url)
                             await user_dm.send(embed=embed)
 
-    @nextcord.slash_command(name="nlevel")
+    @nextcord.slash_command(name="qlevel")
     async def main(self, interaction: nextcord.Interaction):
         pass
 
-    @main.subcommand()
-    async def rankyt(self, interaction: nextcord.Interaction):
+    @main.subcommand(name="qrank", description="Check your rank")
+    async def qrank(self, interaction: nextcord.Interaction):
         print(f"Checking stats for user ID: {interaction.user.id}")
         
         # Fetch user's stats from the database
@@ -143,8 +143,8 @@ class LevelSys(commands.Cog):
         await interaction.channel.send(embed=embed)
 
 
-    @main.subcommand()
-    async def leaderboardyt(self, interaction: nextcord.Interaction):
+    @main.subcommand(name="qleaderboard", description="Check the server's leaderboard")
+    async def qleaderboard(self, interaction: nextcord.Interaction):
         c.execute("SELECT * FROM levelling ORDER BY xp DESC")
         rankings = c.fetchall()
         i = 1

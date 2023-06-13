@@ -20,7 +20,7 @@ class FunCommandsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @nextcord.slash_command()
+    @nextcord.slash_command(name="qfun")
     async def fun(self, interaction: nextcord.Interaction):
         """
         This is the main slash command that will be the prefix of all commands below.
