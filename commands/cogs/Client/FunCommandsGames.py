@@ -508,60 +508,60 @@ class FunCommandsCog(commands.Cog):
         await interaction.response.send_message(codeblock_text)
     
     
-    @fun.subcommand()
+    
+    @fun.subcommand(description="Countdown to a specified event")
     async def countdown(self, interaction: nextcord.Interaction, event_name: str):
+        await interaction.response.defer()
+
+        # Create an animated loading message
+        animation = [
+            "⏳ Calculating the countdown...",
+            "⏳⌛ Calculating the countdown...",
+            "⏳⌛🔢 Calculating the countdown...",
+            "⏳⌛🔢⏰ Calculating the countdown...",
+            "⏳⌛🔢⏰📅 Calculating the countdown...",
+            "⏳⌛🔢⏰📅🕒 Calculating the countdown...",
+        ]
+        loading_message = await interaction.followup.send("Calculating the countdown...")
+        for frame in animation:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
+        await interaction.followup.send(f"What's the date and time of the {event_name}? (Please use the following format: YYYY-MM-DD HH:MM)", ephemeral=True)
+
+        def check(m):
+            return m.author == interaction.user
+
         try:
-            await interaction.response.defer()
+            event_datetime = await self.bot.wait_for('message', check=check, timeout=30.0)
+            event_datetime = event_datetime.content.strip()
+            event_datetime = parser.parse(event_datetime)
+        except nextcord.NotFound:
+            await interaction.followup.send("Sorry, I couldn't find your response. Please try again.", ephemeral=True)
+            return
+        except asyncio.TimeoutError:
+            await interaction.followup.send("Sorry, you didn't respond in time. Please try again.", ephemeral=True)
+            return
+        except ValueError:
+            await interaction.followup.send("Sorry, that's not a valid date and time. Please try again.", ephemeral=True)
+            return
 
-            # Create an animated loading message
-            animation = [
-                "⏳ Calculating the countdown...",
-                "⏳⏱️ Calculating the countdown...",
-                "⏳⏱️📆 Calculating the countdown...",
-                "⏳⏱️📆⌛ Calculating the countdown...",
-                "⏳⏱️📆⌛⏰ Calculating the countdown...",
-                "⏳⏱️📆⌛⏰⏳ Calculating the countdown...",
-            ]
-            loading_message = await interaction.followup.send("Calculating the countdown...")
-            for frame in animation:
-                await loading_message.edit(content=frame)
-                await asyncio.sleep(0.5)
+        now = datetime.utcnow()
+        time_diff = event_datetime - now
 
-            await interaction.followup.send(f"What's the date and time of the {event_name}? (Please use the following format: YYYY-MM-DD HH:MM)", ephemeral=True)
+        days = time_diff.days
+        seconds = time_diff.total_seconds()
+        hours = int(seconds // 3600)
+        minutes = int((seconds % 3600) // 60)
+        seconds = int(seconds % 60)
 
-            def check(m):
-                return m.author == interaction.user
+        countdown = f"{days} days, {hours} hours, {minutes} minutes, and {seconds} seconds until {event_name}!"
 
-            try:
-                event_datetime = await self.bot.wait_for('message', check=check, timeout=30.0)
-                event_datetime = event_datetime.content.strip()
-                event_datetime = parser.parse(event_datetime)
-            except nextcord.NotFound:
-                await interaction.followup.send("Sorry, I couldn't find your response. Please try again.", ephemeral=True)
-                return
-            except asyncio.TimeoutError:
-                await interaction.followup.send("Sorry, you didn't respond in time. Please try again.", ephemeral=True)
-                return
-            except ValueError:
-                await interaction.followup.send("Sorry, that's not a valid date and time. Please try again.", ephemeral=True)
-                return
+        # Create an embedded message with the countdown
+        embed = nextcord.Embed(title="Countdown", description=countdown, color=0x00ff00)
 
-            now = datetime.utcnow()
-            time_diff = event_datetime - now
-
-            days, seconds = time_diff.days, time_diff.seconds
-            hours = seconds // 3600
-            minutes = (seconds % 3600) // 60
-            seconds = seconds % 60
-
-            countdown = f"{days} days, {hours} hours, {minutes} minutes, and {seconds} seconds until {event_name}!"
-            
-            embed = nextcord.Embed(title="Countdown", description=countdown, color=0x00ff00)
-            await loading_message.edit(content="Countdown calculated ✅", embed=embed)
-
-        except Exception as error:
-            print(f"An error occurred: {error}")
-            # Handle the error as per your requirement
+        # Send the embedded message with the countdown
+        await loading_message.edit(content="Countdown calculated ✅", embed=embed, ephemeral=True)
     
     
     
