@@ -1,3 +1,4 @@
+import asyncio
 import nextcord
 from nextcord.ext import commands
 import requests
@@ -55,7 +56,7 @@ class WeatherCog(commands.Cog):
             await interaction.response.send_message("Failed to fetch weather data. Please try again later.")
             
             
-    @commands.guild_only()        
+    @commands.guild_only()
     @q1.subcommand(name="onlinestatus", description="Print how many people are using each type of device.")
     async def onlinestatus(self, interaction: nextcord.Interaction):
         """Print how many people are using each type of device."""
@@ -70,6 +71,25 @@ class WeatherCog(commands.Cog):
             (False, False, False): 7,
         }
         store = [0, 0, 0, 0, 0, 0, 0, 0]
+
+        # Define the computer animation frames
+        animation = [
+            "```diff\n- Calculating online status...```",
+            "```diff\n+ Calculating online status...```",
+            "```diff\n- Calculating online status...```",
+            "```diff\n+ Calculating online status...```",
+            "```diff\n- Calculating online status...```",
+            "```diff\n+ Calculating online status...```",
+        ]
+
+        # Send the initial loading message
+        loading_message = await interaction.response.send_message(animation[0])
+
+        # Animate the loading message
+        for frame in animation[1:]:
+            await loading_message.edit(content=frame)
+            await asyncio.sleep(0.5)
+
         for m in interaction.guild.members:
             value = (
                 m.desktop_status == nextcord.Status.offline,
@@ -77,6 +97,7 @@ class WeatherCog(commands.Cog):
                 m.mobile_status == nextcord.Status.offline,
             )
             store[device[value]] += 1
+
         msg = (
             f"offline all: {store[0]}"
             f"\ndesktop only: {store[1]}"
@@ -87,7 +108,12 @@ class WeatherCog(commands.Cog):
             f"\ndesktop mobile: {store[6]}"
             f"\nonline all: {store[7]}"
         )
-        await interaction.send(f"```py\n{msg}```")
+
+        # Delete the loading message
+        await loading_message.delete()
+
+        await interaction.followup.send(f"```py\n{msg}```")
+
 
 def setup(bot):
     bot.add_cog(WeatherCog(bot))
