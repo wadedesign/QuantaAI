@@ -33,6 +33,23 @@ class WadderCommandsV1(commands.Cog):
         account_creation_difference = timedelta(days=1)  # Change this value to adjust the account creation time difference
         join_time_difference = timedelta(hours=6)  # Change this value to adjust the join time difference
 
+        animation_frames = [
+            "🔎 Detecting possible alt accounts",
+            "🔎 Detecting possible alt accounts.",
+            "🔎 Detecting possible alt accounts..",
+            "🔎 Detecting possible alt accounts..."
+        ]
+
+        # Send the initial loading message with embedded animation
+        embed = nextcord.Embed(title="Alt Account Detection", description=animation_frames[0], color=nextcord.Color.blue())
+        loading_message = await interaction.response.send_message(embed=embed)
+
+        # Animate the loading message with embedded animation
+        for frame in animation_frames[1:]:
+            embed.description = frame
+            await loading_message.edit(embed=embed)
+            await asyncio.sleep(0.5)
+
         for member in members:
             for other_member in members:
                 if member != other_member:
@@ -50,7 +67,12 @@ class WadderCommandsV1(commands.Cog):
             if len(member_set) > 1:
                 alt_message += f"{display_name}: {', '.join(str(member) for member in member_set)}\n"
 
-        await interaction.send(alt_message)
+        # Create the final embed with the alt account information
+        embed = nextcord.Embed(title="Alt Account Detection", description=alt_message, color=nextcord.Color.green())
+        embed.set_footer(text="Detection complete")
+
+        await loading_message.edit(embed=embed)
+
         
         
         
