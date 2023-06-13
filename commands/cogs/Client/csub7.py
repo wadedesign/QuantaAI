@@ -1,3 +1,4 @@
+import asyncio
 import json
 import nextcord
 from nextcord.ext import commands
@@ -7,6 +8,7 @@ import requests
 
 # ! Add more sub commands (Change whole file)
 
+# done
 
 class Profile1(commands.Cog):
     def __init__(self, bot):
@@ -53,15 +55,30 @@ class Profile1(commands.Cog):
             if not isinstance(interaction.author, nextcord.Member):
                 raise Exception("Invalid caller")
             user = interaction.author
+        
         emb: nextcord.Embed = nextcord.Embed(
             title=str(user),
             type="rich"
         )
-        emb.set_image(url=user.display_avatar.url)
-        await interaction.response.send_message(
-            embed=emb,
-            allowed_mentions=self.nopings
-        )
+        
+        # AI theme customization
+        emb.set_thumbnail(url="https://example.com/ai_logo.png")  # Replace with your desired AI logo URL
+        emb.set_footer(text="AI Profile Picture", icon_url="https://example.com/ai_logo.png")  # Replace with your desired AI logo URL
+        
+        # Add animation
+        animation_frames = [
+            "Analyzing user profile...",
+            "Processing image data...",
+            "Generating AI profile picture...",
+        ]
+        
+        message = await interaction.response.send_message(embed=emb, allowed_mentions=self.nopings)
+        
+        while True:
+            for frame in animation_frames:
+                emb.description = frame
+                await message.edit(embed=emb)
+                await asyncio.sleep(1)
         
     @main.subcommand(name="nasapod", description="Displays NASA's Astronomy Picture of the Day.")
     async def get_apod(self, interaction: nextcord.Interaction):
