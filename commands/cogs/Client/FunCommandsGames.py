@@ -14,7 +14,7 @@ import string
 
 scheduled_events = dict()
 
-
+# ** ready for production **
 
 class FunCommandsCog(commands.Cog):
     def __init__(self, bot):
