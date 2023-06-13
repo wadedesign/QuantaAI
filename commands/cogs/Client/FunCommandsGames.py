@@ -72,7 +72,7 @@ class FunCommandsCog(commands.Cog):
         embed = nextcord.Embed(title="Welcome to Wadder!", description="Wadder is a powerful and easy-to-use bot that can help you with a wide range of tasks.", color=0x00ff00)
         embed.add_field(name="Key Features", value="- Slash commands for easy access to bot functionality\n- Customizable settings and preferences\n- Integration with third-party APIs for additional functionality\n- Moderation tools to help keep your server safe and secure\n- And much more!", inline=False)
         embed.set_footer(text="To get started with Wadder, simply invite it to your server and type /help to see a list of available commands.")
-        embed.set_thumbnail(url="https://example.com/bot_thumbnail.png")
+        embed.set_thumbnail(url="https://top.gg/_next/image?url=https%3A%2F%2Fimages.discordapp.net%2Favatars%2F1075144828330971186%2Fd57c846e32ace943c19bd9dcbbf6e196.png%3Fsize%3D128&w=256&q=75")
 
         # Update the loading message with the advertisement embed
         await loading_message.edit(content="Advertisement", embed=embed)
