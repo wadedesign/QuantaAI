@@ -19,3 +19,6 @@ Get ready to experience the future of Discord bots with QuantaAI Studios. Togeth
 
 [Add a Discord Bot](https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID&scope=bot&permissions=YOUR_PERMISSIONS)
 QuantaAI - text-based - wade5#0: tes
+QuantaAI - text-based - wade5#0: boom
+QuantaAI - text-based - wade5#0: test tset i sthe test
+QuantaAI - text-based - wade5#0: 
