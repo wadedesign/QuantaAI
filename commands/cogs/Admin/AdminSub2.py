@@ -215,7 +215,7 @@ class WadderCommandsV1(commands.Cog):
         embed = nextcord.Embed(
             title="Add the bot to your server",
             description="Click the link below to add the bot to your server. Thanks!",
-            url="https://nextcord.com/api/oauth2/authorize?client_id=1072418891680202824&permissions=8&scope=bot%20applications.commands",
+            url="https://discord.com/api/oauth2/authorize?client_id=1075144828330971186&permissions=8&scope=bot%20applications.commands",
             color=0x00ff00
         )
         embed.set_footer(text="Add Wadder")
