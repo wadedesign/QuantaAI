@@ -60,7 +60,7 @@ class PetCog(commands.Cog): # good, change to where it shows the user and use em
         if self.happiness >= 100:
             self.happiness = 100
 
-        await interaction.send('Nom nom')
+        await interaction.response.send_message('Nom nom')
         print("Fed. Current hunger: " + str(self.hunger))
 
         # Define the animation frames using ASCII art
@@ -80,7 +80,7 @@ class PetCog(commands.Cog): # good, change to where it shows the user and use em
         # Send the animation
         for frame in animation_frames:
             await asyncio.sleep(0.5)  # Adjust the delay between frames if needed
-            await interaction.followup.send_message(content=frame)
+            await interaction.followup.send(frame)
 
 
     @main.subcommand(description="snuggle with your pet")
@@ -91,13 +91,35 @@ class PetCog(commands.Cog): # good, change to where it shows the user and use em
         await interaction.send(f'Zzzz')
         print("Snuggled. Current happiness: " + str(self.happiness))
 
-    @main.subcommand(description="pet your pet")
-    async def pet(self, interaction: nextcord.Interaction):
+
+    @main.subcommand(description="Snuggle with your pet")
+    async def snuggle(self, interaction: nextcord.Interaction):
         self.happiness += 10
         if self.happiness >= 100:
             self.happiness = 100
-        await interaction.send(f'mew')
-        print("Petted. Current happiness: " + str(self.happiness))
+
+        await interaction.response.send_message('Zzzz')
+        print("Snuggled. Current happiness: " + str(self.happiness))
+
+        # Define the animation frames using ASCII art
+        animation_frames = [
+            "😴 Snuggling with your pet...",
+            "💤 Snuggling with your pet...",
+            "😊 Snuggling with your pet...",
+            "🥰 Snuggling with your pet...",
+            "😻 Snuggling with your pet...",
+            "🐾 Snuggling with your pet...",
+            "🐱 Snuggling with your pet...",
+            "🐶 Snuggling with your pet...",
+            "🐰 Snuggling with your pet...",
+            "🐦 Snuggling with your pet..."
+        ]
+
+        # Send the animation
+        for frame in animation_frames:
+            await asyncio.sleep(0.5)  # Adjust the delay between frames if needed
+            await interaction.followup.send(frame)
+
 
     @main.subcommand(description="sleep your pet")
     async def sleep(self, interaction: nextcord.Interaction):
