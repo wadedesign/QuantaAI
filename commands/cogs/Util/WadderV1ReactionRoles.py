@@ -6,7 +6,7 @@ from nextcord.ext import commands
 
 # Connect to MongoDB
 cluster = MongoClient("mongodb+srv://apwade75009:Celina@12@quantaai.irlbjcw.mongodb.net/")
-db = cluster[""]
+db = cluster["QunataAI"]
 reaction_roles_collection = db["reaction_roles"]
 
 #** ready for production
