@@ -6,7 +6,7 @@ from nextcord.ext import commands
 
 # Connect to MongoDB
 cluster = MongoClient("mongodb+srv://apwade75009:Celina@12@quantaai.irlbjcw.mongodb.net/")
-db = cluster["your_database_name"]
+db = cluster[""]
 reaction_roles_collection = db["reaction_roles"]
 
 #** ready for production
@@ -28,7 +28,7 @@ class ReactionRoles2(commands.Cog):
         return document if document else {}
 
     @nextcord.slash_command(name="util_1")
-    async def main (self, interaction: nextcord.Interaction):
+    async def main(self, interaction: nextcord.Interaction):
         pass
 
     @main.subcommand(name="setup_roles", description="Sets up a reaction role channel")
@@ -54,7 +54,7 @@ class ReactionRoles2(commands.Cog):
 
         embed = nextcord.Embed(title=f"{emoji} {title}", description=description, color=role.color)
         embed.set_footer(text=f"React with {emoji} to get the {role.name} role")
-        
+
         # Send the reaction role message and add the specified reaction
         reaction_role_message = await reaction_role_channel.send(embed=embed)
         await reaction_role_message.add_reaction(emoji)
