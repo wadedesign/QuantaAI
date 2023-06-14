@@ -5,7 +5,7 @@ from pymongo import MongoClient
 from nextcord.ext import commands
 
 # Connect to MongoDB
-cluster = MongoClient("mongodb+srv://apwade75009:<password>@quantaai.irlbjcw.mongodb.net/")
+cluster = MongoClient("mongodb+srv://apwade75009:Celina@12@quantaai.irlbjcw.mongodb.net/")
 db = cluster["your_database_name"]
 reaction_roles_collection = db["reaction_roles"]
 
