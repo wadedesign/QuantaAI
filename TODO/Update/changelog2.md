@@ -1,6 +1,8 @@
 
 ![Quanta Image](/images/quantaai/png/logo-color.png)
 
+
+
 ## ✨ Enhancements
 
 - Implemented **Embeds** for a wider range of Commands, providing an exquisite and visually appealing interface.
