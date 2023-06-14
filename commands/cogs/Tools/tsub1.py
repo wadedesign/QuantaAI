@@ -180,7 +180,7 @@ class CloudStorage(commands.Cog):
                 
                 
                 
-    @main.subcommand(description="mine sweeper")
+    @main.subcommand(name="qmine", description="mine sweeper")
     async def minesweeper(self, interaction: nextcord.Interaction, grid_size = 5):
         """Generate and post a new minesweeper game - grid size can range from 3x3 to 9x9"""
 
@@ -292,7 +292,7 @@ class CloudStorage(commands.Cog):
 
     
     
-    @main.subcommand()
+    @main.subcommand(name="quserstats",description="Shows the user's stats")
     async def userstats23(self,interaction: nextcord.Interaction, target_user: nextcord.Member = None, private = None):
         
         import matplotlib
@@ -418,7 +418,7 @@ class CloudStorage(commands.Cog):
     
     
 
-    @main.subcommand()
+    @main.subcommand(name='invites', description=" 🔍 Displays the number of invites a user has made")
     async def invites(self, interaction: nextcord.Interaction, user:nextcord.Member=None):
         if user is None:
             total_invites = 0
