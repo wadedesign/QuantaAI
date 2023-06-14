@@ -23,6 +23,22 @@
                         <mxPoint x="390" y="952" as="sourcePoint"/>
                     </mxGeometry>
                 </mxCell>
+                <mxCell id="38" value="AI Moderation" style="whiteSpace=wrap;html=1;rounded=1;arcSize=50;align=center;verticalAlign=middle;strokeWidth=1;autosize=1;spacing=4;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;entityRelationEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;,&quot;segment&quot;:10,&quot;curved&quot;:1,&quot;sourcePerimeterSpacing&quot;:0,&quot;targetPerimeterSpacing&quot;:0};fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="1">
+                    <mxGeometry x="360" y="1030" width="120" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="39" value="" style="edgeStyle=entityRelationEdgeStyle;startArrow=none;endArrow=none;segment=10;curved=1;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;exitX=0.75;exitY=1;exitDx=0;exitDy=0;" edge="1" target="38" parent="1" source="31">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="425" y="1012" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="40" value="OpenAI" style="whiteSpace=wrap;html=1;rounded=1;arcSize=50;align=center;verticalAlign=middle;strokeWidth=1;autosize=1;spacing=4;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;entityRelationEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;,&quot;segment&quot;:10,&quot;curved&quot;:1,&quot;sourcePerimeterSpacing&quot;:0,&quot;targetPerimeterSpacing&quot;:0};fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" vertex="1" collapsed="1" parent="1">
+                    <mxGeometry x="565" y="1020" width="90" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="41" value="" style="edgeStyle=entityRelationEdgeStyle;startArrow=none;endArrow=none;segment=10;curved=1;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;exitX=0.998;exitY=0.933;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" target="40" parent="1" source="31">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="530" y="1030" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
             </root>
         </mxGraphModel>
     </diagram>
