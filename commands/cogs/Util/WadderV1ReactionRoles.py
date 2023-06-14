@@ -4,6 +4,7 @@ import pymongo
 from pymongo import MongoClient
 from nextcord.ext import commands
 import urllib.parse
+from pymongo.mongo_client import MongoClient
 
 
 
@@ -16,6 +17,8 @@ db = cluster["QuantaAI"]
 reaction_roles_collection = db["reaction_roles"]
 
 #** ready for production
+
+
 
 # own cogs!
 reaction_role_channel_name = "🎭reaction-roles"
