@@ -1,6 +1,6 @@
 # QuantaAI: Revolutionizing Discord Server Management
 
-![QuantaAI Logo](images/quantaai/)
+![QuantaAI Logo](images/quantaai/svg/logo-black.svg)
 
 QuantaAI is an AI-powered Discord bot designed to streamline server management and enhance user experience. With its unique ability to establish global partnerships, innovative AI commands including a language learning tool, and a user-friendly design, QuantaAI is breaking down communication barriers and fostering a safer, more connected digital community.
 
