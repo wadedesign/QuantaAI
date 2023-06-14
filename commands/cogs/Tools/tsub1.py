@@ -261,7 +261,6 @@ class CloudStorage(commands.Cog):
     @main.subcommand(name="qwhisper",description="Owner sends a message to a user")
     @commands.is_owner()
     async def whisper(self, interaction: nextcord.Interaction, user: nextcord.User, *, msg: str):
-        """Dm users."""
 
         # Define the hacking-themed emoji animation frames
         frames = ["💻 Hacking in progress...", "🔎 Accessing user database...", "⚙️ Bypassing security protocols...",
@@ -276,8 +275,8 @@ class CloudStorage(commands.Cog):
 
         try:
             e = nextcord.Embed(colour=nextcord.Colour.red())
-            e.title = "You've received a message from a hacker!"
-            e.add_field(name="Hacker:", value=interaction.user, inline=False)
+            e.title = "You've received a message from a Developer!"
+            e.add_field(name="Developer:", value=interaction.user, inline=False)
             e.add_field(name="Time:", value=datetime.datetime.now().strftime("%A, %B %d %Y at %I:%M %p").replace("PM", "pm").replace("AM", "am"), inline=False)
             e.add_field(name="Message:", value=msg, inline=False)
             e.set_thumbnail(url=interaction.user.avatar.url)
