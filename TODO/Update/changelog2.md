@@ -1,8 +1,5 @@
-<div align="center" style="background-color:#212121; padding: 20px;">
-  <h1 style="color:#0000FF; font-size:72px; text-shadow: 2px 2px #FFFFFF;">Version 0.0.2</h1>
-  <p style="font-size:24px; color:#00FFFF; text-shadow: 1px 1px #FF69B4;">- May 31, 2023</p>
-</div>
-
+<!-- Display image -->
+![Quanta Image](images)
 
 ## ✨ Enhancements
 
@@ -24,3 +21,4 @@
 ## 🐞 Bug Fixes
 
 - Resolved pesky issues with AI Commands, ensuring a seamless and more accurate interaction that leaves you impressed.
+
