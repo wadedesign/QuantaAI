@@ -32,7 +32,7 @@ QuantaAI is an AI-powered Discord bot designed to streamline server management a
 
 ## Getting Started
 
-To get started with QuantaAI, visit the bot's [documentation](http://wadderprojects.bhweb.ws/documentation/documentation-html-template-master/docum.html) on the website.
+To get started with QuantaAI, visit the bot's [documentation](https://quantaai.notion.site/95ef9858856b4649a104094926acd147?v=59b04385c0ef446490fa697eef037cd7&pvs=4) on the website.
 
 [![Powered by AI](https://img.shields.io/badge/Powered%20by-AI-orange.svg)](https://www.openai.com/)
 [![Global Connectivity](https://img.shields.io/badge/Global-Connectivity-blue.svg)](http://wadderprojects.bhweb.ws/)
@@ -45,4 +45,4 @@ To get started with QuantaAI, visit the bot's [documentation](http://wadderproje
 [![Customizable Commands](https://img.shields.io/badge/Customizable-Commands-ff69b4.svg)](http://wadderprojects.bhweb.ws/)
 [![Scalability](https://img.shields.io/badge/Scalability-critical.svg)](http://wadderprojects.bhweb.ws/)
 [![Continuous Development](https://img.shields.io/badge/Continuous-Development-yellowgreen.svg)](http://wadderprojects.bhweb.ws/)
-[![Documentation & Support](https://img.shields.io/badge/Documentation-&-Support-lightblue.svg)](http://wadderprojects.bhweb.ws/)
+[![Documentation & Support](https://img.shields.io/badge/Documentation-&-Support-lightblue.svg)](hhttps://quantaai.notion.site/95ef9858856b4649a104094926acd147?v=59b04385c0ef446490fa697eef037cd7&pvs=4)
