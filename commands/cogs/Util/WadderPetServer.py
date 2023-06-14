@@ -59,8 +59,28 @@ class PetCog(commands.Cog): # good, change to where it shows the user and use em
             self.hunger = 100
         if self.happiness >= 100:
             self.happiness = 100
+
         await interaction.send('Nom nom')
         print("Fed. Current hunger: " + str(self.hunger))
+
+        # Define the animation frames using ASCII art
+        animation_frames = [
+            "🍗 Feeding your pet...",
+            "🍖 Feeding your pet...",
+            "🍕 Feeding your pet...",
+            "🥩 Feeding your pet...",
+            "🌮 Feeding your pet...",
+            "🍔 Feeding your pet...",
+            "🥪 Feeding your pet...",
+            "🥗 Feeding your pet...",
+            "🍟 Feeding your pet...",
+            "🍝 Feeding your pet..."
+        ]
+
+        # Send the animation
+        for frame in animation_frames:
+            await asyncio.sleep(0.5)  # Adjust the delay between frames if needed
+            await interaction.followup.send_message(content=frame)
 
 
     @main.subcommand(description="snuggle with your pet")
