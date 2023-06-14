@@ -1,6 +1,13 @@
 import nextcord
 import json
+import pymongo
+from pymongo import MongoClient
 from nextcord.ext import commands
+
+# Connect to MongoDB
+cluster = MongoClient("mongodb+srv://apwade75009:<password>@quantaai.irlbjcw.mongodb.net/")
+db = cluster["your_database_name"]
+reaction_roles_collection = db["reaction_roles"]
 
 #** ready for production
 
@@ -12,15 +19,13 @@ class ReactionRoles2(commands.Cog):
         self.bot = bot
 
     async def save_reaction_roles(self, guild_id, reaction_roles):
-        with open(f"{guild_id}_reaction_roles.json", "w") as file:
-            json.dump(reaction_roles, file, indent=4)
+        # Save reaction_roles to MongoDB
+        reaction_roles_collection.update_one({"_id": guild_id}, {"$set": reaction_roles}, upsert=True)
 
     async def load_reaction_roles(self, guild_id):
-        try:
-            with open(f"{guild_id}_reaction_roles.json", "r") as file:
-                return json.load(file)
-        except FileNotFoundError:
-            return {}
+        # Load reaction_roles from MongoDB
+        document = reaction_roles_collection.find_one({"_id": guild_id})
+        return document if document else {}
 
     @nextcord.slash_command(name="util_1")
     async def main (self, interaction: nextcord.Interaction):
