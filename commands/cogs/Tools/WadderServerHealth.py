@@ -10,7 +10,7 @@ class Helpful(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @nextcord.slash_command(name="channelstatus", description="Check the health of a channel")
     async def channel_status(self, ctx, channel: nextcord.TextChannel = None):
         if not channel:
             channel = ctx.channel
