@@ -5,37 +5,30 @@ from nextcord.ext import commands
 from langdetect import detect
 import os
 import json
+import nextcord
+from nextcord.ext import commands
+from pymongo import MongoClient
+import urllib.parse
 
-# ** ready for production add embeds
+# MongoDB connection details
+username = urllib.parse.quote_plus("apwade75009")
+password = urllib.parse.quote_plus("Celina@12")
+cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mongodb.net/")
+db = cluster["QuantaAI"]
 
 class TranslationCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.enabled = True
         self.chat_model = None
-        self.config_file = "data/translation_settings.json" # Change this to your own file path
+        self.translation_settings_collection = db["translation_settings"]
 
     def load_settings(self):
-        try:
-            with open(self.config_file, "r") as file:
-                return json.load(file)
-        except FileNotFoundError:
-            return {}
+        result = self.translation_settings_collection.find_one()
+        return result if result else {}
 
     def save_settings(self, settings):
-        with open(self.config_file, "w") as file:
-            json.dump(settings, file, indent=4)
-
-    def is_english(self, text):
-        try:
-            language = detect(text)
-        except Exception:
-            return False
-
-        if language == "en":
-            return True
-        else:
-            return False
+        self.translation_settings_collection.replace_one({}, settings, upsert=True)
 
     async def translate_message(self, message):
         openai.api_key = os.getenv("OPENAI_API_KEY")
