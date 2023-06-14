@@ -3,6 +3,8 @@ from nextcord.ext import commands
 import urllib.parse
 from pymongo import MongoClient
 
+# ! ready for production - could add some UI improvements
+
 # MongoDB connection details
 username = urllib.parse.quote_plus("apwade75009")
 password = urllib.parse.quote_plus("Celina@12")
