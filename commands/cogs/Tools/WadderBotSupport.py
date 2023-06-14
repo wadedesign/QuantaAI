@@ -110,7 +110,7 @@ class InfoCmd(commands.Cog):
 
 
 
-    @main.subcommand(name = "waddervote", description = "To get information about voting the bot.")
+    @main.subcommand(name = "quantavote", description = "To get information about voting the bot.")
     @commands.is_owner()
     async def votereminder(self, interaction: nextcord.Interaction):
         channel = self.bot.get_channel(Var.vote_logger.value)
