@@ -1,5 +1,5 @@
-<!-- Display image -->
-![Quanta Image](images)
+
+![Quanta Image](/images/quantaai/png/logo-color.png)
 
 ## ✨ Enhancements
 
