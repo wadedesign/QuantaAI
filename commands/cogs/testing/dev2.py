@@ -8,7 +8,8 @@ from bs4 import BeautifulSoup
 import nextcord
 from nextcord.ext import commands
 import requests
-
+import time
+from datetime import datetime, timedelta
 
 class Developer2(commands.Cog):
     def __init__(self, bot):
@@ -513,6 +514,7 @@ class Developer2(commands.Cog):
         await interaction.response.send_message(f"✅ Member count channel created: {member_count_channel.mention}", ephemeral=True)
 
     @dev4.subcommand(name="ch", description="Check the health of a channel")
+    
     async def channel_status(self, ctx, channel: nextcord.TextChannel = None):
         if not channel:
             channel = ctx.channel
@@ -533,7 +535,7 @@ class Developer2(commands.Cog):
 
         async with ctx.channel.typing():
             count = 0
-            async for message in channel.history(limit=500000, after=datetime.today() - datetime.timedelta(days=100)):
+            async for message in channel.history(limit=500000, after=datetime.today() - timedelta(days=100)):
                 count += 1
 
             if count >= 5000:
