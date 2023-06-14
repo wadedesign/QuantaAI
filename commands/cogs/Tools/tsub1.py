@@ -258,23 +258,34 @@ class CloudStorage(commands.Cog):
     
 
 
-    @main.subcommand(description="Owner sends a message to a user")
+    @main.subcommand(name="qwhisper",description="Owner sends a message to a user")
     @commands.is_owner()
     async def whisper(self, interaction: nextcord.Interaction, user: nextcord.User, *, msg: str):
         """Dm users."""
 
+        # Define the hacking-themed emoji animation frames
+        frames = ["💻 Hacking in progress...", "🔎 Accessing user database...", "⚙️ Bypassing security protocols...",
+                "🔓 Decrypting user messages...", "💬 Composing secret message...", "✉️ Sending message...",
+                "✅ Message sent successfully! 💥", "🎉 Hacking complete!"]
+
+        loading_message = await interaction.response.send_message(frames[0])
+
+        for frame in frames[1:]:
+            await loading_message.edit(content=f"{frame}")
+            time.sleep(random.uniform(0.5, 1.5))
+
         try:
             e = nextcord.Embed(colour=nextcord.Colour.red())
-            e.title = "You've received a message from a developer!"
-            e.add_field(name="Developer:", value=interaction.user, inline=False)
+            e.title = "You've received a message from a hacker!"
+            e.add_field(name="Hacker:", value=interaction.user, inline=False)
             e.add_field(name="Time:", value=datetime.datetime.now().strftime("%A, %B %d %Y at %I:%M %p").replace("PM", "pm").replace("AM", "am"), inline=False)
             e.add_field(name="Message:", value=msg, inline=False)
             e.set_thumbnail(url=interaction.user.avatar.url)
             await user.send(embed=e)
         except nextcord.Forbidden:
-            await interaction.send(':x: Failed to send message to user with ID `{}`.'.format(user.id))
+            await loading_message.edit(content=f':x: Failed to send message to user with ID `{user.id}`.')
         else:
-            await interaction.send('Successfully sent message to {}'.format(user.id))
+            await loading_message.edit(content=f'Successfully sent message to {user.id}')
             
             
     
