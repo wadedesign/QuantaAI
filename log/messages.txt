@@ -28,3 +28,5 @@ QuantaAI - ai-model-base - wade5#0: 2023-07-15 20:00
 QuantaAI - ai-model-base - wade5#0: 2023-07-15 20:00
 QuantaAI - showoff - wade5#0: Here are some AI commands!
 QuantaAI - showoff - wade5#0: !onlineinfo
+House Arrest - language - ThatWardrobeGuy#7504: russian
+House Arrest - language - ThatWardrobeGuy#7504: russian
