@@ -434,16 +434,32 @@ class CloudStorage(commands.Cog):
 
             await interaction.send(f"{user} has invited {total_invites} member{'' if total_invites == 1 else 's'} to the server!")
             
-    @main.subcommand(name='listusers')
+    @main.subcommand(name='listusers', description=" 🔍 Displays the list of connected voice users")
     async def listusers(self, interaction: nextcord.Interaction):
         """Displays the list of connected users"""
         if not interaction.user.voice:
             return await interaction.send("You are not connected to a voice channel :mute:")
+
+        # Define the animation frames
+        frames = [
+            "🔍 Retrieving user information...",
+            "👥 Fetching connected members...",
+            "💬 Compiling member list...",
+            "📋 Generating user report...",
+            "📨 Sending user report...",
+            "✅ User report sent successfully! 🎉"
+        ]
+
+        loading_message = await interaction.send(frames[0])
+
+        for frame in frames[1:]:
+            await loading_message.edit(content=frame)
+            time.sleep(random.uniform(0.5, 1.5))
+
         members = interaction.user.voice.channel.members
-        memnames = []
-        for member in members:
-            memnames.append(member.name)
-        await interaction.send(f"Members in {interaction.user.voice.channel.name}:\n```\n" + "\n".join(memnames) +"\n```") 
+        memnames = [member.name for member in members]
+
+        await loading_message.edit(content=f"Members in {interaction.user.voice.channel.name}:\n```\n" + "\n".join(memnames) + "\n```")
             
             
             
