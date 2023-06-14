@@ -3,10 +3,16 @@ import json
 import pymongo
 from pymongo import MongoClient
 from nextcord.ext import commands
+import urllib.parse
 
-# Connect to MongoDB
-cluster = MongoClient("mongodb+srv://apwade75009:Celina@12@quantaai.irlbjcw.mongodb.net/")
-db = cluster["QunataAI"]
+
+
+
+
+username = urllib.parse.quote_plus("apwade75009")
+password = urllib.parse.quote_plus("Celina@12")
+cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mongodb.net/")
+db = cluster["QuantaAI"]
 reaction_roles_collection = db["reaction_roles"]
 
 #** ready for production
@@ -83,3 +89,5 @@ class ReactionRoles2(commands.Cog):
 
 def setup(bot):
     bot.add_cog(ReactionRoles2(bot))
+
+
