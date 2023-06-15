@@ -1,6 +1,16 @@
 import random
 import nextcord
 from nextcord.ext import commands
+from pymongo import MongoClient
+import urllib.parse
+
+# MongoDB connection details
+username = urllib.parse.quote_plus("apwade75009")
+password = urllib.parse.quote_plus("Celina@12")
+cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mongodb.net/")
+db = cluster["QuantaAI"]
+uno_games_collection = db["uno_games"]
+
 
 class Uno:
     def __init__(self):
@@ -30,19 +40,17 @@ class Uno:
         value = sum(self.card_value(card) for card in hand)
         return value
 
+
 class UnoCog2(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.uno_games = {}
-        
+
     def hand_to_string(self, hand):
         return ', '.join(self.card_to_string(card) for card in hand)
 
     def card_to_string(self, card):
         return f"{card['color']} {card['value']}"
-    
-        
-    
 
     @nextcord.slash_command(name="uno", description="Start a new game of Uno")
     async def main(self, interaction: nextcord.Interaction):
@@ -62,6 +70,14 @@ class UnoCog2(commands.Cog):
             game.bot_hand.append(game.draw_card())
 
         await interaction.response.send_message(f"New Uno game started! Your hand: {self.hand_to_string(game.player_hand)}. Bot's up card: {self.card_to_string(game.bot_hand[0])}")
+
+        # Save Uno game data to MongoDB
+        uno_game_data = {
+            "channel_id": interaction.channel.id,
+            "player_hand": game.player_hand,
+            "bot_hand": game.bot_hand
+        }
+        uno_games_collection.insert_one(uno_game_data)
 
     @main.subcommand(name="play", description="Play a card in the current Uno game")
     async def uno_play(self, interaction: nextcord.Interaction):
@@ -93,6 +109,11 @@ class UnoCog2(commands.Cog):
         else:
             await interaction.response.send_message(f"You played {player_card}. Your hand is now {self.hand_to_string(game.player_hand)}.")
 
+        # Update and save Uno game data to MongoDB
+        uno_game_data = uno_games_collection.find_one({"channel_id": interaction.channel.id})
+        uno_game_data["player_hand"] = game.player_hand
+        uno_games_collection.replace_one({"channel_id": interaction.channel.id}, uno_game_data)
+
     @main.subcommand(name="draw", description="Draw a card in the current Uno game")
     async def uno_draw(self, interaction: nextcord.Interaction):
         if interaction.channel.id not in self.uno_games:
@@ -109,6 +130,11 @@ class UnoCog2(commands.Cog):
         else:
             await interaction.response.send_message(f"You drew {self.card_to_string(game.player_hand[-1])}. Your hand is now {self.hand_to_string(game.player_hand)}.")
 
+        # Update and save Uno game data to MongoDB
+        uno_game_data = uno_games_collection.find_one({"channel_id": interaction.channel.id})
+        uno_game_data["player_hand"] = game.player_hand
+        uno_games_collection.replace_one({"channel_id": interaction.channel.id}, uno_game_data)
+
     @main.subcommand(name="pass", description="Pass your turn in the current Uno game")
     async def uno_pass(self, interaction: nextcord.Interaction):
         if interaction.channel.id not in self.uno_games:
@@ -121,7 +147,13 @@ class UnoCog2(commands.Cog):
             del self.uno_games[interaction.channel.id]
             await interaction.response.send_message(f"Bot's hand is now {self.hand_to_string(game.bot_hand)}. Bot wins!")
         else:
-            await interaction.response.send_message(f"Bot's hand is now {self.hand_to_string(game.bot_hand)}.") 
-            
+            await interaction.response.send_message(f"Bot's hand is now {self.hand_to_string(game.bot_hand)}.")
+
+        # Update and save Uno game data to MongoDB
+        uno_game_data = uno_games_collection.find_one({"channel_id": interaction.channel.id})
+        uno_game_data["bot_hand"] = game.bot_hand
+        uno_games_collection.replace_one({"channel_id": interaction.channel.id}, uno_game_data)
+
+
 def setup(bot):
     bot.add_cog(UnoCog2(bot))
