@@ -1,7 +1,6 @@
 import nextcord
 from nextcord.ext import commands
 import json
-
 from pymongo import MongoClient
 import urllib.parse
 
@@ -9,7 +8,7 @@ import urllib.parse
 username = urllib.parse.quote_plus("apwade75009")
 password = urllib.parse.quote_plus("Celina@12")
 cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mongodb.net/")
-db = cluster["QuantaAI"]  # Replace "YourDatabaseName" with your actual database name
+db = cluster["QuantaAI"]
 welcome_settings_collection = db["welcome_settings"]
 
 # ** Ready for Production **
@@ -18,6 +17,7 @@ class WelcomeMessage(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.welcome_settings_collection = welcome_settings_collection
+        self.settings = self.load_settings()
 
     def load_settings(self):
         result = self.welcome_settings_collection.find_one()
@@ -72,3 +72,4 @@ class WelcomeMessage(commands.Cog):
 
 def setup(bot):
     bot.add_cog(WelcomeMessage(bot))
+
