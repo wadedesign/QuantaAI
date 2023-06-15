@@ -48,7 +48,7 @@ class VerificationCog(commands.Cog):
         overwrites = {
             guild.default_role: nextcord.PermissionOverwrite(read_messages=False)
         }
-        channel = await guild.create_text_channel('verification', overwrites=overwrites)
+        channel = await guild.create_text_channel('🔐・verification', overwrites=overwrites)
         view = VerificationView(self)
         await channel.send("Click the button below to get verified:", view=view)
         return channel
