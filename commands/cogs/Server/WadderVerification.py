@@ -113,6 +113,13 @@ class VerificationCog(commands.Cog):
                 await interaction.send(f"Verification role successfully set to role ID {role_id}. A verification channel with a button has been created.")
         else:
             await interaction.send("You don't have permission to use this command.")
+            
+    @nextcord.slash_command(name="print_roles")
+    async def print_roles(self, interaction: nextcord.Interaction):
+        guild = interaction.guild
+        roles = guild.roles
+        for role in roles:
+            print(f"{role.name}: {role.id}")
 
     @commands.Cog.listener()
     async def on_ready(self):
