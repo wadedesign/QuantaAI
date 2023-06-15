@@ -5,11 +5,20 @@ import nextcord
 from nextcord.ext import commands
 from numbers import Number
 from random import randint
+from pymongo import MongoClient
+import urllib.parse
 
 import requests
 
 BaseCog = getattr(commands, "Cog", object)
 
+
+# MongoDB connection details
+username = urllib.parse.quote_plus("apwade75009")
+password = urllib.parse.quote_plus("Celina@12")
+cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mongodb.net/")
+db = cluster["QuantaAI"]  # Replace "YourNewDatabaseName" with your desired database name
+nba_collection = db["nba_players"]
 
 ## ! Make more sub commands of this! ##
 
@@ -92,7 +101,7 @@ class XKCD(BaseCog):
 
 
         
-    @main.subcommand(name="nba", description="To get nba players")
+    @main.subcommand(name="nba", description="To get NBA players")
     async def nba_player(self, interaction: nextcord.Interaction, name: str):
         search_url = "https://free-nba.p.rapidapi.com/players"
         search_params = {
@@ -120,6 +129,8 @@ class XKCD(BaseCog):
             player_response = requests.get(player_url, headers=headers)
             player_data.append(player_response.json())
 
+        nba_collection.insert_many(player_data)
+
         for player in player_data:
             player_name = player['first_name'] + " " + player['last_name']
             player_team = player['team']['full_name']
@@ -131,29 +142,29 @@ class XKCD(BaseCog):
                 + str(player['weight_pounds'])
                 + " lbs"
             )
-            
+
             image_search_url = "https://api.unsplash.com/search/photos"
             image_search_params = {
                 "query": player_name,
                 "per_page": 1,
                 "client_id": "8_x4s8mZvLnV6ZzBsiEfWIdq8ZL_utvXX5MdtyDgm34"
             }
-            
+
             image_response = requests.get(image_search_url, params=image_search_params)
             image_data = image_response.json()["results"]
-            
+
             if image_data:
                 player_image = image_data[0]["urls"]["small"]
             else:
                 player_image = None
-            
+
             embed = nextcord.Embed(title="NBA Player Information", description=f"Player: {player_name}", color=0x00ff00)
             embed.add_field(name="Team", value=player_team, inline=False)
             embed.add_field(name="Stats", value=player_stats, inline=False)
-            
+
             if player_image:
                 embed.set_thumbnail(url=player_image)
-            
+
             await interaction.send(embed=embed)
 
 
