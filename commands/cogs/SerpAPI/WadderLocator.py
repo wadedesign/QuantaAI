@@ -2,8 +2,17 @@ import json
 import nextcord
 from nextcord.ext import commands
 from serpapi import GoogleSearch
+from pymongo import MongoClient
+import urllib.parse
 
 # * Ready for Production * #
+
+# MongoDB connection details
+username = urllib.parse.quote_plus("apwade75009")
+password = urllib.parse.quote_plus("Celina@12")
+cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mongodb.net/")
+db = cluster["QuantaAI"]  # Replace "YourNewDatabaseName" with your desired database name
+spam_collection = db["serpapi"]
 
 
 class LocalSearchCog(commands.Cog):
@@ -43,10 +52,9 @@ class LocalSearchCog(commands.Cog):
         else:
             await interaction.send("No local results found.")
 
-
     @main.subcommand(name="photo_meta", description="Fetches photo metadata for a local search result")
     async def photo_meta(self, interaction: nextcord.Interaction, query: str, location: str, index: int):
-    # Get the search results first
+        # Get the search results first
         search_params = {
             "engine": "google_maps",
             "q": query,
@@ -80,7 +88,7 @@ class LocalSearchCog(commands.Cog):
         response = f"Photo meta data for '{query}':\n```{json.dumps(results, indent=2, sort_keys=True)}```"
         await interaction.send(response)
 
-#** Google Lens **# Very good, look a picutre of someone or something and it will find more things about it 
+    # ** Google Lens **# Very good, look a picutre of someone or something and it will find more things about it
     @main.subcommand(name="googlelens", description="Searches for visual matches of url.png")
     async def googlelens(self, interaction: nextcord.Interaction, url: str):
         await interaction.response.defer()
@@ -101,8 +109,8 @@ class LocalSearchCog(commands.Cog):
                 await interaction.send(response)
         else:
             await interaction.send("No visual matches found.")
-            
-    #** Uses a word to find videos from google **#
+
+    # ** Uses a word to find videos from google **#
     @main.subcommand(name="googlevideos", description="Searches for videos based on a query")
     async def googlevideos(self, interaction: nextcord.Interaction, query: str):
         await interaction.response.defer()
@@ -125,7 +133,7 @@ class LocalSearchCog(commands.Cog):
                 await interaction.send(response)
         else:
             await interaction.send("No video results found.")
-            
+
     @main.subcommand(name="ytvideos", description="Searches for videos based on a query")
     async def youtubesearch(self, interaction: nextcord.Interaction, query: str):
         await interaction.response.defer()
@@ -147,7 +155,6 @@ class LocalSearchCog(commands.Cog):
         else:
             await interaction.send("No video results found.")
 
-            
     @main.subcommand(name="bing", description="Searches for things on Bing")
     async def bingsearch(self, interaction: nextcord.Interaction, query: str):
         await interaction.response.defer()
@@ -178,3 +185,6 @@ class LocalSearchCog(commands.Cog):
 
 def setup(bot):
     bot.add_cog(LocalSearchCog(bot))
+
+
+
