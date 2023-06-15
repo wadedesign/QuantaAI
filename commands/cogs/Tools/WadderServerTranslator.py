@@ -35,7 +35,7 @@ class TranslationCog(commands.Cog):
 
         try:
             response = openai.Completion.create(
-                engine="text-davinci-003",
+                model="gpt-3.5-turbo-16k",
                 prompt=f"Translate the following text to English: {message}",
                 max_tokens=100,
                 n=1,
