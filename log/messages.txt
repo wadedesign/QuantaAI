@@ -30,3 +30,9 @@ QuantaAI - showoff - wade5#0: Here are some AI commands!
 QuantaAI - showoff - wade5#0: !onlineinfo
 House Arrest - language - ThatWardrobeGuy#7504: russian
 House Arrest - language - ThatWardrobeGuy#7504: russian
+QuantaAI - showoff - wade5#0: test
+QuantaAI - showoff - wade5#0: ste
+QuantaAI - showoff - wade5#0: tsset
+QuantaAI - showoff - wade5#0: set
+QuantaAI - showoff - wade5#0: st
+QuantaAI - showoff - wade5#0: sset
