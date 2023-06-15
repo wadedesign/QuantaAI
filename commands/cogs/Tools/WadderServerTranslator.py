@@ -1,14 +1,12 @@
 import asyncio
-import openai
+import os
+import urllib.parse
+
 import nextcord
 from nextcord.ext import commands
 from langdetect import detect
-import os
-import json
-import nextcord
-from nextcord.ext import commands
 from pymongo import MongoClient
-import urllib.parse
+import openai
 
 # MongoDB connection details
 username = urllib.parse.quote_plus("apwade75009")
@@ -35,7 +33,7 @@ class TranslationCog(commands.Cog):
 
         try:
             response = openai.Completion.create(
-                model="gpt-3.5-turbo-16k",
+                engine="text-davinci-003",
                 prompt=f"Translate the following text to English: {message}",
                 max_tokens=100,
                 n=1,
@@ -48,6 +46,13 @@ class TranslationCog(commands.Cog):
 
         translated_message = response.choices[0].text.strip()
         return translated_message
+
+    def is_english(self, text):
+        try:
+            lang = detect(text)
+            return lang == 'en'
+        except:
+            return False
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -71,7 +76,6 @@ class TranslationCog(commands.Cog):
             translated_message = await self.translate_message(message.content)
             if translated_message.lower() != message.content.lower():
                 await message.channel.send(f"{message.author.mention} said (translated): {translated_message}")
-
 
     @nextcord.slash_command(name="servertranslation", description="Enable or disable server translation")
     async def main(self, interaction: nextcord.Interaction):
@@ -97,8 +101,6 @@ class TranslationCog(commands.Cog):
             settings[guild_id]["enabled"] = False
             self.save_settings(settings)
 
-
-    
     @main.subcommand(name="setchannel", description="Set the channel for server translation")
     @commands.has_permissions(administrator=True)
     async def set_translation_channel(self, interaction: nextcord.Interaction, channel: nextcord.TextChannel):
@@ -112,7 +114,7 @@ class TranslationCog(commands.Cog):
         self.save_settings(settings)
 
         await interaction.send(f"Translation channel has been set to {channel.mention}")
-    
+
     @main.subcommand(name="setmodel", description="Set the model for server translation")
     @commands.has_permissions(administrator=True)
     async def set_chat_model(self, interaction: nextcord.Interaction, model_key):
@@ -128,6 +130,6 @@ class TranslationCog(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def enable(self, interaction: nextcord.Interaction):
         self.enabled = True
-        
+
 def setup(bot):
     bot.add_cog(TranslationCog(bot))
