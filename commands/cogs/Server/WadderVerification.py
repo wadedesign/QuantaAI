@@ -87,23 +87,23 @@ class VerificationCog(commands.Cog):
         else:
             await interaction.followup.send("The verification role for this server has not been set.", ephemeral=True)
 
-    @commands.command(name="svrole")
-    async def set_verification_role(self, ctx: commands.Context, role_id: int):
-        if await self.is_admin(ctx.author):
-            verification_data = self.get_verification_data(ctx.guild.id)
+    @nextcord.slash_command(name="svrole", description="Set the verification role for the server.")
+    async def set_verification_role(self, interaction: nextcord.Interaction, role_id: int):
+        if await self.is_admin(interaction.user):
+            verification_data = self.get_verification_data(interaction.guild.id)
             if not verification_data:
-                verification_data = {"guild_id": ctx.guild.id}
+                verification_data = {"guild_id": interaction.guild.id}
 
             verification_data['role_id'] = role_id
 
             if 'channel_id' not in verification_data:
-                channel = await self.create_verification_channel(ctx.guild)
+                channel = await self.create_verification_channel(interaction.guild)
                 verification_data['channel_id'] = channel.id
 
             self.save_verification_data(verification_data)
-            await ctx.send(f"Verification role successfully set to role ID {role_id}. A verification channel with a button has been created.")
+            await interaction.send(f"Verification role successfully set to role ID {role_id}. A verification channel with a button has been created.")
         else:
-            await ctx.send("You don't have permission to use this command.")
+            await interaction.send("You don't have permission to use this command.")
 
     @commands.Cog.listener()
     async def on_ready(self):
