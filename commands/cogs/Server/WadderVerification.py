@@ -12,7 +12,7 @@ cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mon
 db = cluster["QuantaAI"]
 verification_collection = db["verification"]
 
-# ! This is not ready for production
+
 
 class VerifyButton(Button):
     def __init__(self, verification_cog, *args, **kwargs):
