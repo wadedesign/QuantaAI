@@ -4,18 +4,30 @@ import nextcord
 import calendar
 from nextcord.ext import commands
 import os 
+from pymongo import MongoClient
+import urllib.parse
+
+# MongoDB connection details
+username = urllib.parse.quote_plus("apwade75009")
+password = urllib.parse.quote_plus("Celina@12")
+cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mongodb.net/")
+db = cluster["QuantaAI"]  # Replace "YourNewDatabaseName" with your desired database name
+calendar_collection = db["calendar_events"]
 
 
 class CalendarCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.calendar_data = 'data/calendar_data.json'
-        
-        if not os.path.exists(self.calendar_data):
-            with open(self.calendar_data, 'w') as f:
-                json.dump({}, f)
 
-    @nextcord.slash_command(name="calendar", description="Manage calendar events")
+    async def save_event(self, server_id, event_name, event_datetime):
+        event_data = {
+            "server_id": server_id,
+            "event_name": event_name,
+            "datetime": event_datetime
+        }
+        calendar_collection.insert_one(event_data)
+
+    @nextcord.slash_command(name="calendar")
     @commands.has_permissions(administrator=True)
     async def _calendar(self, interaction: nextcord.Interaction):
         pass
@@ -27,21 +39,9 @@ class CalendarCog(commands.Cog):
             return
 
         event_datetime = f"{date} {time}"
-        
-        with open(self.calendar_data, 'r') as f:
-            data = json.load(f)
-
         server_id = str(interaction.guild.id)
-        if server_id not in data:
-            data[server_id] = []
 
-        data[server_id].append({
-            'event_name': event_name,
-            'datetime': event_datetime
-        })
-
-        with open(self.calendar_data, 'w') as f:
-            json.dump(data, f)
+        await self.save_event(server_id, event_name, event_datetime)
 
         await interaction.response.send_message(f"Event '{event_name}' created on {date} at {time}.")
 
@@ -52,19 +52,14 @@ class CalendarCog(commands.Cog):
             month = today.month
             year = today.year
 
-        with open(self.calendar_data, 'r') as f:
-            data = json.load(f)
-
         server_id = str(interaction.guild.id)
-        if server_id not in data:
-            await interaction.response.send_message("No events found for this server.")
-            return
+        events = calendar_collection.find({"server_id": server_id})
 
-        events = data[server_id]
         if not events:
             await interaction.response.send_message("No events found for this server.")
             return
 
+        events = list(events)
         events.sort(key=lambda x: x['datetime'])
         event_list = [f"**{event['event_name']}** on {event['datetime']}" for event in events]
 
@@ -73,6 +68,6 @@ class CalendarCog(commands.Cog):
 
         await interaction.response.send_message(f"Calendar for {calendar.month_name[month]} {year}:\n```\n{cal_str}\n```\nUpcoming events:\n" + "\n".join(event_list))
 
+
 def setup(bot):
     bot.add_cog(CalendarCog(bot))
-
