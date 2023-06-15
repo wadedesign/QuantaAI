@@ -2,6 +2,16 @@ import json
 import os
 import nextcord
 from nextcord.ext import commands
+from pymongo import MongoClient
+import urllib.parse
+
+# MongoDB connection details
+username = urllib.parse.quote_plus("apwade75009")
+password = urllib.parse.quote_plus("Celina@12")
+cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mongodb.net/")
+db = cluster["QuantaAI"]
+channels_collection = db["global_channels"]
+events_collection = db["events"]
 
 class PartnerShip(commands.Cog):
     def __init__(self, bot):
@@ -9,17 +19,14 @@ class PartnerShip(commands.Cog):
         self.global_channels = self.load_global_channels()
 
     def load_global_channels(self):
-        try:
-            file_path = os.path.join("data", "global_channels.json")
-            with open(file_path, "r") as f:
-                return json.load(f)
-        except FileNotFoundError:
+        global_channels = channels_collection.find_one()
+        if global_channels:
+            return global_channels["data"]
+        else:
             return {}
 
     def save_global_channels(self):
-        file_path = os.path.join("data", "global_channels.json")
-        with open(file_path, "w") as f:
-            json.dump(self.global_channels, f)
+        channels_collection.update_one({}, {"$set": {"data": self.global_channels}}, upsert=True)
 
     def add_global_channel(self, guild, channel):
         self.global_channels[str(guild.id)] = channel.id
