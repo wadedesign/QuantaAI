@@ -38,3 +38,7 @@ QuantaAI - showoff - wade5#0: st
 QuantaAI - showoff - wade5#0: sset
 QuantaAI - text-based - wade5#0: hola
 QuantaAI - text-based - wade5#0: hola
+QuantaAI - showoff - wade5#0: !ticket
+QuantaAI - 🐛・bug-report - wade5#0: !ticket
+QuantaAI - wade5-ticket - wade5#0: this is cool
+QuantaAI - wade5-ticket - wade5#0: we will see if this works herein a sec
