@@ -37,3 +37,4 @@ QuantaAI - showoff - wade5#0: set
 QuantaAI - showoff - wade5#0: st
 QuantaAI - showoff - wade5#0: sset
 QuantaAI - text-based - wade5#0: hola
+QuantaAI - text-based - wade5#0: hola
