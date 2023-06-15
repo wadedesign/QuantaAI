@@ -6,7 +6,7 @@ import openai
 from pymongo import MongoClient
 import urllib.parse
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = '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'
 
 # MongoDB connection details
 username = urllib.parse.quote_plus("apwade75009")
