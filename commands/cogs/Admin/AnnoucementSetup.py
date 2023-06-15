@@ -1,14 +1,20 @@
-import json
 import asyncio
 import nextcord
 from nextcord.ext import commands
 from datetime import datetime, timedelta
+from pymongo import MongoClient
+import urllib.parse
 
+# MongoDB connection details
+username = urllib.parse.quote_plus("apwade75009")
+password = urllib.parse.quote_plus("Celina@12")
+cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mongodb.net/")
+db = cluster["QuantaAI"]  # Replace "YourNewDatabaseName" with your desired database name
+announcement_collection = db["announcements"]
 
 class AnnouncementManager(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.settings_file = "announcement_settings.json"
         self.load_settings()
 
     @commands.guild_only()
@@ -69,21 +75,21 @@ class AnnouncementManager(commands.Cog):
             await announcement_channel.send(f"🚀 New feature: {details}")
 
     def get_announcement_channel(self, guild: nextcord.Guild):
-        channel_id = self.settings[str(guild.id)]["channel_id"]
+        guild_id = str(guild.id)
+        channel_id = self.settings[guild_id]["channel_id"]
         return guild.get_channel(channel_id)
 
     def load_settings(self):
-        try:
-            with open(self.settings_file, "r") as f:
-                self.settings = json.load(f)
-        except FileNotFoundError:
+        settings = announcement_collection.find_one({}, {"_id": 0})
+        if settings:
+            self.settings = settings
+        else:
             self.settings = {}
 
     def save_settings(self):
-        with open(self.settings_file, "w") as f:
-            json.dump(self.settings, f, indent=4)
-
+        announcement_collection.replace_one({}, self.settings, upsert=True)
 
 def setup(bot):
     bot.add_cog(AnnouncementManager(bot))
+
 
