@@ -6,6 +6,17 @@ from nextcord.ui import Button, View
 import json
 import os
 import random
+from pymongo import MongoClient
+import urllib.parse
+
+# MongoDB connection details
+username = urllib.parse.quote_plus("apwade75009")
+password = urllib.parse.quote_plus("Celina@12")
+cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mongodb.net/")
+db = cluster["QuantaAI"]
+players_collection = db["players"]
+stocks_collection = db["stocks"]
+bank_collection = db["bank"]
 
 class StockMarketGame(commands.Cog):
     def __init__(self, bot):
@@ -13,8 +24,10 @@ class StockMarketGame(commands.Cog):
         self.players = {}
         self.load_players()
         self.stocks = {}
+        self.load_stocks()
         self.update_interests.start()
         self.bank = {"balance": 1000000, "loan_interest": 0.05, "savings_interest": 0.02}
+        self.load_bank()
         self.update_stock_prices.start()
 
     async def get_top_stocks(self, limit=50):
@@ -22,25 +35,35 @@ class StockMarketGame(commands.Cog):
             async with session.get(f"https://financialmodelingprep.com/api/v3/stock-screener?marketCapMoreThan=1000000000&limit={limit}&apikey=demo") as response:
                 data = await response.json()
         return [stock["symbol"] for stock in data]
+    
     async def get_random_stock(self):
         stock_symbols = list(self.stocks.keys())
         return random.choice(stock_symbols)
-    
     
     def cog_unload(self):
         self.update_stock_prices.cancel()
     
     def save_players(self):
-        with open("data/players.json", "w") as f:
-            json.dump(self.players, f)
-
-    def load_players(self):
-        if os.path.exists("players.json"):
-            with open("players.json", "r") as f:
-                self.players = json.load(f)
-        else:
-            self.players = {}
+        players_collection.update_many({}, {"$set": self.players})
     
+    def load_players(self):
+        players = players_collection.find({})
+        self.players = {str(player["_id"]): player["data"] for player in players}
+    
+    def save_stocks(self):
+        stocks_collection.update_many({}, {"$set": self.stocks})
+    
+    def load_stocks(self):
+        stocks = stocks_collection.find({})
+        self.stocks = {stock["_id"]: stock["data"] for stock in stocks}
+    
+    def save_bank(self):
+        bank_collection.update_one({"_id": "bank"}, {"$set": self.bank}, upsert=True)
+    
+    def load_bank(self):
+        bank = bank_collection.find_one({"_id": "bank"})
+        if bank:
+            self.bank = bank["data"]
     
     @tasks.loop(minutes=1)
     async def update_stock_prices(self):
@@ -50,13 +73,15 @@ class StockMarketGame(commands.Cog):
                 async with session.get(f"https://financialmodelingprep.com/api/v3/quote/{stock}?apikey=demo") as response:
                     data = (await response.json())[0]
                 self.stocks[stock] = {"price": data["price"], "name": data["name"], "changePercent": data["changesPercentage"]}
+        self.save_stocks()
     
     @tasks.loop(minutes=30)  # You can change the interval to your preference
     async def update_interests(self):
         for player_id, player_data in self.players.items():
             player_data["savings"] *= (1 + self.bank["savings_interest"])
             player_data["loan"] *= (1 + self.bank["loan_interest"])
-            
+        self.save_players()
+    
     def is_admin():
         async def predicate(ctx):
             return ctx.author.guild_permissions.administrator
