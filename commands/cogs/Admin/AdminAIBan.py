@@ -90,6 +90,7 @@ class BanHammer(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        print(f"Received message: {message.content}")
         if message.author == self.bot.user:
             return
 
@@ -112,13 +113,14 @@ class BanHammer(commands.Cog):
                 await message.channel.send(f"{message.author.name} has been temporarily banned for 3 days due to inappropriate messages.")
             else:
                 warning_message = f"{message.author.name}, this is a warning. You have sent an inappropriate message. "\
-                                  f"You have {warns} out of 5 warnings. "\
-                                  f"Reaching 5 warnings will result in a temporary ban for 3 days."
+                                f"You have {warns} out of 5 warnings. "\
+                                f"Reaching 5 warnings will result in a temporary ban for 3 days."
                 await message.channel.send(warning_message)
                 try:
                     await message.author.send(warning_message)
                 except nextcord.errors.Forbidden:
                     pass
+
 
 
 def setup(bot):
