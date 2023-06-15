@@ -32,7 +32,7 @@ class StockMarketGame(commands.Cog):
 
     async def get_top_stocks(self, limit=50):
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://financialmodelingprep.com/api/v3/stock-screener?marketCapMoreThan=1000000000&limit={limit}&apikey=16c7ee94924968337c7fec0feb2ab3df") as response:
+            async with session.get(f"https://financialmodelingprep.com/api/v3/financial-statement-symbol-lists?apikey=16c7ee94924968337c7fec0feb2ab3df") as response:
                 data = await response.json()
         return [stock["symbol"] for stock in data]
     
