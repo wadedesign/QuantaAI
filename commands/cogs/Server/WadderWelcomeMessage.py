@@ -9,7 +9,7 @@ import urllib.parse
 username = urllib.parse.quote_plus("apwade75009")
 password = urllib.parse.quote_plus("Celina@12")
 cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mongodb.net/")
-db = cluster["YourDatabaseName"]  # Replace "YourDatabaseName" with your actual database name
+db = cluster["QuantaAI"]  # Replace "YourDatabaseName" with your actual database name
 welcome_settings_collection = db["welcome_settings"]
 
 # ** Ready for Production **
