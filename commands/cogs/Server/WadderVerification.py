@@ -5,6 +5,8 @@ from nextcord.ui import Button, View
 from pymongo import MongoClient
 import urllib.parse
 
+# ! redo the button and embed lol!
+
 # MongoDB connection details
 username = urllib.parse.quote_plus("apwade75009")
 password = urllib.parse.quote_plus("Celina@12")
