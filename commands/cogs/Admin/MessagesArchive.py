@@ -3,8 +3,17 @@ import json
 import nextcord
 from nextcord.ext import commands
 import aiofiles
+from pymongo import MongoClient
+import urllib.parse
 
-class MessageArchive(commands.Cog): #** RFP **#
+# MongoDB connection details
+username = urllib.parse.quote_plus("apwade75009")
+password = urllib.parse.quote_plus("Celina@12")
+cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mongodb.net/")
+db = cluster["QuantaAI"] 
+archive_collection = db["message_archives"]
+
+class MessageArchive(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -17,20 +26,24 @@ class MessageArchive(commands.Cog): #** RFP **#
                 "timestamp": message.created_at.isoformat()
             })
 
-        async with aiofiles.open(f"{channel.guild.id}_{channel.id}_archive.json", "w") as archive_file:
-            await archive_file.write(json.dumps(messages, indent=2))
-        
-        return f"{channel.guild.id}_{channel.id}_archive.json"
+        archive_data = {
+            "guild_id": str(channel.guild.id),
+            "channel_id": str(channel.id),
+            "messages": messages
+        }
+
+        await archive_collection.insert_one(archive_data)
+        return str(channel.guild.id), str(channel.id)
 
     @nextcord.slash_command(name="archive", description="📚 Archive messages from a channel.")
     async def main(self, interaction: nextcord.Interaction):
         pass
-    
+
     @main.subcommand(name="arcmes", description="📚 Archive messages from a channel.")
     @commands.has_permissions(administrator=True)
     async def arc(self, interaction: nextcord.Interaction, channel: nextcord.TextChannel):
-        archive_filename = await self.archive_messages(channel)
-        
+        guild_id, channel_id = await self.archive_messages(channel)
+
         # Define the computer animation frames
         animation = [
             "```yaml\n[                    ]```",
@@ -46,14 +59,14 @@ class MessageArchive(commands.Cog): #** RFP **#
             "```yaml\n[▉▉▉▉▉▉▉▉▉▉          ]```",
             "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉         ]```",
             "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉        ]```",
-            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉       ]```",
-            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉      ]```",
-            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉     ]```",
-            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉    ]```",
-            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉   ]```",
-            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉  ]```",
-            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ ]```",
-            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉       ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉      ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉     ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉    ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉   ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉  ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ ]```",
+            "```yaml\n[▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉]```",
             "```yaml\n[Archiving messages... ]```",
         ]
 
@@ -71,11 +84,8 @@ class MessageArchive(commands.Cog): #** RFP **#
             color=nextcord.Color.blue()
         )
         embed.set_footer(text="Created by MessageArchive")
-        
-        file = nextcord.File(archive_filename, filename=f"{channel.name}_archive.json")
-        
-        await loading_message.edit(content="Archived Messages", embed=embed, file=file)
 
+        await loading_message.edit(content="Archived Messages", embed=embed)
 
     @main.subcommand(name="arcserver", description="📚 Archive Server")
     @commands.has_permissions(administrator=True)
@@ -117,19 +127,16 @@ class MessageArchive(commands.Cog): #** RFP **#
 
         for channel in interaction.guild.text_channels:
             try:
-                archive_filename = await self.archive_messages(channel)
-                
+                guild_id, channel_id = await self.archive_messages(channel)
+
                 embed = nextcord.Embed(
                     title="Message Archive",
                     description=f"Archived messages from {channel.mention}",
                     color=nextcord.Color.blue()
                 )
                 embed.set_footer(text="Created by MessageArchive")
-                
-                file = nextcord.File(archive_filename, filename=f"{channel.name}_archive.json")
-                
-                await loading_message.edit(content="Archiving Server", embed=embed, file=file)
-                
+
+                await loading_message.edit(content="Archiving Server", embed=embed)
             except Exception as e:
                 print(f"Error archiving channel {channel}: {e}")
 
