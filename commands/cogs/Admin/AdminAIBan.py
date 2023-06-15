@@ -64,7 +64,29 @@ class BanHammer(commands.Cog):
             await self.set_ban_hammer_enabled(guild_id, True)
             message = "Ban Hammer has been enabled."
 
-        await interaction.send(message)
+        await interaction.send("Processing...")
+
+        # Define the animation frames using ASCII art
+        animation_frames = [
+            "⚡️",
+            "⚡️⚡️⚡️",
+            "⚡️⚡️⚡️⚡️⚡️",
+            "⚡️⚡️⚡️⚡️⚡️⚡️⚡️",
+            "⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️",
+            "⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️",
+            "⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️",
+            "⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️",
+            "⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️",
+            "⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️"
+        ]
+
+        # Send the animation frames with a delay between them
+        for frame in animation_frames:
+            await asyncio.sleep(0.5)  # Adjust the delay between frames if needed
+            await interaction.followup.send(frame)
+
+        await interaction.followup.send(message)
+
 
     @commands.Cog.listener()
     async def on_message(self, message):
