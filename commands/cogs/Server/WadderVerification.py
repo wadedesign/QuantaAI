@@ -77,31 +77,40 @@ class VerificationCog(commands.Cog):
         if verification_data and verification_data.get('role_id'):
             role_id = verification_data['role_id']
             verified_role = guild.get_role(role_id)
-            if verified_role and verified_role not in member.roles:
-                await member.add_roles(verified_role)
-                dm_channel = await member.create_dm()
-                await dm_channel.send("You've been successfully verified! You can now access the server channels.")
-                await interaction.followup.send("You've been successfully verified!", ephemeral=True)
+            if verified_role:
+                if verified_role in member.roles:
+                    await member.remove_roles(verified_role)
+                    await interaction.followup.send("Verification role has been removed.", ephemeral=True)
+                else:
+                    await member.add_roles(verified_role)
+                    await interaction.followup.send("You've been successfully verified!", ephemeral=True)
             else:
-                await interaction.followup.send("You're already verified.", ephemeral=True)
+                await interaction.followup.send("The verification role does not exist in the server.", ephemeral=True)
         else:
             await interaction.followup.send("The verification role for this server has not been set.", ephemeral=True)
 
-    @nextcord.slash_command(name="svrole", description="Set the verification role for the server.")
+    @nextcord.slash_command(name="svrole", description="Set or remove the verification role for the server.")
     async def set_verification_role(self, interaction: nextcord.Interaction, role_id: str):
         if await self.is_admin(interaction.user):
             verification_data = self.get_verification_data(interaction.guild.id)
             if not verification_data:
                 verification_data = {"guild_id": interaction.guild.id}
 
-            verification_data['role_id'] = role_id
+            if role_id == "remove":
+                if verification_data.get('role_id'):
+                    del verification_data['role_id']
+                    await interaction.send("Verification role has been removed.")
+                else:
+                    await interaction.send("There was no verification role set to remove.")
+            else:
+                verification_data['role_id'] = role_id
 
-            if 'channel_id' not in verification_data:
-                channel = await self.create_verification_channel(interaction.guild)
-                verification_data['channel_id'] = channel.id
+                if 'channel_id' not in verification_data:
+                    channel = await self.create_verification_channel(interaction.guild)
+                    verification_data['channel_id'] = channel.id
 
-            self.save_verification_data(verification_data)
-            await interaction.send(f"Verification role successfully set to role ID {role_id}. A verification channel with a button has been created.")
+                self.save_verification_data(verification_data)
+                await interaction.send(f"Verification role successfully set to role ID {role_id}. A verification channel with a button has been created.")
         else:
             await interaction.send("You don't have permission to use this command.")
 
@@ -111,3 +120,4 @@ class VerificationCog(commands.Cog):
 
 def setup(bot):
     bot.add_cog(VerificationCog(bot))
+
