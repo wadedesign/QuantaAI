@@ -8,6 +8,9 @@ import urllib.parse
 
 openai.api_key = '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'
 
+# not working at the moment
+
+
 # MongoDB connection details
 username = urllib.parse.quote_plus("apwade75009")
 password = urllib.parse.quote_plus("Celina@12")
