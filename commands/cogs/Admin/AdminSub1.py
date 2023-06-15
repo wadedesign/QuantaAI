@@ -1,10 +1,28 @@
 import nextcord
 from nextcord.ext import commands
+from pymongo import MongoClient
+import urllib.parse
+
+# MongoDB connection details
+username = urllib.parse.quote_plus("apwade75009")
+password = urllib.parse.quote_plus("Celina@12")
+cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mongodb.net/")
+db = cluster["QuantaAI"]  # Replace "YourNewDatabaseName" with your desired database name
+commands_collection = db["custom_commands"]
+
 
 class CustomCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.commands = {}
+        self.load_custom_commands()
+
+    def load_custom_commands(self):
+        commands_data = commands_collection.find({})
+        for command_data in commands_data:
+            name = command_data["_id"]
+            response = command_data["response"]
+            self.commands[name] = response
 
     @commands.group(name='cc', invoke_without_command=True)
     async def custom_commands(self, ctx):
@@ -20,6 +38,7 @@ class CustomCommands(commands.Cog):
             return
 
         self.commands[name] = response
+        commands_collection.insert_one({"_id": name, "response": response})
         await ctx.send(f'Successfully created custom command: `{name}`')
 
     @custom_commands.command(name='edit')
@@ -31,6 +50,7 @@ class CustomCommands(commands.Cog):
             return
 
         self.commands[name] = response
+        commands_collection.update_one({"_id": name}, {"$set": {"response": response}})
         await ctx.send(f'Successfully edited custom command: `{name}`')
 
     @custom_commands.command(name='delete')
@@ -42,6 +62,7 @@ class CustomCommands(commands.Cog):
             return
 
         del self.commands[name]
+        commands_collection.delete_one({"_id": name})
         await ctx.send(f'Successfully deleted custom command: `{name}`')
 
     @custom_commands.command(name='list')
@@ -68,8 +89,10 @@ class CustomCommands(commands.Cog):
             response = self.commands[command]
             await message.channel.send(response)
 
+
 def setup(bot):
     bot.add_cog(CustomCommands(bot))
+
     
     
     
