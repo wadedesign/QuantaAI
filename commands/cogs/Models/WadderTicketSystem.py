@@ -14,7 +14,8 @@ db = cluster["QuantaAI"]
 tickets_collection = db["tickets"]
 
 
-# ** RFP ** Quick make the ticket include the user who made it in the embed
+# ** best ticket system ever! **
+
 
 
 # works now!!!!
