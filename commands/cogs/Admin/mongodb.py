@@ -8,9 +8,9 @@ username = urllib.parse.quote_plus("apwade75009")
 password = urllib.parse.quote_plus("Celina@12")
 cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mongodb.net/")
 db = cluster["QuantaAI"]  # Replace "YourNewDatabaseName" with your desired database name
-message_collection = db["messages"]
-user_collection = db["users"]
-server_collection = db["servers"]
+message_collection = db["messagesquanta"]
+user_collection = db["usersquanta"]
+server_collection = db["serversquanta"]
 
 
 class LoggingCog(commands.Cog):
@@ -67,5 +67,4 @@ class LoggingCog(commands.Cog):
 
 
 def setup(bot):
-    cog = LoggingCog(bot)
-    bot.add_cog(cog)
+    bot.add_cog(LoggingCog(bot))

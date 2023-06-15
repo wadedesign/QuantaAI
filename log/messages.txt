@@ -54,3 +54,4 @@ QuantaAI - 👥・quanta-team - wade5#0: killll bithc
 QuantaAI - 👥・quanta-team - wade5#0: !create hello hi
 QuantaAI - 👥・quanta-team - wade5#0: !cc create hello hi
 QuantaAI - 👥・quanta-team - wade5#0: !hello
+QuantaAI - wade5-ticket - wade5#0: yes still works lol
