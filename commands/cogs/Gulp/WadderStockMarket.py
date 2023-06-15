@@ -32,7 +32,7 @@ class StockMarketGame(commands.Cog):
 
     async def get_top_stocks(self, limit=50):
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://financialmodelingprep.com/api/v3/stock-screener?marketCapMoreThan=1000000000&limit={limit}&apikey=demo") as response:
+            async with session.get(f"https://financialmodelingprep.com/api/v3/stock-screener?marketCapMoreThan=1000000000&limit={limit}&apikey=16c7ee94924968337c7fec0feb2ab3df") as response:
                 data = await response.json()
         return [stock["symbol"] for stock in data]
     
@@ -93,16 +93,16 @@ class StockMarketGame(commands.Cog):
             net_worth += self.stocks[stock]["price"] * quantity
         return net_worth
     
-    @nextcord.slash_command(name="mk", description="Start a new game of Number Guess")
+    @nextcord.slash_command(name="qstock")
     async def main(self, interaction: nextcord.Interaction):
         pass
     
-    @main.subcommand()
+    @main.subcommand(name="qstocks", description="View the available stocks.")
     async def stocks(self, interaction: nextcord.Interaction):
         stocks_list = [f"{stock}: {self.stocks[stock]['name']} (${self.stocks[stock]['price']:.2f})" for stock in self.stocks]
         await interaction.send("Available stocks:\n" + "\n".join(stocks_list))
 
-    @main.subcommand()
+    @main.subcommand(name="qstockinfo", description="View information about a stock.")
     async def mk_stock_info(self, interaction: nextcord.Interaction, symbol: str):
         if symbol not in self.stocks:
             await interaction.send("That stock symbol is not available for trading.")
@@ -110,7 +110,7 @@ class StockMarketGame(commands.Cog):
             stock_info = self.stocks[symbol]
             await interaction.send(f"{symbol}: {stock_info['name']} (${stock_info['price']:.2f})")
 
-    @main.subcommand()
+    @main.subcommand(name="qsjoin", description="Join the game")
     async def mk_join_game(self, interaction: nextcord.Interaction):
         player_id = str(interaction.user.id)
         if player_id in self.players:
@@ -119,7 +119,7 @@ class StockMarketGame(commands.Cog):
             self.players[player_id] = {"balance": 100000, "portfolio": {}, "savings": 0, "loan": 0}
             await interaction.send(f"Welcome to the game, {interaction.user.mention}! You have been given $100,000 to start trading.")
             self.save_players()
-    @main.subcommand()
+    @main.subcommand(name="qsave", description="View your savings account balance.")
     async def mk_save_money(self, interaction: nextcord.Interaction, amount: float):
         player_id = str(interaction.user.id)
         if player_id not in self.players:
