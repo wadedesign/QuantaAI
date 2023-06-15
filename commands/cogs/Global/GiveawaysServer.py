@@ -1,37 +1,43 @@
+from asyncio import tasks
 import nextcord
 import json
 import asyncio
 import datetime
 import time
 import random
+from nextcord.ext import commands
+from pymongo import MongoClient
+import urllib.parse
 
-from nextcord.ext import commands, tasks
-
+# MongoDB connection details
+username = urllib.parse.quote_plus("apwade75009")
+password = urllib.parse.quote_plus("Celina@12")
+cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mongodb.net/")
+db = cluster["QuantaAI"]
+giveaways_collection = db["giveaways"]
 
 def convert(date):
     pos = ["s", "m", "h", "d"]
-    time_dic = {"s": 1, "m": 60, "h": 3600, "d": 3600 *24}
+    time_dic = {"s": 1, "m": 60, "h": 3600, "d": 3600 * 24}
     i = {"s": "Secondes", "m": "Minutes", "h": "Heures", "d": "Jours"}
     unit = date[-1]
     if unit not in pos:
         return -1
     try:
         val = int(date[:-1])
-
     except:
         return -2
-
     if val == 1:
         return val * time_dic[unit], i[unit][:-1]
     else:
         return val * time_dic[unit], i[unit]
 
 
-async def stop_giveaway(self, g_id, data):
-    channel = self.bot.get_channel(data["channel_id"])
+async def stop_giveaway(bot, g_id, data):
+    channel = bot.get_channel(data["channel_id"])
     giveaway_message = await channel.fetch_message(int(g_id))
     users = await giveaway_message.reactions[0].users().flatten()
-    users.pop(users.index(self.bot.user))
+    users.pop(users.index(bot.user))
     if len(users) < data["winners"]:
         winners_number = len(users)
     else:
@@ -43,24 +49,18 @@ async def stop_giveaway(self, g_id, data):
         users_mention.append(user.mention)
     result_embed = nextcord.Embed(
         title="🎉 {} 🎉".format(data["prize"]),
-        color=self.color,
+        color=0x2F3136,
         description="Congratulations {} you won the giveaway !".format(", ".join(users_mention))
     ) \
-        .set_footer(icon_url=self.bot.user.avatar_url, text="Giveaway Ended !")
+        .set_footer(icon_url=bot.user.avatar_url, text="Giveaway Ended !")
     await giveaway_message.edit(embed=result_embed)
     ghost_ping = await channel.send(", ".join(users_mention))
     await ghost_ping.delete()
-    giveaways = json.load(open("data/giveaways.json", "r"))
-    del giveaways[g_id]
-    json.dump(giveaways, open("data/giveaways.json", "w"), indent=4)
-
-
+    giveaways_collection.delete_one({"_id": g_id})
 
 class Giveaways(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        
-        self.color = 0x2F3136
         self.giveaway_task.start()
 
     def cog_unload(self):
@@ -69,26 +69,21 @@ class Giveaways(commands.Cog):
     @tasks.loop(seconds=5)
     async def giveaway_task(self):
         await self.bot.wait_until_ready()
-        giveaways = json.load(open("cogs/giveaways.json", "r"))
-
-        if len(giveaways) == 0:
-            return
+        giveaways = giveaways_collection.find()
+        current_time = int(time.time())
 
         for giveaway in giveaways:
-            data = giveaways[giveaway]
-            if int(time.time()) > data["end_time"]:
-                await stop_giveaway(self, giveaway, data)
+            if current_time > giveaway["end_time"]:
+                await stop_giveaway(self.bot, str(giveaway["_id"]), giveaway)
 
-
-    @commands.command(
-        name="giveaway")
+    @commands.command(name="giveaway")
     @commands.has_permissions(manage_guild=True)
     async def giveaway(self, ctx: commands.Context):
         init = await ctx.send(embed=nextcord.Embed(
             title="🎉 New Giveaway ! 🎉",
             description="Please answer the following questions to finalize the creation of the Giveaway",
-            color=self.color)
-                       .set_footer(icon_url=self.bot.user.avatar_url, text=self.bot.user.name))
+            color=0x2F3136)
+            .set_footer(icon_url=self.bot.user.avatar_url, text=self.bot.user.name))
 
         questions = [
             "What would be the prize of the giveaway?",
@@ -107,7 +102,7 @@ class Giveaways(commands.Cog):
             embed = nextcord.Embed(
                 title="Giveaway 🎉",
                 description=question,
-                color=self.color
+                color=0x2F3136
             ).set_footer(icon_url=self.bot.user.avatar_url, text="Giveaway !")
             if index == 1:
                 question_message = await ctx.send(embed=embed)
@@ -120,7 +115,7 @@ class Giveaways(commands.Cog):
             except asyncio.TimeoutError:
                 await ctx.send(embed=nextcord.Embed(
                     title="Error",
-                    color=self.color,
+                    color=0x2F3136,
                     description="You took too long to answer this question"
                 ))
                 return
@@ -136,11 +131,12 @@ class Giveaways(commands.Cog):
         try:
             winners = abs(int(answers[3]))
             if winners == 0:
-                await ctx.send("You did not enter an postive number.")
+                await ctx.send("You did not enter a positive number.")
                 return
         except ValueError:
             await ctx.send("You did not enter an integer.")
             return
+
         prize = answers[0].title()
         channel = self.bot.get_channel(channel_id)
         converted_time = convert(answers[2])
@@ -149,45 +145,43 @@ class Giveaways(commands.Cog):
         elif converted_time == -2:
             await ctx.send("Your time value should be an integer.")
             return
+
         await init.delete()
         await question_message.delete()
         giveaway_embed = nextcord.Embed(
             title="🎉 {} 🎉".format(prize),
-            color=self.color,
+            color=0x2F3136,
             description=f'» **{winners}** {"winner" if winners == 1 else "winners"}\n'
                         f'» Hosted by {ctx.author.mention}\n\n'
-                        f'» **React with 🎉 to get into the giveaway.**\n'
-        )\
+                        f'» **React with 🎉 to enter the giveaway.**\n'
+        ) \
             .set_footer(icon_url=self.bot.user.avatar_url, text="Ends at")
 
         giveaway_embed.timestamp = datetime.datetime.utcnow() + datetime.timedelta(seconds=converted_time[0])
         giveaway_message = await channel.send(embed=giveaway_embed)
         await giveaway_message.add_reaction("🎉")
         now = int(time.time())
-        giveaways = json.load(open("data/giveaways.json", "r"))
         data = {
+            "_id": str(giveaway_message.id),
             "prize": prize,
             "host": ctx.author.id,
             "winners": winners,
             "end_time": now + converted_time[0],
             "channel_id": channel.id
         }
-        giveaways[str(giveaway_message.id)] = data
-        json.dump(giveaways, open("data/giveaways.json", "w"), indent=4)
+        giveaways_collection.insert_one(data)
 
-    @commands.command(
-        name="gstop",
-        usage="{giveaway_id}"
-    )
+    @commands.command(name="gstop", usage="{giveaway_id}")
     @commands.has_permissions(manage_guild=True)
     async def gstop(self, ctx: commands.Context, message_id):
         await ctx.message.delete()
-        giveaways = json.load(open("data/giveaways.json", "r"))
-        if not message_id in giveaways.keys(): return await ctx.send(
-            embed=nextcord.Embed(title="Error",
-                                description="This giveaway ID is not found.",
-                                color=self.color))
-        await stop_giveaway(self, message_id, giveaways[message_id])
+        giveaway = giveaways_collection.find_one({"_id": message_id})
+        if not giveaway:
+            return await ctx.send(embed=nextcord.Embed(
+                title="Error",
+                description="This giveaway ID is not found.",
+                color=0x2F3136))
+        await stop_giveaway(self.bot, message_id, giveaway)
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx: commands.Context, error):
@@ -197,14 +191,14 @@ class Giveaways(commands.Cog):
         if isinstance(error, commands.MissingPermissions):
             return await ctx.send(embed=nextcord.Embed(
                 title="Error",
-                description="You don't have the permission to use this command.",
-                color=self.color))
+                description="You don't have permission to use this command.",
+                color=0x2F3136))
+        
         if isinstance(error, commands.MissingRequiredArgument):
             return await ctx.send(embed=nextcord.Embed(
                 title="Error",
-                description=f"You forgot to provide an argument, please do it like: `{ctx.command.name} {ctx.command.usage}`",
-                color=self.color))
-
+                description=f"You forgot to provide an argument, please use it like: `{ctx.command.name} {ctx.command.usage}`",
+                color=0x2F3136))
 
 def setup(bot):
     bot.add_cog(Giveaways(bot))
