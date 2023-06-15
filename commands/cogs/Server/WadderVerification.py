@@ -13,7 +13,6 @@ db = cluster["QuantaAI"]
 verification_collection = db["verification"]
 
 
-
 class VerifyButton(Button):
     def __init__(self, verification_cog, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -59,14 +58,16 @@ class VerificationCog(commands.Cog):
                 channel_id = verification_data['channel_id']
                 channel = guild.get_channel(channel_id)
                 if channel:
-                    # Delete all previous verification messages in the channel
                     async for message in channel.history(limit=100):
                         if message.author == self.bot.user and message.content.startswith("Click the button below"):
-                            await message.delete()
-
-                    # Send a new verification message with a button
-                    view = VerificationView(self)
-                    await channel.send("Click the button below to get verified:", view=view)
+                            # Edit the existing verification message
+                            view = VerificationView(self)
+                            await message.edit(content="Click the button below to get verified:", view=view)
+                            break
+                    else:
+                        # No existing verification message found, create a new one
+                        view = VerificationView(self)
+                        await channel.send("Click the button below to get verified:", view=view)
 
     async def verify_member(self, interaction: nextcord.Interaction):
         await interaction.response.defer()
@@ -114,7 +115,6 @@ class VerificationCog(commands.Cog):
         else:
             await interaction.send("You don't have permission to use this command.")
 
-            
     @nextcord.slash_command(name="print_roles")
     async def print_roles(self, interaction: nextcord.Interaction):
         guild = interaction.guild
@@ -126,6 +126,6 @@ class VerificationCog(commands.Cog):
     async def on_ready(self):
         await self.find_verification_channels()
 
+
 def setup(bot):
     bot.add_cog(VerificationCog(bot))
-
