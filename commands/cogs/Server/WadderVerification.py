@@ -76,7 +76,7 @@ class VerificationCog(commands.Cog):
 
         if verification_data and verification_data.get('role_id'):
             role_id = verification_data['role_id']
-            verified_role = guild.get_role(role_id)
+            verified_role = guild.get_role(int(role_id))
             if verified_role:
                 if verified_role in member.roles:
                     await member.remove_roles(verified_role)
@@ -113,6 +113,7 @@ class VerificationCog(commands.Cog):
                 await interaction.send(f"Verification role successfully set to role ID {role_id}. A verification channel with a button has been created.")
         else:
             await interaction.send("You don't have permission to use this command.")
+
             
     @nextcord.slash_command(name="print_roles")
     async def print_roles(self, interaction: nextcord.Interaction):
