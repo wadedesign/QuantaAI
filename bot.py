@@ -64,7 +64,7 @@ def create_view() -> nextcord.ui.View:
     """
     view = nextcord.ui.View()
     buttons = [
-        (nextcord.ButtonStyle.link, "Visit Website", "🌐", "https://example.com"),
+        (nextcord.ButtonStyle.link, "Visit Website", "<:icons8twittercircled94:1119119011163148308>", "https://example.com"),
         (nextcord.ButtonStyle.primary, "Support Server", "🤝", "https://example.com/support"),
         (nextcord.ButtonStyle.secondary, "GitHub Repo", "🔗", "https://github.com/your_username/your_repo"),
         (nextcord.ButtonStyle.success, "Documentation", "📚", "https://example.com/docs"),
