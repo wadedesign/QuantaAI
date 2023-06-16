@@ -94,3 +94,8 @@ QuantaAI - text-based - wade5#0: \<:icons8update94:1119304409122361344>
 QuantaAI - text-based - wade5#0: \<:icons8satellitesignal94:1119304405292953732>
 QuantaAI - text-based - wade5#0: /<:icons8broadcasting48:1119230623790399488>
 QuantaAI - text-based - wade5#0: \<:icons8broadcasting48:1119230623790399488>
+QuantaAI - ai-model-base - wade5#0: showoff
+QuantaAI - ai-model-base - wade5#0: yes
+QuantaAI - ai-model-base - wade5#0: yes
+QuantaAI - ai-model-base - wade5#0: yes
+QuantaAI - ai-model-base - wade5#0: done
