@@ -34,12 +34,12 @@ class Uptime(commands.Cog, description="Uptime command"):
 
     @nextcord.slash_command(name="uptime", description="Shows the uptime of the bot")
     async def uptimewadder(self, interaction: nextcord.Interaction):
-        guild_count_emoji = "🏰"
-        global_users_emoji = "👥"
+        guild_count_emoji = "<:icons8satellitesignal94:1119304405292953732>"
+        global_users_emoji = "<:icons8broadcasting48:1119230623790399488>"
         cpu_emoji = "<:icons8tasks48:1119230747044237434>"
-        ram_emoji = "🔒"
-        nodejs_emoji = "📦"
-        discordjs_emoji = "💬"
+        ram_emoji = "<:icons8ssd94:1119304406656098336>"
+        nodejs_emoji = "<:icons8python94:1119304404768665711>"
+        discordjs_emoji = "<:icons8update94:1119304409122361344>"
 
         current_time = datetime.now().strftime("%m/%d/%Y %I:%M %p")
 

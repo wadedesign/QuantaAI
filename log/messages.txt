@@ -88,3 +88,9 @@ QuantaAI - text-based - wade5#0: test
 QuantaAI - text-based - wade5#0: test
 QuantaAI - text-based - wade5#0: done
 QuantaAI - text-based - wade5#0: \<:icons8discord94:1119230631633760266>
+QuantaAI - text-based - wade5#0: \<:icons8ssd94:1119304406656098336>
+QuantaAI - text-based - wade5#0: \<:icons8python94:1119304404768665711>
+QuantaAI - text-based - wade5#0: \<:icons8update94:1119304409122361344>
+QuantaAI - text-based - wade5#0: \<:icons8satellitesignal94:1119304405292953732>
+QuantaAI - text-based - wade5#0: /<:icons8broadcasting48:1119230623790399488>
+QuantaAI - text-based - wade5#0: \<:icons8broadcasting48:1119230623790399488>
