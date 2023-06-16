@@ -56,7 +56,7 @@ async def on_ready():
             # Add buttons
             view = nextcord.ui.View()
 
-            view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.link, label="Visit Website", emoji="🌐", url="https://example.com"))
+            view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.link, label="Visit Website", emoji=":icons8twittercircled94:", url="https://example.com"))
             view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.primary, label="Support Server", emoji="🤝", url="https://example.com/support"))
             view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.secondary, label="GitHub Repo", emoji="🔗", url="https://github.com/your_username/your_repo"))
             view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.success, label="Documentation", emoji="📚", url="https://example.com/docs"))
