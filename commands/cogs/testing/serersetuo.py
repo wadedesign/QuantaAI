@@ -9,7 +9,7 @@ import matplotlib.dates as mdates
 class ServerInfo(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.api_key = "YOUR_API_KEY"
+        self.api_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjdmZDJkYWQ2NDFiMjEyOTIiLCJpYXQiOjE2ODI5NzAwMDcsIm5iZiI6MTY4Mjk3MDAwNywiaXNzIjoiaHR0cHM6Ly93d3cuYmF0dGxlbWV0cmljcy5jb20iLCJzdWIiOiJ1cm46dXNlcjo3MDIzMjUifQ.WM5_voLQoe_aN7ekFe2g_TM6RSuKNsZ-REz1OH2SYWI"
         self.server_id = None
         self.original_message = None
         self.update_server_info.start()
@@ -121,13 +121,13 @@ class ServerInfo(commands.Cog):
         if self.server_id and self.original_message:
             await self.update_server_info_message()
 
-    @commands.command(name="setserver", description="Set the server ID for server info updates")
+    @nextcord.slash_command(name="setserver", description="Set the server ID for server info updates")
     @commands.has_permissions(administrator=True)
     async def set_server_id(self, ctx, server_id: int):
         self.server_id = server_id
         await ctx.send(f"Server ID set to {server_id}")
 
-    @commands.command(name="setupdates", description="Set up server info updates in a channel")
+    @nextcord.slash_command(name="setupdates", description="Set up server info updates in a channel")
     @commands.has_permissions(administrator=True)
     async def set_updates_channel(self, ctx, channel: nextcord.TextChannel):
         if self.server_id:
