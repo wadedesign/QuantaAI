@@ -1,4 +1,5 @@
 import asyncio
+import datetime
 import importlib
 import importlib.util
 import os
@@ -7,6 +8,7 @@ import nextcord
 from dotenv import load_dotenv
 from nextcord.ext import commands
 from pretty_help import PrettyHelp
+from datetime import datetime, timezone
 
 from logger import setup_logger
 
@@ -45,9 +47,15 @@ def create_embed(changelog: str) -> nextcord.Embed:
     """
     Create an embed with the given changelog string.
     """
-    embed = nextcord.Embed(title="Changelog for Wadder", description=changelog, color=nextcord.Color.orange())
+    embed = nextcord.Embed(
+        title="Changelog for Wadder",
+        description=changelog,
+        color=nextcord.Color.blue()  # Replace with an appropriate color
+    )
+    embed.set_thumbnail(url="https://example.com/your_thumbnail.png")  # Replace with the URL of your thumbnail or image
     embed.set_author(name="Wade", icon_url="http://wadderprojects.bhweb.ws/assets/img/waddernew.png")
-    embed.set_footer(text="Bot developed by Wade#1781")
+    embed.set_footer(text="Bot developed by Wade#1781 • Released on")
+    embed.timestamp = datetime.now(timezone.utc)
     return embed
 
 def create_view() -> nextcord.ui.View:
