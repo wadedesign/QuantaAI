@@ -582,5 +582,33 @@ class Developer2(commands.Cog):
             # Update the loading message with the channel information embed
             await loading_message.edit(content="Channel Information", file=gif_file, embed=embed)
             
+            
+    @dev4.subcommand(description="Get ZIP Code Information")
+    async def zip_code(self, interaction: nextcord.Interaction, zip_code: str):
+        url = "https://us-zip-code-information.p.rapidapi.com/"
+
+        querystring = {"zipcode": zip_code}
+
+        headers = {
+            "X-RapidAPI-Key": "82cfc7318cmsh3f3e03fa5eb7fdfp16eb9cjsn5bd4ea35cd19",
+            "X-RapidAPI-Host": "us-zip-code-information.p.rapidapi.com"
+        }
+
+        response = requests.get(url, headers=headers, params=querystring)
+        data = response.json()
+
+        # Extract the relevant information from the response
+        city = data.get("city")
+        state = data.get("state")
+        country = data.get("country")
+
+        # Build the response message
+        message = f"ZIP Code Information for {zip_code}:\n\n"
+        message += f"City: {city}\n"
+        message += f"State: {state}\n"
+        message += f"Country: {country}"
+
+        await interaction.response.send_message(content=message, ephemeral=True)
+            
 def setup(bot):
     bot.add_cog(Developer2(bot))
