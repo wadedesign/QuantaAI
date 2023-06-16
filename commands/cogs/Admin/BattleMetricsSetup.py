@@ -42,7 +42,7 @@ class ServerInfo(commands.Cog):
         timestamps, player_counts = await self.fetch_player_count_history(server_id)
 
         if timestamps and player_counts:
-            fig, ax = plt.subplots()
+            fig, ax = plt.subplots(figsize=(10, 6))
             ax.plot(timestamps, player_counts, linestyle='-', marker='o', markersize=3, color='blue', linewidth=1)
 
             ax.set_xlabel("Time")
@@ -51,11 +51,12 @@ class ServerInfo(commands.Cog):
             ax.grid(True)
 
             # Format x-axis date and time labels
+            ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
             ax.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d %H:%M'))
             fig.autofmt_xdate()
 
             buffer = BytesIO()
-            plt.savefig(buffer, format="png")
+            plt.savefig(buffer, format="png", bbox_inches="tight", pad_inches=0.2)
             buffer.seek(0)
             plt.close(fig)
 
@@ -64,7 +65,7 @@ class ServerInfo(commands.Cog):
             return None
 
     @nextcord.slash_command(name="serverinfo", description="Get server info for a given server ID on BattleMetrics")
-    async def serverinfo(self, interaction: nextcord.Interaction, server_id: int):
+    async def serverinfo(self, ctx, server_id: int):
         try:
             # Send a request to the BattleMetrics API
             headers = {"Authorization": f"Bearer {self.api_key}"}
@@ -92,7 +93,7 @@ class ServerInfo(commands.Cog):
                                            color=nextcord.Color.blue())
 
                     embed.set_image(url="attachment://player_count_history.png")
-                    await interaction.response.send_message(embed=embed, file=graph_file)
+                    await ctx.send(embed=embed, file=graph_file)
                 else:
                     # Create embed message with server information only
                     embed = nextcord.Embed(title=f"Server info for {server_name}",
@@ -100,18 +101,15 @@ class ServerInfo(commands.Cog):
                                                        f"Online players: {online_players}/{max_players}",
                                            color=nextcord.Color.blue())
 
-                    await interaction.response.send_message(embed=embed)
+                    await ctx.send(embed=embed)
 
             else:
                 # Handle invalid server ID
-                await interaction.response.send_message("Invalid server ID")
-                
-                
-                
+                await ctx.send("Invalid server ID")
 
         except Exception as e:
             print(e)
-            await interaction.response.send_message("An error occurred while fetching server information")
+            await ctx.send("An error occurred while fetching server information")
 
 def setup(bot):
     bot.add_cog(ServerInfo(bot))
