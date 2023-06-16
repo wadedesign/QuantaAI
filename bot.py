@@ -54,8 +54,8 @@ async def on_ready():
             embed.set_footer(text="Bot developed by Wade#1781")
 
             custom_emoji = {
-                    "id": "CUSTOM_EMOJI_ID", # Replace CUSTOM_EMOJI_ID with the actual ID of your custom emoji
-                    "name": "CUSTOM_EMOJI_NAME" # Replace CUSTOM_EMOJI_NAME with the actual name of your custom emoji
+                    "id": "1119120511700566037",  # Replace this with the actual ID of your custom emoji
+                    "name": "icons8twittercircled94"  # The name of your custom emoji
                 }
             # Add buttons
             view = nextcord.ui.View()
