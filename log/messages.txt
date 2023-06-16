@@ -56,3 +56,5 @@ QuantaAI - 👥・quanta-team - wade5#0: !cc create hello hi
 QuantaAI - 👥・quanta-team - wade5#0: !hello
 QuantaAI - wade5-ticket - wade5#0: yes still works lol
 QuantaAI - text-based - wade5#0: !commandchart
+QuantaAI - text-based - wade5#0: <:icons8tasks48:1119230747044237434>
+QuantaAI - text-based - wade5#0: \<:icons8tasks48:1119230747044237434>

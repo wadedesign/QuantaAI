@@ -36,7 +36,7 @@ class Uptime(commands.Cog, description="Uptime command"):
     async def uptimewadder(self, interaction: nextcord.Interaction):
         guild_count_emoji = "🏰"
         global_users_emoji = "👥"
-        cpu_emoji = "💻"
+        cpu_emoji = "<:icons8tasks48:1119230747044237434>"
         ram_emoji = "🔒"
         nodejs_emoji = "📦"
         discordjs_emoji = "💬"
