@@ -597,16 +597,22 @@ class Developer2(commands.Cog):
         response = requests.get(url, headers=headers, params=querystring)
         data = response.json()
 
-        # Extract the relevant information from the response
-        city = data.get("city")
-        state = data.get("state")
-        country = data.get("country")
+        if isinstance(data, list) and len(data) > 0:
+            # Access the first dictionary in the list
+            zip_info = data[0]
 
-        # Build the response message
-        message = f"ZIP Code Information for {zip_code}:\n\n"
-        message += f"City: {city}\n"
-        message += f"State: {state}\n"
-        message += f"Country: {country}"
+            # Extract the relevant information from the dictionary
+            city = zip_info.get("City")
+            state = zip_info.get("State")
+            country = zip_info.get("Country")
+
+            # Build the response message
+            message = f"ZIP Code Information for {zip_code}:\n\n"
+            message += f"City: {city}\n"
+            message += f"State: {state}\n"
+            message += f"Country: {country}"
+        else:
+            message = "No information found for the provided ZIP code."
 
         await interaction.response.send_message(content=message, ephemeral=True)
             
