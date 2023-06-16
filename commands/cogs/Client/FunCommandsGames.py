@@ -11,6 +11,8 @@ from sklearn import svm
 from sklearn.feature_extraction.text import CountVectorizer
 import random
 import string
+import urllib.parse
+from pymongo import MongoClient
 
 scheduled_events = dict()
 
@@ -146,11 +148,18 @@ class FunCommandsCog(commands.Cog):
         
         
         
-    @fun.subcommand(description="Send Rules")#remove this for its own cog
+    @fun.subcommand(description="Send Rules")
     @commands.has_permissions(administrator=True)
-    async def send_rules_and_verify(self,interaction: nextcord.Interaction):
+    async def send_rules_and_verify(self, interaction: nextcord.Interaction):
         def check(reaction, user):
             return user == interaction.user and str(reaction.emoji) == '✅'
+
+        # MongoDB connection details
+        username = urllib.parse.quote_plus("apwade75009")
+        password = urllib.parse.quote_plus("Celina@12")
+        cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mongodb.net/")
+        db = cluster["QuantaAI"]  # Replace "YourNewDatabaseName" with your desired database name
+        verification_collection = db["verirules"]  # Replace "YourNewCollectionName" with your desired collection name
 
         # Create the embed for the rules
         rules_embed = nextcord.Embed(title="📖 Server Rules", description="Please read and follow the rules below:")
@@ -190,6 +199,14 @@ class FunCommandsCog(commands.Cog):
             if reaction.message.id == rules_message.id and user != self.bot.user and str(reaction.emoji) == '✅':
                 await user.add_roles(role)
                 await interaction.channel.send(f'{user.mention} has been verified and now has access to other areas of the server.')
+
+                # Save the verification data to MongoDB
+                verification_data = {
+                    "user_id": user.id,
+                    "guild_id": interaction.guild.id,
+                    "verified": True
+                }
+                verification_collection.insert_one(verification_data)
 
         self.bot.add_listener(on_reaction_add, 'on_reaction_add')
         
