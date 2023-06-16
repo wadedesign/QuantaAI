@@ -145,7 +145,10 @@ class ServerInfo22(commands.Cog):
         if self.server_id and self.original_message:
             await self.update_server_info_message()
 
-    @nextcord.slash_command(name="setserver", description="Set the server ID for server info updates")
+    @nextcord.slash_command(name="battlesetup")
+    async def main (self, interaction: nextcord.Interaction):
+        pass
+    @main.subcommand(name="setserver", description="Set the server ID for server info updates")
     @commands.has_permissions(administrator=True)
     async def set_server_id(self, interaction: nextcord.Interaction, server_id: int):
         self.server_id = server_id
@@ -174,7 +177,7 @@ class ServerInfo22(commands.Cog):
             self.server_info_collection.insert_one({"_id": server_id})
             await interaction.send(f"Server ID set to {server_id}")
 
-    @nextcord.slash_command(name="setupdates", description="Set up server info updates in a channel")
+    @main.subcommand(name="setupdates", description="Set up server info updates in a channel")
     @commands.has_permissions(administrator=True)
     async def set_updates_channel(self, interaction: nextcord.Interaction, channel: nextcord.TextChannel):
         if self.server_id:
@@ -184,7 +187,7 @@ class ServerInfo22(commands.Cog):
         else:
             await interaction.send("Please set the server ID first using the `setserver` command.")
 
-    @nextcord.slash_command(name="refresh", description="Refresh the server info")
+    @main.subcommand(name="refresh", description="Refresh the server info")
     @commands.has_permissions(administrator=True)
     async def refresh_server_info(self, interaction: nextcord.Interaction):
         if self.server_id and self.original_message:
