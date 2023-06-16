@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import matplotlib.dates as mdates
 
-class ServerInfo(commands.Cog):
+class ServerInfo22(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.api_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjdmZDJkYWQ2NDFiMjEyOTIiLCJpYXQiOjE2ODI5NzAwMDcsIm5iZiI6MTY4Mjk3MDAwNywiaXNzIjoiaHR0cHM6Ly93d3cuYmF0dGxlbWV0cmljcy5jb20iLCJzdWIiOiJ1cm46dXNlcjo3MDIzMjUifQ.WM5_voLQoe_aN7ekFe2g_TM6RSuKNsZ-REz1OH2SYWI"
@@ -121,21 +121,21 @@ class ServerInfo(commands.Cog):
         if self.server_id and self.original_message:
             await self.update_server_info_message()
 
-    @nextcord.slash_command(name="setserver", description="Set the server ID for server info updates")
+    @nextcord.slash_command(name="sets1", description="Set the server ID for server info updates")
     @commands.has_permissions(administrator=True)
-    async def set_server_id(self, ctx, server_id: int):
+    async def set_server_id(self, interaction: nextcord.Interaction, server_id: int):
         self.server_id = server_id
-        await ctx.send(f"Server ID set to {server_id}")
+        await interaction.send(f"Server ID set to {server_id}")
 
-    @nextcord.slash_command(name="setupdates", description="Set up server info updates in a channel")
+    @nextcord.slash_command(name="setupdates1", description="Set up server info updates in a channel")
     @commands.has_permissions(administrator=True)
-    async def set_updates_channel(self, ctx, channel: nextcord.TextChannel):
+    async def set_updates_channel(self, interaction: nextcord.Interaction, channel: nextcord.TextChannel):
         if self.server_id:
             self.original_message = await channel.send("Initializing server info...")
             await self.update_server_info_message()
-            await ctx.send(f"Server info updates set up in {channel.mention}")
+            await interaction.send(f"Server info updates set up in {channel.mention}")
         else:
-            await ctx.send("Please set the server ID first using the `setserver` command.")
+            await interaction.send("Please set the server ID first using the `setserver` command.")
 
 def setup(bot):
-    bot.add_cog(ServerInfo(bot))
+    bot.add_cog(ServerInfo22(bot))
