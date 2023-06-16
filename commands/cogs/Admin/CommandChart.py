@@ -100,7 +100,7 @@ class CommandChart(commands.Cog):
 
         if not channel:
             channel = interaction.channel
-        if not channel.permissions_for(interaction.message.author).read_messages == True:
+        if not channel.permissions_for(interaction.user).read_messages == True:
             await em.delete()
             return await interaction.send("You do not have the proper permissions to access that channel.")
 
