@@ -48,7 +48,7 @@ def create_embed(changelog: str) -> nextcord.Embed:
     Create an embed with the given changelog string.
     """
     embed = nextcord.Embed(
-        title="Changelog for Wadder",
+        title="Changelog for QuantaAI",
         description=changelog,
         color=nextcord.Color.blue()  # Replace with an appropriate color
     )
