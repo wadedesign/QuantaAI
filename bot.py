@@ -53,11 +53,14 @@ async def on_ready():
             embed.set_author(name="Wade", icon_url="http://wadderprojects.bhweb.ws/assets/img/waddernew.png")
             embed.set_footer(text="Bot developed by Wade#1781")
 
+            custom_emoji = {
+                    "id": "CUSTOM_EMOJI_ID", # Replace CUSTOM_EMOJI_ID with the actual ID of your custom emoji
+                    "name": "CUSTOM_EMOJI_NAME" # Replace CUSTOM_EMOJI_NAME with the actual name of your custom emoji
+                }
             # Add buttons
             view = nextcord.ui.View()
 
-            view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.link, label="Visit Website", emoji=":icons8twittercircled94:", url="https://example.com"))
-            view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.link, label="Visit Website", emoji=":icons8twittercircled94:", url="https://example.com"))
+            view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.link, label="Visit Website", emoji=custom_emoji, url="https://example.com"))
 
             view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.primary, label="Support Server", emoji="🤝", url="https://example.com/support"))
             view.add_item(nextcord.ui.Button(style=nextcord.ButtonStyle.secondary, label="GitHub Repo", emoji="🔗", url="https://github.com/your_username/your_repo"))
