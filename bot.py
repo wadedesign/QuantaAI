@@ -53,8 +53,7 @@ def create_embed(changelog: str) -> nextcord.Embed:
         color=nextcord.Color.blue()  # Replace with an appropriate color
     )
     embed.set_thumbnail(url="https://example.com/your_thumbnail.png")  # Replace with the URL of your thumbnail or image
-    embed.set_author(name="<:icons8approval94:1119237585982722079>" + " Wade", icon_url="http://wadderprojects.bhweb.ws/assets/img/waddernew.png")
-
+    embed.set_author(name="Wade", icon_url="http://wadderprojects.bhweb.ws/assets/img/waddernew.png")
     embed.set_footer(text="Bot developed by Wade#5 • Released on")
     embed.timestamp = datetime.now(timezone.utc)
     return embed
