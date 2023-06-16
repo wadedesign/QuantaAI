@@ -175,7 +175,7 @@ class FunCommandsCog(commands.Cog):
 
         # Add the rules to the embed
         for i, rule in enumerate(rules):
-            rules_embed.add_field(name=f"🔹 Rule {i+1}", value=f"```{rule}```", inline=False)
+            rules_embed.add_field(name=f"<:icons8approval94:1119237585982722079> Rule {i+1}", value=f"```{rule}```", inline=False)
 
         # Prompt the user to specify the channel to send the rules to
         await interaction.followup.send('Please specify the channel to send the rules to (mention the channel):')
