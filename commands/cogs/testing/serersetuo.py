@@ -180,6 +180,7 @@ class ServerInfo22(commands.Cog):
     @main.subcommand(name="setupdates", description="Set up server info updates in a channel")
     @commands.has_permissions(administrator=True)
     async def set_updates_channel(self, interaction: nextcord.Interaction, channel: nextcord.TextChannel):
+        await interaction.response.defer()
         if self.server_id:
             self.original_message = await channel.send("Initializing server info...")
             await self.update_server_info_message()
