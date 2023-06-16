@@ -115,3 +115,8 @@ QuantaAI - ai-model-base - wade5#0: test
 QuantaAI - ai-model-base - wade5#0: quit
 QuantaAI - ai-model-base - wade5#0: <#1117543187850997843>
 QuantaAI - ai-model-base - wade5#0: Quanta Enthusiast
+QuantaAI - showoff - wade5#0: yewsy
+QuantaAI - showoff - wade5#0: yesy
+QuantaAI - showoff - wade5#0: quit
+QuantaAI - showoff - wade5#0: <#1117543187850997843>
+QuantaAI - showoff - wade5#0: Quanta Enthusiast

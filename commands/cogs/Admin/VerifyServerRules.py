@@ -1,6 +1,7 @@
 import nextcord
 from nextcord.ext import commands
-from nextcord.ui import View, button
+
+# error 53 object has no attriubute id 
 
 class VerifyServerRules(commands.Cog):
     def __init__(self, bot):
@@ -9,8 +10,8 @@ class VerifyServerRules(commands.Cog):
     @nextcord.slash_command()
     @commands.has_permissions(administrator=True)
     async def vsrules(self, interaction: nextcord.Interaction):
-        def check(button, user):
-            return user == interaction.user and button.custom_id == 'verify_button'
+        def check(reaction, user):
+            return user == interaction.user and str(reaction.emoji) == '✅'
 
         # Create the embed for the rules
         rules_embed = nextcord.Embed(title="Server Rules", description="Please read and follow the rules below:")
@@ -44,15 +45,12 @@ class VerifyServerRules(commands.Cog):
         # Send the rules as an embed to the specified channel
         rules_message = await channel.send(embed=rules_embed)
 
-        # Create the verify button
-        verify_button = nextcord.ui.Button(style=nextcord.ButtonStyle.primary, label='Verify', custom_id='verify_button')
+        # Add the verification check mark
+        await rules_message.add_reaction('✅')
+        await interaction.send(f'The rules have been sent to {channel.mention}. React with ✅ on the rules message to gain access to other areas of the Discord server.')
 
-        # Add the verify button to the rules message
-        action_row = nextcord.ui.ActionRow(verify_button)
-        await rules_message.edit(content=f'React with the button below to gain access to other areas of the Discord server.', embed=None, view=nextcord.ui.View(action_row))
-
-        # Wait for the user to click the verify button
-        button, user = await self.bot.wait_for('button_click', check=check)
+        # Wait for the user to react to the rules message
+        reaction, user = await self.bot.wait_for('reaction_add', check=check)
         await user.add_roles(role)
         await interaction.send(f'{user.mention} has been verified and now has access to other areas of the server.')
 
