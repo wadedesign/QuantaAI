@@ -116,7 +116,7 @@ class ServerInfo22(commands.Cog):
             print(e)
             await self.original_message.edit(content="An error occurred while fetching server information")
 
-    @tasks.loop(minutes=4)
+    @tasks.loop(seconds=15)
     async def update_server_info(self):
         if self.server_id and self.original_message:
             await self.update_server_info_message()
