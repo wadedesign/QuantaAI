@@ -11,7 +11,7 @@ import urllib.parse
 class ServerInfo22(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.api_key = "YOUR_API_KEY"
+        self.api_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjdmZDJkYWQ2NDFiMjEyOTIiLCJpYXQiOjE2ODI5NzAwMDcsIm5iZiI6MTY4Mjk3MDAwNywiaXNzIjoiaHR0cHM6Ly93d3cuYmF0dGxlbWV0cmljcy5jb20iLCJzdWIiOiJ1cm46dXNlcjo3MDIzMjUifQ.WM5_voLQoe_aN7ekFe2g_TM6RSuKNsZ-REz1OH2SYWI"
         self.server_id = None
         self.original_message = None
         self.update_server_info.start()
