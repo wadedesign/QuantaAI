@@ -139,3 +139,4 @@ async def on_bot_close():
     
 
 bot.run(TOKEN)
+

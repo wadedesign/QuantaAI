@@ -5,6 +5,7 @@ import nextcord
 from nextcord.ext import commands
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.patheffects as path_effects
 
 class CommandChart(commands.Cog):
     """Shows the commands most used in a certain channel within the last so-and-so messages"""
@@ -32,37 +33,41 @@ class CommandChart(commands.Cog):
         plt.clf()
 
         # Set a custom color map
-        cmap = plt.get_cmap("nipy_spectral")
+        cmap = plt.get_cmap("tab20c")
         colors = cmap(np.linspace(0, 1, len(top)))
 
+        # Create a gradient background
+        plt.style.use("dark_background")
+
         # Set figure and axis properties
-        fig, ax = plt.subplots(figsize=(8, 8), dpi=80)
+        fig, ax = plt.subplots(figsize=(10, 10), dpi=100)
         ax.axis("equal")
 
-        # Generate the pie chart
+        # Generate the pie chart with 3D effect
         wedges, texts, autotexts = ax.pie(
             [x[1] for x in top] + [others],
             labels=["{} ({:.1f}%)".format(x[0], x[1]) for x in top] + ["Others ({:.1f}%)".format(others)],
             colors=colors,
             autopct="%1.1f%%",
-            startangle=0,
-            wedgeprops=dict(width=0.3),
+            startangle=90,
+            pctdistance=0.85,
+            wedgeprops=dict(width=0.4, edgecolor="w"),
             textprops={"color": "w", "fontweight": "bold"},
         )
 
         # Set font properties for the text inside the wedges
-        plt.setp(autotexts, size=10, weight="bold")
+        plt.setp(autotexts, size=12, weight="bold")
 
-        # Add a title
-        title = plt.title("Stats in #{}".format(channel.name), color="white", fontsize=16)
+        # Add a title with a neon glow effect
+        title = plt.title("Stats in #{}".format(channel.name), color="w", fontsize=24)
         title.set_va("top")
         title.set_ha("center")
+        title.set_path_effects([path_effects.Stroke(linewidth=2, foreground="w"), path_effects.Normal()])
 
-        # Add a shadow effect to the wedges
+        # Add a neon glow effect to the wedges
         for wedge in wedges:
-            wedge.set_edgecolor("k")
-            wedge.set_linewidth(1)
             wedge.set_alpha(0.8)
+            wedge.set_path_effects([path_effects.Stroke(linewidth=1.5, foreground="w"), path_effects.Normal()])
 
         # Remove unnecessary spines and ticks
         ax.spines["top"].set_visible(False)
@@ -73,7 +78,7 @@ class CommandChart(commands.Cog):
 
         # Save the chart to an image buffer
         image_object = BytesIO()
-        plt.savefig(image_object, format="PNG", facecolor="#36393E", bbox_inches="tight", pad_inches=0)
+        plt.savefig(image_object, format="PNG", facecolor="#121212", bbox_inches="tight", pad_inches=0)
         image_object.seek(0)
         return image_object
 
@@ -144,4 +149,8 @@ class CommandChart(commands.Cog):
 
 def setup(bot):
     bot.add_cog(CommandChart(bot))
+
+
+
+
 
