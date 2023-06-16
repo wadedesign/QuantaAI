@@ -68,6 +68,9 @@ def create_view() -> nextcord.ui.View:
         (nextcord.ButtonStyle.primary, "Support Server", "🤝", "https://example.com/support"),
         (nextcord.ButtonStyle.secondary, "GitHub Repo", "🔗", "https://github.com/your_username/your_repo"),
         (nextcord.ButtonStyle.success, "Documentation", "📚", "https://example.com/docs"),
+        (nextcord.ButtonStyle.danger, "Bug Report", "🐛", "https://example.com/bug-report"),
+        (nextcord.ButtonStyle.danger, "Bug Report", "🐛", "https://example.com/bug-report"),
+        (nextcord.ButtonStyle.danger, "Bug Report", "🐛", "https://example.com/bug-report"),
         (nextcord.ButtonStyle.danger, "Bug Report", "🐛", "https://example.com/bug-report")
     ]
     for style, label, emoji, url in buttons:
