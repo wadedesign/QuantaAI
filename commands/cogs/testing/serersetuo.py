@@ -5,14 +5,23 @@ import requests
 import matplotlib.pyplot as plt
 from io import BytesIO
 import matplotlib.dates as mdates
+from pymongo import MongoClient
+import urllib.parse
 
-class ServerInfo(commands.Cog):
+class ServerInfo22(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.api_key = "YOUR_API_KEY"
         self.server_id = None
         self.original_message = None
         self.update_server_info.start()
+
+        # MongoDB connection details
+        username = urllib.parse.quote_plus("apwade75009")
+        password = urllib.parse.quote_plus("Celina@12")
+        cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mongodb.net/")
+        db = cluster["YourNewDatabaseName"]  # Replace "YourNewDatabaseName" with your desired database name
+        self.server_info_collection = db["server_info"]
 
     def cog_unload(self):
         self.update_server_info.cancel()
@@ -86,25 +95,40 @@ class ServerInfo(commands.Cog):
                 online_players = data["data"]["attributes"]["players"]
                 max_players = data["data"]["attributes"]["maxPlayers"]
 
+                # Store server information in the database
+                self.server_info_collection.update_one(
+                    {"_id": self.server_id},
+                    {"$set": {
+                        "name": server_name,
+                        "ip": server_ip,
+                        "port": server_port,
+                        "online_players": online_players,
+                        "max_players": max_players
+                    }},
+                    upsert=True
+                )
+
                 # Generate and send player count history graph
                 graph_buffer = await self.generate_player_count_history_graph()
                 if graph_buffer:
                     graph_file = nextcord.File(graph_buffer, "player_count_history.png")
 
                     # Create embed message with server information and graph
-                    embed = nextcord.Embed(title=f"Server info for {server_name}",
-                                           description=f"IP: {server_ip}:{server_port}\n"
-                                                       f"Online players: {online_players}/{max_players}",
-                                           color=nextcord.Color.blue())
+                    embed = nextcord.Embed(
+                        title=f"Server info for {server_name}",
+                        description=f"IP: {server_ip}:{server_port}\nOnline players: {online_players}/{max_players}",
+                        color=nextcord.Color.blue()
+                    )
 
                     embed.set_image(url="attachment://player_count_history.png")
                     await self.original_message.edit(embed=embed, file=graph_file)
                 else:
                     # Create embed message with server information only
-                    embed = nextcord.Embed(title=f"Server info for {server_name}",
-                                           description=f"IP: {server_ip}:{server_port}\n"
-                                                       f"Online players: {online_players}/{max_players}",
-                                           color=nextcord.Color.blue())
+                    embed = nextcord.Embed(
+                        title=f"Server info for {server_name}",
+                        description=f"IP: {server_ip}:{server_port}\nOnline players: {online_players}/{max_players}",
+                        color=nextcord.Color.blue()
+                    )
 
                     await self.original_message.edit(embed=embed)
 
@@ -125,7 +149,30 @@ class ServerInfo(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def set_server_id(self, interaction: nextcord.Interaction, server_id: int):
         self.server_id = server_id
-        await interaction.send(f"Server ID set to {server_id}")
+
+        # Check if server ID exists in the database
+        existing_server_info = self.server_info_collection.find_one({"_id": server_id})
+
+        if existing_server_info:
+            # Retrieve stored server information
+            name = existing_server_info["name"]
+            ip = existing_server_info["ip"]
+            port = existing_server_info["port"]
+            online_players = existing_server_info["online_players"]
+            max_players = existing_server_info["max_players"]
+
+            # Create embed message with retrieved server information
+            embed = nextcord.Embed(
+                title=f"Server info for {name}",
+                description=f"IP: {ip}:{port}\nOnline players: {online_players}/{max_players}",
+                color=nextcord.Color.blue()
+            )
+
+            await interaction.send(embed=embed)
+        else:
+            # Store the server ID without server information
+            self.server_info_collection.insert_one({"_id": server_id})
+            await interaction.send(f"Server ID set to {server_id}")
 
     @nextcord.slash_command(name="setupdates", description="Set up server info updates in a channel")
     @commands.has_permissions(administrator=True)
@@ -147,4 +194,5 @@ class ServerInfo(commands.Cog):
             await interaction.send("Please set the server ID and channel first using the `setserver` and `setupdates` commands.")
 
 def setup(bot):
-    bot.add_cog(ServerInfo(bot))
+    bot.add_cog(ServerInfo22(bot))
+
