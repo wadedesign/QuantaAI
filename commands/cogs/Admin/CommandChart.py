@@ -89,20 +89,20 @@ class CommandChart(commands.Cog):
         return image_object
 
     @commands.guild_only()
-    @commands.command()
+    @nextcord.slash_command()
     async def commandchart(
-        self, ctx, channel: typing.Optional[nextcord.TextChannel] = None, number: int = 5000,
+        self, interaction: nextcord.Interaction, channel: typing.Optional[nextcord.TextChannel] = None, number: int = 5000,
     ):
         """See the used commands in a certain channel within a certain amount of messages."""
         e = nextcord.Embed(description="Loading...", color=0x000099)
         e.set_thumbnail(url="https://cdn.discordapp.com/emojis/544517783224975387.gif?v=1")
-        em = await ctx.send(embed=e)
+        em = await interaction.send(embed=e)
 
         if not channel:
-            channel = ctx.channel
-        if not channel.permissions_for(ctx.message.author).read_messages == True:
+            channel = interaction.channel
+        if not channel.permissions_for(interaction.message.author).read_messages == True:
             await em.delete()
-            return await ctx.send("You do not have the proper permissions to access that channel.")
+            return await interaction.send("You do not have the proper permissions to access that channel.")
 
         message_list = []
         try:
@@ -113,7 +113,7 @@ class CommandChart(commands.Cog):
                     message_list.append(com.qualified_name)
         except nextcord.errors.Forbidden:
             await em.delete()
-            return await ctx.send("I do not have permission to look at that channel.")
+            return await interaction.send("I do not have permission to look at that channel.")
         msg_data = {"total count": 0, "commands": {}}
 
         for msg in message_list:
@@ -131,7 +131,7 @@ class CommandChart(commands.Cog):
 
         if msg_data["commands"] == {}:
             await em.delete()
-            return await ctx.send("No commands have been run in that channel.")
+            return await interaction.send("No commands have been run in that channel.")
         for command in msg_data["commands"]:
             pd = float(msg_data["commands"][command]["count"]) / float(msg_data["total count"])
             msg_data["commands"][command]["percent"] = round(pd * 100, 1)
@@ -149,7 +149,7 @@ class CommandChart(commands.Cog):
         others = 100 - sum(x[1] for x in top_ten)
         img = self.create_chart(top_ten, others, channel)
         await em.delete()
-        await ctx.channel.send(file=nextcord.File(img, "chart.png"))
+        await interaction.channel.send(file=nextcord.File(img, "chart.png"))
 
 
 def setup(bot):
