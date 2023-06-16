@@ -1,5 +1,4 @@
 import asyncio
-import datetime
 import importlib
 import importlib.util
 import os
@@ -8,7 +7,7 @@ import nextcord
 from dotenv import load_dotenv
 from nextcord.ext import commands
 from pretty_help import PrettyHelp
-from typing import Tuple, List
+
 from logger import setup_logger
 
 # added by wade
@@ -42,37 +41,27 @@ async def update_presence():
 
 
 
-def read_changelog(file_path: str) -> str:
-    """
-    Reads the changelog from the specified file.
-    """
-    try:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            return f.read()
-    except FileNotFoundError:
-        print(f"Changelog file not found at: {file_path}")
-        return ""
-    except Exception as e:
-        print(f"An error occurred while reading the changelog file:\n{str(e)}")
-        traceback.print_exc()
-        return ""
-
 def create_embed(changelog: str) -> nextcord.Embed:
     """
-    Creates an embed with the given changelog string.
+    Create an embed with the given changelog string.
     """
     embed = nextcord.Embed(title="Changelog for Wadder", description=changelog, color=nextcord.Color.orange())
-    embed.set_author(name=os.getenv('BOT_NAME', 'Wade'), icon_url=os.getenv('BOT_ICON_URL', "http://wadderprojects.bhweb.ws/assets/img/waddernew.png"))
-    embed.set_footer(text=f"Bot developed by {os.getenv('BOT_DEVELOPER', 'Wade#1781')}")
-    embed.set_thumbnail(url=os.getenv('BOT_THUMBNAIL_URL', 'http://wadderprojects.bhweb.ws/assets/img/waddernew.png')) 
-    embed.timestamp = datetime.datetime.utcnow()  # Adding a timestamp
+    embed.set_author(name="Wade", icon_url="http://wadderprojects.bhweb.ws/assets/img/waddernew.png")
+    embed.set_footer(text="Bot developed by Wade#1781")
     return embed
 
-def create_view(buttons: List[Tuple[nextcord.ButtonStyle, str, str, str]]) -> nextcord.ui.View:
+def create_view() -> nextcord.ui.View:
     """
-    Creates a view with buttons.
+    Create a view with buttons.
     """
     view = nextcord.ui.View()
+    buttons = [
+        (nextcord.ButtonStyle.link, "Visit Website", "🌐", "https://example.com"),
+        (nextcord.ButtonStyle.primary, "Support Server", "🤝", "https://example.com/support"),
+        (nextcord.ButtonStyle.secondary, "GitHub Repo", "🔗", "https://github.com/your_username/your_repo"),
+        (nextcord.ButtonStyle.success, "Documentation", "📚", "https://example.com/docs"),
+        (nextcord.ButtonStyle.danger, "Bug Report", "🐛", "https://example.com/bug-report")
+    ]
     for style, label, emoji, url in buttons:
         view.add_item(nextcord.ui.Button(style=style, label=label, emoji=emoji, url=url))
     return view
@@ -80,25 +69,20 @@ def create_view(buttons: List[Tuple[nextcord.ButtonStyle, str, str, str]]) -> ne
 @bot.event
 async def on_ready():
     """
-    Reads the changelog file and sends it as an embed to a specified channel.
+    Read the changelog file and send it as an embed to a specified channel.
     """
     try:
-        changelog = read_changelog(os.getenv('CHANGELOG_PATH', 'QuantaProjects/Update/qchangelogsmd/changelog2.md'))
+        with open(r'QuantaProjects/Update/qchangelogsmd/changelog2.md', 'r', encoding='utf-8') as f:
+            changelog = f.read()
 
-        channel_id = int(os.getenv('CHANNEL_ID', '1112958990171775089'))  # Replace with the ID of the channel you want to send the embed to
+        # Configuration
+        channel_id = 1112958990171775089  # Replace with the ID of the channel you want to send the embed to
 
         # Send the embed
         channel = bot.get_channel(channel_id)
         if channel:
             embed = create_embed(changelog)
-            buttons = [
-                (nextcord.ButtonStyle.link, "Visit Website", "🌐", "https://example.com"),
-                (nextcord.ButtonStyle.primary, "Support Server", "🤝", "https://example.com/support"),
-                (nextcord.ButtonStyle.secondary, "GitHub Repo", "🔗", "https://github.com/your_username/your_repo"),
-                (nextcord.ButtonStyle.success, "Documentation", "📚", "https://example.com/docs"),
-                (nextcord.ButtonStyle.danger, "Bug Report", "🐛", "https://example.com/bug-report")
-            ]
-            view = create_view(buttons)
+            view = create_view()
             await channel.send(embed=embed, view=view)
         else:
             print(f"Unable to find channel with ID: {channel_id}")
