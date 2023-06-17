@@ -11,10 +11,17 @@ from pretty_help import PrettyHelp
 from datetime import datetime, timezone
 
 from logger import setup_logger
-
+import sentry_sdk
 # added by wade
 
+sentry_sdk.init(
+    dsn="https://899564a6b18d45948704c3560277eea4@o4505376557432832.ingest.sentry.io/4505376561037312",
 
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0
+)
 
 ending_note = "For additional assistance, contact a moderator."
 color = 0x00FF00
