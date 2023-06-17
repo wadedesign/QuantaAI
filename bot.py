@@ -23,6 +23,8 @@ sentry_sdk.init(
     traces_sample_rate=1.0
 )
 
+division_by_zero = 1 / 0
+
 ending_note = "For additional assistance, contact a moderator."
 color = 0x00FF00
 
