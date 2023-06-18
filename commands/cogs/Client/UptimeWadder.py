@@ -44,11 +44,11 @@ class Uptime(commands.Cog, description="Uptime command"):
         memory_total = memory.total / (1024 * 1024)
         
         # Create embed
-        embed = nextcord.Embed(title="QuantaAI 🤖", color=nextcord.Color.blue())
+        embed = nextcord.Embed(title="QuantaAI <:icons8quantumbit64:1119848347176538222>", color=nextcord.Color.blue())
         
         # System Info
-        embed.add_field(name="<:icons8ubuntu48:1119848350812995684> System Info", value=f"**CPU**: 🖥️ Intel Xeon E5-2670v2 - Usage: {cpu_usage}%\n"
-                                                    f"**RAM**: 💾 DDR3 @ 1333 MHz - Usage: {memory_used:.2f} MB / {memory_total:.2f} MB\n"
+        embed.add_field(name="<:icons8ubuntu48:1119848350812995684> System Info", value=f"**CPU**: <:icons8cpu94:1119848345951797368> Intel Xeon E5-2670v2 - Usage: {cpu_usage}%\n"
+                                                    f"**RAM**: <:icons8ssd94:1119304406656098336> DDR3 @ 1333 MHz - Usage: {memory_used:.2f} MB / {memory_total:.2f} MB\n"
                                                     f"**Storage**: <:icons8storage94:1119848349131100170> RAID 10 SSD\n"
                                                     f"**Network**: <:icons8wifi94:1119848351895138465> 1 Gbit Multi-blend", inline=False)
         
@@ -58,7 +58,7 @@ class Uptime(commands.Cog, description="Uptime command"):
         
         # Global Statistics
         embed.add_field(name="🌍 Global Statistics", value=f"**Guild Count**: 🌐 {global_guilds}\n"
-                                                        f"**User Count**: 👥 {global_users}", inline=False)
+                                                        f"**User Count**: <:icons8conference94:1119848344257302589> {global_users}", inline=False)
         
         # Set footer
         embed.set_footer(text=f"🕒 Last Updated • {current_time}")
