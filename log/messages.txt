@@ -131,3 +131,7 @@ Konoha🍃 - cloud - jodd_reta#0274: m!play samjho na aditya
 Konoha🍃 - cloud - jodd_reta#0274: m!stop
 QuantaAI - text-based - wade5#0: \<:icons8ssd94:1119304406656098336>
 QuantaAI - 📷・quanta-showcase - wade5#0: \<:icons8python94:1119304404768665711>
+QuantaAI - 📷・quanta-showcase - wade5#0: \<:icons8ubuntu48:1119848350812995684>
+QuantaAI - 📷・quanta-showcase - wade5#0: \<:icons8storage94:1119848349131100170>
+QuantaAI - 📷・quanta-showcase - wade5#0: \<:icons8wifi94:1119848351895138465>
+QuantaAI - 📷・quanta-showcase - wade5#0: icons8quantumbit64

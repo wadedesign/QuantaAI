@@ -47,10 +47,10 @@ class Uptime(commands.Cog, description="Uptime command"):
         embed = nextcord.Embed(title="QuantaAI 🤖", color=nextcord.Color.blue())
         
         # System Info
-        embed.add_field(name="💻 System Info", value=f"**CPU**: 🖥️ Intel Xeon E5-2670v2 - Usage: {cpu_usage}%\n"
+        embed.add_field(name="<:icons8ubuntu48:1119848350812995684> System Info", value=f"**CPU**: 🖥️ Intel Xeon E5-2670v2 - Usage: {cpu_usage}%\n"
                                                     f"**RAM**: 💾 DDR3 @ 1333 MHz - Usage: {memory_used:.2f} MB / {memory_total:.2f} MB\n"
-                                                    f"**Storage**: 💽 RAID 10 SSD\n"
-                                                    f"**Network**: 🌐 1 Gbit Multi-blend", inline=False)
+                                                    f"**Storage**: <:icons8storage94:1119848349131100170> RAID 10 SSD\n"
+                                                    f"**Network**: <:icons8wifi94:1119848351895138465> 1 Gbit Multi-blend", inline=False)
         
         # Bot Info
         embed.add_field(name="🤖 Bot Info", value=f"**Python Version**: <:icons8python94:1119304404768665711> v3.11\n"
