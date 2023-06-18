@@ -1,4 +1,5 @@
 import asyncio
+import io
 import random
 import aiohttp
 import nextcord
@@ -22,7 +23,11 @@ nba_collection = db["nba_players"]
 
 ## ! Make more sub commands of this! ##
 
+version1="Bot V.1006-23.beta"
+version2 ="`optimization upgrade, chat gpt improvements, chat gpt in mp work, dalle avalaible work in mp too, mention bot in mp work, report work in mp, version work in mp and ping work in mp`"
 
+version3="Bot V.0906-23.beta"
+version4 ="`optimization upgrade, chat gpt and mention bot help in text channels`"
 class XKCD(BaseCog):
     """Display XKCD entries"""
 
@@ -166,6 +171,28 @@ class XKCD(BaseCog):
                 embed.set_thumbnail(url=player_image)
 
             await interaction.send(embed=embed)
+            
+            
+    @main.subcommand()
+    async def qversion(self, interaction: nextcord.Interaction):
+        if isinstance(interaction.channel, nextcord.TextChannel):
+            await interaction.message.delete()
+        embed = nextcord.Embed(title="Versions du Bot", color=nextcord.Color.random())
+        embed.set_author(name=f"Demandé par {interaction.user.name}", icon_url=interaction.user.avatar)
+        embed.add_field(name="", value="")
+        embed.add_field(name="Last Version", value=version1)
+        embed.add_field(name="Update Logs", value=version2)
+        embed.add_field(name="", value="")
+        embed.add_field(name="Old Version", value=version3)
+        embed.add_field(name="Update Logs", value=version4)
+        embed.add_field(name="", value="")
+        embed.add_field(name="Preview Version", value="Bot V.0103-23.alpha")
+        embed.add_field(name="Update Logs", value="`Optimisation, First update and alot of new command`")
+        embed.add_field(name="Date format", value="`MM/DD/YY`")
+        with open("./Autres/version.jpg", "rb") as f:
+            image_data = f.read()
+        embed.set_thumbnail(url="attachment://version.jpg")
+        await interaction.send(embed=embed, file=nextcord.File(io.BytesIO(image_data), "version.jpg"))
 
 
 def setup(bot):
