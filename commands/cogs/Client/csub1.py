@@ -222,7 +222,7 @@ class XKCD(BaseCog):
             embedc1.set_footer(text=version1)
             await interaction.send(embed=embedc1)
 
-    @commands.command()
+    @main.subcommand()
     async def helps(self, interaction: nextcord.Interaction):
 
         embed_message = nextcord.Embed(
@@ -232,8 +232,8 @@ class XKCD(BaseCog):
         )
 
         embed_message.set_author(
-            name=f"Demandé par {interaction.author.name}",
-            icon_url=interaction.author.avatar
+            name=f"Demandé par {interaction.user.name}",
+            icon_url=interaction.user.avatar
         )
 
         embed_message.add_field(name="helps", value="help show this message =help")
@@ -250,8 +250,8 @@ class XKCD(BaseCog):
         )
 
         embed_message2.set_author(
-            name=f"Demandé par {interaction.author.name}",
-            icon_url=interaction.author.avatar
+            name=f"Demandé par {interaction.user.name}",
+            icon_url=interaction.user.avatar
         )
         
         embed_message2.add_field(name="slist", value="slist list all soundboard =slist 4")
@@ -273,8 +273,8 @@ class XKCD(BaseCog):
         )
 
         embed_message3.set_author(
-            name=f"Demandé par {interaction.author.name}",
-            icon_url=interaction.author.avatar
+            name=f"Demandé par {interaction.user.name}",
+            icon_url=interaction.user.avatar
         )
         
 
@@ -289,8 +289,8 @@ class XKCD(BaseCog):
         )
 
         embed_message4.set_author(
-            name=f"Demandé par {interaction.author.name}",
-            icon_url=interaction.author.avatar
+            name=f"Demandé par {interaction.user.name}",
+            icon_url=interaction.user.avatar
         )
         
       
@@ -308,8 +308,8 @@ class XKCD(BaseCog):
         )
 
         embed_message5.set_author(
-            name=f"Demandé par {interaction.author.name}",
-            icon_url=interaction.author.avatar
+            name=f"Demandé par {interaction.user.name}",
+            icon_url=interaction.user.avatar
         )
         
       
@@ -329,8 +329,8 @@ class XKCD(BaseCog):
         )
 
         embed_message6.set_author(
-            name=f"Demandé par {interaction.author.name}",
-            icon_url=interaction.author.avatar
+            name=f"Demandé par {interaction.user.name}",
+            icon_url=interaction.user.avatar
         )
 
         embed_message6.add_field(name="helps", value="help show this message =help")
