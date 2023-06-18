@@ -57,7 +57,7 @@ class Uptime(commands.Cog, description="Uptime command"):
                                                 f"**Nextcord Version**: <:icons8update94:1119304409122361344> ^2.4.2", inline=False)
         
         # Global Statistics
-        embed.add_field(name="🌍 Global Statistics", value=f"**Guild Count**: 🌐 {global_guilds}\n"
+        embed.add_field(name="🌍 Global Statistics", value=f"**Guild Count**: <:icons8worldmap94:1119849386483142727> {global_guilds}\n"
                                                         f"**User Count**: <:icons8conference94:1119848344257302589> {global_users}", inline=False)
         
         # Set footer
