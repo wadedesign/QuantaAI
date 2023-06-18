@@ -10,6 +10,8 @@ from nextcord.ext import commands
 from pretty_help import PrettyHelp
 from datetime import datetime, timezone
 
+import requests
+
 from logger import setup_logger
 import sentry_sdk
 # added by wade
@@ -151,7 +153,21 @@ for root, dirs, files in os.walk(cogs_dir):
 async def setuplogger(interaction: nextcord.Interaction):
     await setup_logger(interaction)
 
+@bot.command()
+async def get_projects_full(ctx, board_id: int):
+    url = f"https://your-domain.atlassian.com/rest/agile/1.0/board/{board_id}/project/full"
+    headers = {
+        "Authorization": "Bearer <access_token>",
+    }
 
+    response = requests.get(url, headers=headers)
+    data = response.json()
+
+    if response.status_code == 200:
+        # Process the data or send it as a response
+        await ctx.send(data)
+    else:
+        await ctx.send("Failed to retrieve projects.")
 
 
 @bot.slash_command()
