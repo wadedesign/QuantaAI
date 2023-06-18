@@ -189,10 +189,10 @@ class XKCD(BaseCog):
         embed.add_field(name="Preview Version", value="Bot V.0103-23.alpha")
         embed.add_field(name="Update Logs", value="`Optimisation, First update and alot of new command`")
         embed.add_field(name="Date format", value="`MM/DD/YY`")
-        with open("./Autres/version.jpg", "rb") as f:
+        with open("/images/quantaai/png/logo-black.png", "rb") as f:
             image_data = f.read()
-        embed.set_thumbnail(url="attachment://version.jpg")
-        await interaction.send(embed=embed, file=nextcord.File(io.BytesIO(image_data), "version.jpg"))
+        embed.set_thumbnail(url="attachment://logo-black.png")
+        await interaction.send(embed=embed, file=nextcord.File(io.BytesIO(image_data), "logo-black.png"))
 
 
 def setup(bot):
