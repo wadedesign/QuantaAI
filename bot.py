@@ -2,6 +2,7 @@ import asyncio
 import datetime
 import importlib
 import importlib.util
+import json
 import os
 import traceback
 import nextcord
@@ -153,25 +154,28 @@ for root, dirs, files in os.walk(cogs_dir):
 async def setuplogger(interaction: nextcord.Interaction):
     await setup_logger(interaction)
 
+
+        
 @bot.command()
-async def get_projects_full(ctx):
-    url = f"https://quantaai.atlassian.net/jira/software/projects/QUAN/boards/1"
+async def get_board(ctx, board_id: int):
+    url = f"https://quantaai.atlassian.net/jira/software/projects/QUAN/boards/{board_id}"
     headers = {
+        "Accept": "application/json",
         "Authorization": "Bearer ATATT3xFfGF0Vk_MsWSxVjrEw1CZ4Uhijh_cGJulp1sAsQo6rFCc9058moPqzocG4b9uUI0su2RemGBUUxRWGTaUuXGch3OmiCoBe9D4Ws8PIvn70D3qD4kO1exO5mNMb-pET2X6kdE9NT1Jj1I2V7n0UeBszhUj5ciy72ojKtRKCbOyBCie4qM=867E977F",
     }
 
-    print("Sending GET request to Jira API...")
     response = requests.get(url, headers=headers)
-    print("Response received.")
+    data = response.json()
 
     if response.status_code == 200:
-        data = response.json()
-        print("Data retrieved successfully.")
-        print(data)  # Optional: print the data received
-        await ctx.send(data)
+        # Print JSON response to terminal
+        formatted_data = json.dumps(data, sort_keys=True, indent=4, separators=(",", ": "))
+        print(formatted_data)
+
+        # Send JSON response as a message
+        await ctx.send(formatted_data)
     else:
-        print("Failed to retrieve projects.")
-        await ctx.send("Failed to retrieve projects.")
+        await ctx.send("Failed to retrieve the board.")
 
 
 @bot.slash_command()
