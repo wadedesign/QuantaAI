@@ -28,6 +28,8 @@ version2 ="`optimization upgrade, chat gpt improvements, chat gpt in mp work, da
 
 version3="Bot V.0906-23.beta"
 version4 ="`optimization upgrade, chat gpt and mention bot help in text channels`"
+
+
 class XKCD(BaseCog):
     """Display XKCD entries"""
 
