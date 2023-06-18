@@ -176,7 +176,7 @@ class XKCD(BaseCog):
     @main.subcommand()
     async def qversion(self, interaction: nextcord.Interaction):
         if isinstance(interaction.channel, nextcord.TextChannel):
-            await interaction.message.delete()
+            await interaction.response.defer()
         embed = nextcord.Embed(title="Versions du Bot", color=nextcord.Color.random())
         embed.set_author(name=f"Demandé par {interaction.user.name}", icon_url=interaction.user.avatar)
         embed.add_field(name="", value="")
@@ -189,7 +189,7 @@ class XKCD(BaseCog):
         embed.add_field(name="Preview Version", value="Bot V.0103-23.alpha")
         embed.add_field(name="Update Logs", value="`Optimisation, First update and alot of new command`")
         embed.add_field(name="Date format", value="`MM/DD/YY`")
-        with open("/images/quantaai/png/logo-black.png", "rb") as f:
+        with open("images/quantaai/png/logo-black.png", "rb") as f:
             image_data = f.read()
         embed.set_thumbnail(url="attachment://logo-black.png")
         await interaction.send(embed=embed, file=nextcord.File(io.BytesIO(image_data), "logo-black.png"))
@@ -197,3 +197,5 @@ class XKCD(BaseCog):
 
 def setup(bot):
     bot.add_cog(XKCD(bot))
+    
+    

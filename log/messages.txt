@@ -150,3 +150,4 @@ QuantaAI - text-based - wade5#0: !get_projects_full 1
 QuantaAI - text-based - wade5#0: !get_projects_full
 QuantaAI - text-based - wade5#0: !get_projects_full
 QuantaAI - text-based - wade5#0: !get_board 1
+QuantaAI - text-based - wade5#0: /dev3 qversion
