@@ -214,13 +214,13 @@ class XKCD(BaseCog):
             embedc.add_field(name="", value="We will fix it as soon as possible.", inline=False)
             embedc.set_author(name=f"Requested by {interaction.user.name}", icon_url=interaction.user.avatar)
             embedc.set_footer(text=version1)
-            await interaction.send(embed=embedc, delete_after=5)
+            await interaction.send(embed=embedc)
         else:
             embedc1 = nextcord.Embed(title="Report Error", description="Error sending the message.", color=nextcord.Color.red())
             embedc1.add_field(name="", value="Please try again later.", inline=False)
             embedc1.set_author(name=f"Requested by {interaction.user.name}", icon_url=interaction.user.avatar)
             embedc1.set_footer(text=version1)
-            await interaction.send(embed=embedc1, delete_after=5)
+            await interaction.send(embed=embedc1)
 
 
 def setup(bot):
