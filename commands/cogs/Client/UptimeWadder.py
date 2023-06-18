@@ -61,7 +61,7 @@ class Uptime(commands.Cog, description="Uptime command"):
                                                         f"**User Count**: <:icons8conference94:1119848344257302589> {global_users}", inline=False)
         
         # Set footer
-        embed.set_footer(text=f"🕒 Last Updated • {current_time}")
+        embed.set_footer(text=f"<:icons8availableupdates48:1119850424732753950> Last Updated • {current_time}")
 
         # Send the embed
         await self.uptime_message.edit(embed=embed)
