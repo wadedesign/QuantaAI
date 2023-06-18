@@ -160,13 +160,17 @@ async def get_projects_full(ctx):
         "Authorization": "Bearer ATATT3xFfGF0Vk_MsWSxVjrEw1CZ4Uhijh_cGJulp1sAsQo6rFCc9058moPqzocG4b9uUI0su2RemGBUUxRWGTaUuXGch3OmiCoBe9D4Ws8PIvn70D3qD4kO1exO5mNMb-pET2X6kdE9NT1Jj1I2V7n0UeBszhUj5ciy72ojKtRKCbOyBCie4qM=867E977F",
     }
 
+    print("Sending GET request to Jira API...")
     response = requests.get(url, headers=headers)
-    data = response.json()
+    print("Response received.")
 
     if response.status_code == 200:
-        # Process the data or send it as a response
+        data = response.json()
+        print("Data retrieved successfully.")
+        print(data)  # Optional: print the data received
         await ctx.send(data)
     else:
+        print("Failed to retrieve projects.")
         await ctx.send("Failed to retrieve projects.")
 
 
