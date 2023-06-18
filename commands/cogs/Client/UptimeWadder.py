@@ -47,27 +47,28 @@ class Uptime(commands.Cog, description="Uptime command"):
         embed = nextcord.Embed(title="Bot Uptime 🤖", color=nextcord.Color.blue())
         
         # System Info
-        embed.add_field(name="💻 System Info", value="\u200b", inline=False)
-        embed.add_field(name="CPU", value=f"🖥️ Intel Xeon E5-2670v2 - Usage: {cpu_usage}%", inline=True)
-        embed.add_field(name="RAM", value=f"💾 DDR3 @ 1333 MHz - Usage: {memory_used:.2f} MB / {memory_total:.2f} MB", inline=True)
-        embed.add_field(name="Storage", value="💽 RAID 10 SSD", inline=True)
-        embed.add_field(name="Network", value="🌐 1 Gbit Multi-blend", inline=True)
+        embed.add_field(name="💻 System Info", value="QuantaAI", inline=True)
+        embed.add_field(name="CPU", value=f"🖥️ **Intel Xeon E5-2670v2** - Usage: **{cpu_usage}%**", inline=True)
+        embed.add_field(name="RAM", value=f"💾 **DDR3 @ 1333 MHz** - Usage: **{memory_used:.2f} MB / {memory_total:.2f} MB**", inline=True)
+        embed.add_field(name="Storage", value="💽 **RAID 10 SSD**", inline=True)
+        embed.add_field(name="Network", value="🌐 **1 Gbit Multi-blend**", inline=True)
         
         # Bot Info
-        embed.add_field(name="🤖 Bot Info", value="\u200b", inline=False)
-        embed.add_field(name="Python Version", value="🐍 v3.11", inline=True)
-        embed.add_field(name="Nextcord Version", value="🤖 ^2.4.2", inline=True)
+        embed.add_field(name="🤖 Bot Info", value="Dif", inline=True)
+        embed.add_field(name="Python Version", value="🐍 **v3.11**", inline=True)
+        embed.add_field(name="Nextcord Version", value="🤖 **^2.4.2**", inline=True)
         
         # Global Statistics
-        embed.add_field(name="🌍 Global Statistics", value="\u200b", inline=False)
-        embed.add_field(name="Guild Count", value=f"🌐 {global_guilds}", inline=True)
-        embed.add_field(name="User Count", value=f"👥 {global_users}", inline=True)
+        embed.add_field(name="🌍 Global Statistics", value="Dif", inline=True)
+        embed.add_field(name="Guild Count", value=f"🌐 **{global_guilds}**", inline=True)
+        embed.add_field(name="User Count", value=f"👥 **{global_users}**", inline=True)
         
         # Set footer
         embed.set_footer(text=f"🕒 Last Updated • {current_time}")
 
         # Send the embed
         await self.uptime_message.edit(embed=embed)
+
 
 
     @uptimeCounter.before_loop
