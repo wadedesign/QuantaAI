@@ -154,7 +154,7 @@ async def setuplogger(interaction: nextcord.Interaction):
     await setup_logger(interaction)
 
 @bot.command()
-async def get_projects_full(ctx, board_id: int):
+async def get_projects_full(ctx):
     url = f"https://quantaai.atlassian.net/jira/software/projects/QUAN/boards/1"
     headers = {
         "Authorization": "Bearer ATATT3xFfGF0Vk_MsWSxVjrEw1CZ4Uhijh_cGJulp1sAsQo6rFCc9058moPqzocG4b9uUI0su2RemGBUUxRWGTaUuXGch3OmiCoBe9D4Ws8PIvn70D3qD4kO1exO5mNMb-pET2X6kdE9NT1Jj1I2V7n0UeBszhUj5ciy72ojKtRKCbOyBCie4qM=867E977F",
