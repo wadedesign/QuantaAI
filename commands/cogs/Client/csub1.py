@@ -35,6 +35,8 @@ class XKCD(BaseCog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.webhook_url = "https://discord.com/api/webhooks/1120068450052735016/c-CKTSRuo4YtBWOdUwRDEL-mO5DnOJbpIFGxgyRo7kjQbJ_3CHaqdYLdovEX4ZJOF8Eu" # Remplacez WEBHOOK
+
         
     @nextcord.slash_command(name='dev3')
     async def main(self, interaction: nextcord.Interaction):
