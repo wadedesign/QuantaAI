@@ -60,8 +60,8 @@ class Uptime(commands.Cog, description="Uptime command"):
         embed.add_field(name="<:icons8global64:1119850913805381683> Global Statistics", value=f"**Guild Count**: <:icons8worldmap94:1119849386483142727> {global_guilds}\n"
                                                         f"**User Count**: <:icons8conference94:1119848344257302589> {global_users}", inline=False)
         
-        emoji = '<:icons8availableupdates48:1119850424732753950>'
-        embed.set_footer(text=f"{emoji} Last Updated • {current_time}")
+        
+        embed.set_footer(text=f"Last Updated • {current_time}")
 
         # Send the embed
         await self.uptime_message.edit(embed=embed)
