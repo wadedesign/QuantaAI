@@ -37,15 +37,15 @@ class Uptime(commands.Cog, description="Uptime command"):
 
         embed = nextcord.Embed(title="Bot Uptime", color=nextcord.Color.blue())
         embed.add_field(name="System Statistics", value="\u200b", inline=False)
-        embed.add_field(name=f"CPU Usage", value=f"{psutil.cpu_percent()}%", inline=False)
+        embed.add_field(name="CPU Usage", value=f"🖥️ {psutil.cpu_percent()}%", inline=False)
         memory = psutil.virtual_memory()
-        embed.add_field(name=f"CPU", value="Intel Xeon E5-2670v2", inline=False)
-        embed.add_field(name=f"RAM", value="DDR3 @ 1333 MHz RAM", inline=False)
-        embed.add_field(name=f"Storage", value="RAID 10 SSD", inline=False)
-        embed.add_field(name=f"Network", value="1 Gbit Multi-blend", inline=False)
-        embed.add_field(name=f"RAM Usage", value=f"{memory.used / (1024 * 1024):.2f} MB / {memory.total / (1024 * 1024):.2f} MB", inline=False)
-        embed.add_field(name=f"Python Version", value="v3.11", inline=False)
-        embed.add_field(name=f"Nextcord Version", value="^2.4.2", inline=False)
+        embed.add_field(name="CPU", value="📟 Intel Xeon E5-2670v2", inline=False)
+        embed.add_field(name="RAM", value="💾 DDR3 @ 1333 MHz RAM", inline=False)
+        embed.add_field(name="Storage", value="💽 RAID 10 SSD", inline=False)
+        embed.add_field(name="Network", value="🌐 1 Gbit Multi-blend", inline=False)
+        embed.add_field(name="RAM Usage", value=f"<:icons8ssd94:1119304406656098336> {memory.used / (1024 * 1024):.2f} MB / {memory.total / (1024 * 1024):.2f} MB", inline=False)
+        embed.add_field(name="Python Version", value="🐍 v3.11", inline=False)
+        embed.add_field(name="Nextcord Version", value="🤖 ^2.4.2", inline=False)
         embed.set_footer(text=f"Bot Uptime • {current_time}")
 
         await self.uptime_message.edit(embed=embed)
@@ -57,19 +57,20 @@ class Uptime(commands.Cog, description="Uptime command"):
         channel = self.bot.get_channel(channel_id)
         self.uptime_message = await channel.send("Calculating uptime...")
 
-    @nextcord.slash_command(name="uptimeq", description="Shows the uptime of the bot")
-    async def uptimequnata(self, interaction: nextcord.Interaction):
+    @nextcord.slash_command(name="uptime", description="Shows the uptime of the bot")
+    async def uptimewadder(self, interaction: nextcord.Interaction):
         current_time = datetime.now().strftime("%m/%d/%Y %I:%M %p")
 
         embed = nextcord.Embed(title="Bot Uptime", color=nextcord.Color.blue())
-        embed.add_field(name="Global Statistics", value=f"Guild Count - {len(self.bot.guilds)}", inline=False)
-        embed.add_field(name="\u200b", value=f"Global Users - {len(self.bot.users)}", inline=False)
+        embed.add_field(name="Global Statistics", value=f"🌐 Guild Count: {len(self.bot.guilds)}", inline=False)
+        embed.add_field(name="\u200b", value=f"👥 Global Users: {len(self.bot.users)}", inline=False)
         embed.set_footer(text=f"Bot Uptime • {current_time}")
 
         await interaction.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Uptime(bot))
+
 
 
 
