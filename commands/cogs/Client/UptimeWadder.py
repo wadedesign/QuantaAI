@@ -53,11 +53,11 @@ class Uptime(commands.Cog, description="Uptime command"):
                                                     f"**Network**: <:icons8wifi94:1119848351895138465> 1 Gbit Multi-blend", inline=False)
         
         # Bot Info
-        embed.add_field(name="🤖 Bot Info", value=f"**Python Version**: <:icons8python94:1119304404768665711> v3.11\n"
+        embed.add_field(name="<:icons8info64:1119850916431007744> Bot Info", value=f"**Python Version**: <:icons8python94:1119304404768665711> v3.11\n"
                                                 f"**Nextcord Version**: <:icons8n64:1119849810455961682> ^2.4.2", inline=False)
         
         # Global Statistics
-        embed.add_field(name="🌍 Global Statistics", value=f"**Guild Count**: <:icons8worldmap94:1119849386483142727> {global_guilds}\n"
+        embed.add_field(name="<:icons8global64:1119850913805381683> Global Statistics", value=f"**Guild Count**: <:icons8worldmap94:1119849386483142727> {global_guilds}\n"
                                                         f"**User Count**: <:icons8conference94:1119848344257302589> {global_users}", inline=False)
         
         # Set footer
