@@ -342,16 +342,16 @@ class XKCD(BaseCog):
         embed_message6.add_field(name="dalle", value="use dalle in nextcord =dalle [Something to ask]")
        
               
-        with open("./Autres/info.png", "rb") as f:
+        with open("images/quantaai/png/logo-black.png", "rb") as f:
             image_data = f.read()
-        embed_message6.set_thumbnail(url="attachment://info.png")
+        embed_message6.set_thumbnail(url="attachment://logo-black.png")
 
         await interaction.send(embed=embed_message)
         await interaction.send(embed=embed_message4)
         await interaction.send(embed=embed_message5)
         await interaction.send(embed=embed_message2)
         await interaction.send(embed=embed_message3)
-        await interaction.send(embed=embed_message6, file=nextcord.File(io.BytesIO(image_data), "info.png"))
+        await interaction.send(embed=embed_message6, file=nextcord.File(io.BytesIO(image_data), "logo-black.png"))
 
 def setup(bot):
     bot.add_cog(XKCD(bot))
