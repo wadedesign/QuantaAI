@@ -24,7 +24,6 @@ sentry_sdk.init(
 )
 
 
-
 ending_note = "For additional assistance, contact a moderator."
 color = 0x00FF00
 
