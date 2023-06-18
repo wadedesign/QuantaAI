@@ -34,23 +34,41 @@ class Uptime(commands.Cog, description="Uptime command"):
 
     async def update_uptime_message(self):
         current_time = datetime.now().strftime("%m/%d/%Y %I:%M %p")
-
-        embed = nextcord.Embed(title="Bot Uptime", color=nextcord.Color.blue())
-        embed.add_field(name="System Statistics", value="\u200b", inline=False)
-        embed.add_field(name="Global Statistics", value=f"🌐 Guild Count: {len(self.bot.guilds)}", inline=False)
-        embed.add_field(name="\u200b", value=f"👥 Global Users: {len(self.bot.users)}", inline=False)
-        embed.add_field(name="CPU Usage", value=f"🖥️ {psutil.cpu_percent()}%", inline=False)
+        
+        # Prepare values
+        global_users = len(self.bot.users)
+        global_guilds = len(self.bot.guilds)
+        cpu_usage = psutil.cpu_percent()
         memory = psutil.virtual_memory()
-        embed.add_field(name="CPU", value="📟 Intel Xeon E5-2670v2", inline=False)
-        embed.add_field(name="RAM", value="💾 DDR3 @ 1333 MHz RAM", inline=False)
-        embed.add_field(name="Storage", value="💽 RAID 10 SSD", inline=False)
-        embed.add_field(name="Network", value="🌐 1 Gbit Multi-blend", inline=False)
-        embed.add_field(name="RAM Usage", value=f"<:icons8ssd94:1119304406656098336> {memory.used / (1024 * 1024):.2f} MB / {memory.total / (1024 * 1024):.2f} MB", inline=False)
-        embed.add_field(name="Python Version", value="🐍 v3.11", inline=False)
-        embed.add_field(name="Nextcord Version", value="🤖 ^2.4.2", inline=False)
-        embed.set_footer(text=f"Bot Uptime • {current_time}")
+        memory_used = memory.used / (1024 * 1024)
+        memory_total = memory.total / (1024 * 1024)
+        
+        # Create embed
+        embed = nextcord.Embed(title="Bot Uptime 🤖", color=nextcord.Color.blue())
+        
+        # System Info
+        embed.add_field(name="💻 System Info", value="\u200b", inline=False)
+        embed.add_field(name="CPU", value=f"🖥️ Intel Xeon E5-2670v2 - Usage: {cpu_usage}%", inline=True)
+        embed.add_field(name="RAM", value=f"💾 DDR3 @ 1333 MHz - Usage: {memory_used:.2f} MB / {memory_total:.2f} MB", inline=True)
+        embed.add_field(name="Storage", value="💽 RAID 10 SSD", inline=True)
+        embed.add_field(name="Network", value="🌐 1 Gbit Multi-blend", inline=True)
+        
+        # Bot Info
+        embed.add_field(name="🤖 Bot Info", value="\u200b", inline=False)
+        embed.add_field(name="Python Version", value="🐍 v3.11", inline=True)
+        embed.add_field(name="Nextcord Version", value="🤖 ^2.4.2", inline=True)
+        
+        # Global Statistics
+        embed.add_field(name="🌍 Global Statistics", value="\u200b", inline=False)
+        embed.add_field(name="Guild Count", value=f"🌐 {global_guilds}", inline=True)
+        embed.add_field(name="User Count", value=f"👥 {global_users}", inline=True)
+        
+        # Set footer
+        embed.set_footer(text=f"🕒 Last Updated • {current_time}")
 
+        # Send the embed
         await self.uptime_message.edit(embed=embed)
+
 
     @uptimeCounter.before_loop
     async def beforeUptimeCounter(self):
