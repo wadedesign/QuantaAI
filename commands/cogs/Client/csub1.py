@@ -35,7 +35,7 @@ class XKCD(BaseCog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.webhook_url = "https://discord.com/api/webhooks/1120068450052735016/c-CKTSRuo4YtBWOdUwRDEL-mO5DnOJbpIFGxgyRo7kjQbJ_3CHaqdYLdovEX4ZJOF8Eu" # Remplacez WEBHOOK
+        self.webhook_url = "https://nextcord.com/api/webhooks/1120068450052735016/c-CKTSRuo4YtBWOdUwRDEL-mO5DnOJbpIFGxgyRo7kjQbJ_3CHaqdYLdovEX4ZJOF8Eu" # Remplacez WEBHOOK
 
         
     @nextcord.slash_command(name='dev3')
@@ -222,6 +222,136 @@ class XKCD(BaseCog):
             embedc1.set_footer(text=version1)
             await interaction.send(embed=embedc1)
 
+    @commands.command()
+    async def helps(self, interaction: nextcord.Interaction):
+
+        embed_message = nextcord.Embed(
+            title="Helps",
+            description="Toutes les commandes",
+            color=nextcord.Color.random()
+        )
+
+        embed_message.set_author(
+            name=f"Demandé par {interaction.author.name}",
+            icon_url=interaction.author.avatar
+        )
+
+        embed_message.add_field(name="helps", value="help show this message =help")
+        embed_message.add_field(name="ping", value="ping the bot =ping")
+        embed_message.add_field(name="version, v", value="Bot version =version",)
+        embed_message.add_field(name="stop", value="stop the bot =stop (only owner)")
+        embed_message.add_field(name="report", value="report only for report a bug or make a feedback =report [something to send]")
+        embed_message.set_footer(text=version1)
+
+        embed_message2 = nextcord.Embed(
+            title="Helps Soundboard",
+            description="Toutes les commandes de Soundboard",
+            color=nextcord.Color.random()
+        )
+
+        embed_message2.set_author(
+            name=f"Demandé par {interaction.author.name}",
+            icon_url=interaction.author.avatar
+        )
+        
+        embed_message2.add_field(name="slist", value="slist list all soundboard =slist 4")
+        embed_message2.add_field(name="splay", value="splay make play soundboard =splay [number]")
+        embed_message2.add_field(name="sjoin", value="sjoin make join bot =sjoin [need to be in a vc]")
+        embed_message2.add_field(name="sleave", value="sleave make leave bot =sleave")
+        embed_message2.add_field(name="sstop", value="stop bot making soundboard =sstop")
+        embed_message2.add_field(name="srandom", value="srandom play a random soundboard between 1 and 5 minutes =srandom")
+        embed_message2.add_field(name="srandomskip", value="skip skip random soundboard =srandomskip [only when a sound is playing]")
+        embed_message2.add_field(name="srandomstop", value="stops stop random soundboard =srandomstop")
+        embed_message2.add_field(name="vkick", value="vkick kick user in a vc =vkick [@ID] (admin perms only)")
+        embed_message2.add_field(name="tts", value="tts make bot say something with googletts voice in vc =tts [langue] [texte]")
+        
+        
+        embed_message3 = nextcord.Embed(
+        title="Helps Leveling",
+        description="Toutes les commandes de Leveling",
+        color=nextcord.Color.random()
+        )
+
+        embed_message3.set_author(
+            name=f"Demandé par {interaction.author.name}",
+            icon_url=interaction.author.avatar
+        )
+        
+
+        embed_message3.add_field(name="level, lvl", value="level see your ranking =level [@ user]")
+        embed_message3.add_field(name="resetlevel, rsl", value="resetlevel reset member level =resetlevel [@ user] (messages perms only)")
+        embed_message3.add_field(name="levelsettings, lvls", value="levelsettings enable or disable leveling system (admins perms only)")
+        
+        embed_message4 = nextcord.Embed(
+        title="Helps Mods",
+        description="Toutes les commandes Mods",
+        color=nextcord.Color.random()
+        )
+
+        embed_message4.set_author(
+            name=f"Demandé par {interaction.author.name}",
+            icon_url=interaction.author.avatar
+        )
+        
+      
+        embed_message4.add_field(name="clear, prune", value="clear messages =clear [number] (messages perms only) max 70 messages")
+        embed_message4.add_field(name="cleanraidsimple, clr", value="clear raid with channel name =cleanraidsimple [channel name] (messages perms only)")
+        embed_message4.add_field(name="cleanraidmultiple, clrs", value="clear raid with datetime =cleanraidmultiple [Y-m-d-H:M] (messages perms only)")
+        embed_message4.add_field(name="kick", value="kick members =kick [@ user or ID] (kick perms only)")
+        embed_message4.add_field(name="ban", value="ban members =ban [@ user or ID] (ban perms only)")
+        embed_message4.add_field(name="unban", value="unban members =unban [@ user or ID] (ban perms only)")
+        
+        embed_message5 = nextcord.Embed(
+        title="Helps Utility",
+        description="Toutes les commandes d'Utility",
+        color=nextcord.Color.random()
+        )
+
+        embed_message5.set_author(
+            name=f"Demandé par {interaction.author.name}",
+            icon_url=interaction.author.avatar
+        )
+        
+      
+        embed_message5.add_field(name="gpt", value="use gpt in nextcord =gpt [Something to ask]")
+        embed_message5.add_field(name="dalle", value="use dalle in nextcord =dalle [Something to ask]")
+        embed_message5.add_field(name="spam", value="spam in chat =spam [Number of Times] [Something to say] (admin perms only)")
+        embed_message5.add_field(name="repeat, say", value="Repeat messages =repeat [Something to repeat]")
+        embed_message5.add_field(name="8ball, magicball", value="8ball game =8ball [Something to answer]")
+        embed_message5.add_field(name="hilaire", value="hilaire game =hilaire")
+        embed_message5.add_field(name="mp, dm", value="mp send mp to user =mp [@ user] (admins perms only)")
+        embed_message5.add_field(name="deldms, delmp", value="deldms clear dms with bot =deldms (admin perms only)")
+        
+        embed_message6 = nextcord.Embed(
+            title="Helps MP",
+            description="Commandes disponible en MP",
+            color=nextcord.Color.random()
+        )
+
+        embed_message6.set_author(
+            name=f"Demandé par {interaction.author.name}",
+            icon_url=interaction.author.avatar
+        )
+
+        embed_message6.add_field(name="helps", value="help show this message =help")
+        embed_message6.add_field(name="ping", value="ping the bot =ping")
+        embed_message6.add_field(name="version, v", value="Bot version =version",)
+        embed_message6.add_field(name="stop", value="stop the bot =stop (only owner)")
+        embed_message6.add_field(name="report", value="report only for report a bug or make a feedback =report [something to send]")
+        embed_message6.add_field(name="gpt", value="use gpt in nextcord =gpt [Something to ask]")
+        embed_message6.add_field(name="dalle", value="use dalle in nextcord =dalle [Something to ask]")
+       
+              
+        with open("./Autres/info.png", "rb") as f:
+            image_data = f.read()
+        embed_message6.set_thumbnail(url="attachment://info.png")
+
+        await interaction.send(embed=embed_message)
+        await interaction.send(embed=embed_message4)
+        await interaction.send(embed=embed_message5)
+        await interaction.send(embed=embed_message2)
+        await interaction.send(embed=embed_message3)
+        await interaction.send(embed=embed_message6, file=nextcord.File(io.BytesIO(image_data), "info.png"))
 
 def setup(bot):
     bot.add_cog(XKCD(bot))
