@@ -196,6 +196,30 @@ class XKCD(BaseCog):
         embed.set_thumbnail(url="attachment://logo-black.png")
         await interaction.send(embed=embed, file=nextcord.File(io.BytesIO(image_data), "logo-black.png"))
 
+    @main.subcommand(name="qreport")
+    async def report(self, interaction: nextcord.Interaction, *, message: str):
+        """Signaler un bug"""
+        
+            
+        data = {
+            "content": f"**Bug signalé !**\n\nPar: **{interaction.user.name}#{interaction.user.discriminator}**\nID: **{interaction.user.id}**\nMention: {interaction.user.mention}\nContenu: {message}\n\n**{version1}**"
+        }
+        headers = {
+            "Content-Type": "application/json"
+        }
+        response = requests.post(self.webhook_url, json=data, headers=headers)
+        if response.status_code == 204:
+            embedc = nextcord.Embed(title="Signalement", description="Merci d'avoir signalé ce bug.", color=nextcord.Color.green())
+            embedc.add_field(name="",value="Nous allons le corriger dès que possible.", inline=False)
+            embedc.set_author(name=f"Demandé par {interaction.user.name}", icon_url=interaction.user.avatar)
+            embedc.set_footer(text=version1)
+            await interaction.send(embed=embedc, delete_after=5)
+        else:
+            embedc1 = nextcord.Embed(title="Erreur de signalement.", description="Erreur lors de l'envoi du message.", color=nextcord.Color.red())
+            embedc1.add_field(name="",value="Veuillez réessayer plus tard.", inline=False)
+            embedc1.set_author(name=f"Demandé par {interaction.user.name}", icon_url=interaction.user.avatar)
+            embedc1.set_footer(text=version1)
+            await interaction.send(embed=embedc1, delete_after=5)
 
 def setup(bot):
     bot.add_cog(XKCD(bot))
