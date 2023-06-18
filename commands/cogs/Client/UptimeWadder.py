@@ -53,7 +53,7 @@ class Uptime(commands.Cog, description="Uptime command"):
                                                     f"**Network**: 🌐 1 Gbit Multi-blend", inline=False)
         
         # Bot Info
-        embed.add_field(name="🤖 Bot Info", value=f"**Python Version**: 🐍 v3.11\n"
+        embed.add_field(name="🤖 Bot Info", value=f"**Python Version**: <:icons8python94:1119304404768665711> v3.11\n"
                                                 f"**Nextcord Version**: <:icons8update94:1119304409122361344> ^2.4.2", inline=False)
         
         # Global Statistics
