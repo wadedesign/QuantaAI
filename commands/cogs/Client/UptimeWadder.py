@@ -10,6 +10,7 @@ class Uptime(commands.Cog, description="Uptime command"):
         self.tm = 0
         self.th = 0
         self.td = 0
+        self.uptime_message = None
         self.uptimeCounter.start()
 
     def cog_unload(self):
@@ -28,40 +29,48 @@ class Uptime(commands.Cog, description="Uptime command"):
                     self.th = 0
                     self.td += 1
 
-    @uptimeCounter.before_loop
-    async def beforeUptimeCounter(self):
-        await self.bot.wait_until_ready()
+        if self.uptime_message:
+            await self.update_uptime_message()
 
-    @nextcord.slash_command(name="uptime", description="Shows the uptime of the bot")
-    async def uptimewadder(self, interaction: nextcord.Interaction):
-        guild_count_emoji = "<:icons8satellitesignal94:1119304405292953732>"
-        global_users_emoji = "<:icons8broadcasting48:1119230623790399488>"
-        cpu_emoji = "<:icons8tasks48:1119230747044237434>"
-        ram_emoji = "<:icons8ssd94:1119304406656098336>"
-        nodejs_emoji = "<:icons8python94:1119304404768665711>"
-        discordjs_emoji = "<:icons8update94:1119304409122361344>"
-
+    async def update_uptime_message(self):
         current_time = datetime.now().strftime("%m/%d/%Y %I:%M %p")
 
         embed = nextcord.Embed(title="Bot Uptime", color=nextcord.Color.blue())
-        embed.add_field(name="Global Statistics", value=f"{guild_count_emoji} Guild Count - {len(self.bot.guilds)}", inline=False)
-        embed.add_field(name="\u200b", value=f"{global_users_emoji} Global Users - {len(self.bot.users)}", inline=False)
         embed.add_field(name="System Statistics", value="\u200b", inline=False)
-        embed.add_field(name=f"{cpu_emoji} CPU Usage", value=f"{psutil.cpu_percent()}%", inline=False)
+        embed.add_field(name=f"CPU Usage", value=f"{psutil.cpu_percent()}%", inline=False)
         memory = psutil.virtual_memory()
-        embed.add_field(name=f"{cpu_emoji} CPU", value="Intel Xeon E5-2670v2", inline=False)
-        embed.add_field(name=f"{ram_emoji} RAM", value="DDR3 @ 1333 MHz RAM", inline=False)
-        embed.add_field(name=f"{ram_emoji} Storage", value="RAID 10 SSD", inline=False)
-        embed.add_field(name=f"{ram_emoji} Network", value="1 Gbit Multi-blend", inline=False)
-        embed.add_field(name=f"{ram_emoji} RAM Usage", value=f"{memory.used / (1024 * 1024):.2f} MB / {memory.total / (1024 * 1024):.2f} MB", inline=False)
-        embed.add_field(name=f"{nodejs_emoji} Python Version", value="v3.11", inline=False)
-        embed.add_field(name=f"{discordjs_emoji} Nextcord Version", value="^2.4.2", inline=False)
+        embed.add_field(name=f"CPU", value="Intel Xeon E5-2670v2", inline=False)
+        embed.add_field(name=f"RAM", value="DDR3 @ 1333 MHz RAM", inline=False)
+        embed.add_field(name=f"Storage", value="RAID 10 SSD", inline=False)
+        embed.add_field(name=f"Network", value="1 Gbit Multi-blend", inline=False)
+        embed.add_field(name=f"RAM Usage", value=f"{memory.used / (1024 * 1024):.2f} MB / {memory.total / (1024 * 1024):.2f} MB", inline=False)
+        embed.add_field(name=f"Python Version", value="v3.11", inline=False)
+        embed.add_field(name=f"Nextcord Version", value="^2.4.2", inline=False)
+        embed.set_footer(text=f"Bot Uptime • {current_time}")
+
+        await self.uptime_message.edit(embed=embed)
+
+    @uptimeCounter.before_loop
+    async def beforeUptimeCounter(self):
+        await self.bot.wait_until_ready()
+        channel_id = 1110811750724554803  # Replace with your channel ID
+        channel = self.bot.get_channel(channel_id)
+        self.uptime_message = await channel.send("Calculating uptime...")
+
+    @nextcord.slash_command(name="uptimeq", description="Shows the uptime of the bot")
+    async def uptimequnata(self, interaction: nextcord.Interaction):
+        current_time = datetime.now().strftime("%m/%d/%Y %I:%M %p")
+
+        embed = nextcord.Embed(title="Bot Uptime", color=nextcord.Color.blue())
+        embed.add_field(name="Global Statistics", value=f"Guild Count - {len(self.bot.guilds)}", inline=False)
+        embed.add_field(name="\u200b", value=f"Global Users - {len(self.bot.users)}", inline=False)
         embed.set_footer(text=f"Bot Uptime • {current_time}")
 
         await interaction.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Uptime(bot))
+
 
 
 
