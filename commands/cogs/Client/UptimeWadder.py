@@ -54,7 +54,7 @@ class Uptime(commands.Cog, description="Uptime command"):
         
         # Bot Info
         embed.add_field(name="🤖 Bot Info", value=f"**Python Version**: <:icons8python94:1119304404768665711> v3.11\n"
-                                                f"**Nextcord Version**: <:icons8update94:1119304409122361344> ^2.4.2", inline=False)
+                                                f"**Nextcord Version**: <:icons8n64:1119849810455961682> ^2.4.2", inline=False)
         
         # Global Statistics
         embed.add_field(name="🌍 Global Statistics", value=f"**Guild Count**: <:icons8worldmap94:1119849386483142727> {global_guilds}\n"
