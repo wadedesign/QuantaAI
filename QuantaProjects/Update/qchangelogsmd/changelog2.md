@@ -1,11 +1,11 @@
 
 
- >```QuantaAI 1.0 Beta```
+ ```QuantaAI 1.0 Beta```
 
 ``` 
 Issue - QuantaAI Voice Systems, qsay, etc. 
 ```
-``` Resolution ``` - The hosting site needs to address the issue on their end.
+``` Resolution ``` The hosting site needs to address the issue on their end.
 
 ## Welcome to the Beta Phase!
 
@@ -31,7 +31,6 @@ Issue - QuantaAI Voice Systems, qsay, etc.
 
 
 > ```Website``` 
->
->- [QuantaAI](http://wadderprojects.bhweb.ws)
 
-![QuantaAI](/images/quantaai/png/logo-no-background.png "QuantaAI Logo")
+- [QuantaAI](http://wadderprojects.bhweb.ws)
+
