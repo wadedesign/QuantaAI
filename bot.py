@@ -76,8 +76,8 @@ def create_view() -> nextcord.ui.View:
     view = nextcord.ui.View()
     buttons = [
         (nextcord.ButtonStyle.link, "Visit Website", "<:icons8twittercircled94:1119119011163148308>", "http://wadderprojects.bhweb.ws/assets/images/logo/logo-no-background.png"),
-        (nextcord.ButtonStyle.primary, "Support Server", "<:icons8faq94:1119240484875935766>", "https://example.com/support"),
-        (nextcord.ButtonStyle.secondary, "GitHub Repo", "<:icons8github48:1119230633256947802>", "https://github.com/your_username/your_repo"),
+        (nextcord.ButtonStyle.primary, "Support Server", "<:icons8faq94:1119240484875935766>", "https://discord.gg/CaSre2pN2f"),
+        (nextcord.ButtonStyle.secondary, "GitHub Repo", "<:icons8github48:1119230633256947802>", "https://github.com/wadder12"),
         (nextcord.ButtonStyle.success, "Documentation", "<:icons8help94:1119230634632695850>", "https://example.com/docs"),
         (nextcord.ButtonStyle.danger, "Bug Report", "<:icons8bug48:1119237589573050450>", "https://example.com/bug-report"),
         
