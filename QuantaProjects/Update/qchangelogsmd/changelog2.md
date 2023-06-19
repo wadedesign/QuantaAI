@@ -30,6 +30,6 @@ Issue - QuantaAI Voice Systems, qsay, etc.
 - ```Resolved``` persistent issues with AI commands, ensuring a seamless and more accurate interaction that will leave you impressed.
 
 
-> Website 
+> ```Website``` 
 
-- [QuantaAI](https://duckduckgo.com)
+- [QuantaAI](http://wadderprojects.bhweb.ws)
