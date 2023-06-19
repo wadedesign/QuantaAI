@@ -4,7 +4,7 @@
  >## ```QuantaAI 1.0 Beta```
 
 ``` 
-Not Working - QuantaAI Voice Systems, qsay, etc. 
+Issue - QuantaAI Voice Systems, qsay, etc. 
 ```
 ``` fix ``` - Hosting site needs to fix it on their end
 
