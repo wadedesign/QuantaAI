@@ -6,32 +6,26 @@
 ``` 
 Issue - QuantaAI Voice Systems, qsay, etc. 
 ```
-``` fix ``` - Hosting site needs to fix it on their end
+``` Resolution ``` - The hosting site needs to address the issue on their end.
 
-## Welcome to the Beta!
+## Welcome to the Beta Phase!
 
-``` in the beta phase, we understand that commands will look odd & out of place ```
+``` During the beta phase, it's expected that some commands may appear unusual or out of place.```
 
-```but when out of beta, it will look very pretty! ```
+```However, we assure you that once we're out of beta, the interface will be visually stunning! ```
 
+> ## Features 
 
+- Implemented ```Embeds``` for a broader range of commands, offering an exquisite and visually appealing user interface.
+- Integrated captivating ```Quanta GIFs``` into the embeds, elevating the overall user experience to new heights.
+- Expanded the list of ```third-party APIs```, unlocking limitless possibilities and empowering your creativity.
+- Made a ```database change``` by transitioning QuantaAI to utilize MongoDB as the primary database.
+- Incorporated ```RapidAPI``` integration, bringing QuantaAI commands to a whole new level.
 
+> ## Updates
 
-> ## Feature 
-
-- Implemented ```Embeds``` for a wider range of Commands, providing an exquisite and visually appealing interface.
-- Integrated the captivating ```Quanta GIF``` into the embeds, elevating the overall user experience to new heights.
-- Expanded the list of ```3rd party APIs``` to unlock endless possibilities and empower your creativity.
-- ```DataBase``` change, QuantaAI has moved to using mongodb as the primary database.
-- ```RapidAPI``` intergration, brings QuantaAI commands to a whole new level.
-
-
-> ## Update
-
-- ```Migrated``` some of the regular commands to a more refined and alluring format, perfectly aligned with our commitment to deliver an extraordinary user experience.
-
+- ```Refined``` some regular commands to a more polished and captivating format, perfectly aligned with our commitment to deliver an extraordinary user experience.
 
 > ## Bug Fixes
 
-- ```Resolved``` pesky issues with AI Commands, ensuring a seamless and more accurate interaction that leaves you impressed.
-
+- ```Resolved``` persistent issues with AI commands, ensuring a seamless and more accurate interaction that will leave you impressed.
