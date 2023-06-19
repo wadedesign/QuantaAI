@@ -1,6 +1,6 @@
 
 
- >## ```QuantaAI 1.0 Beta```
+ >```QuantaAI 1.0 Beta```
 
 ``` 
 Issue - QuantaAI Voice Systems, qsay, etc. 
@@ -15,11 +15,11 @@ Issue - QuantaAI Voice Systems, qsay, etc.
 
 > ## Features 
 
-- Implemented ```Embeds``` for a broader range of commands, offering an exquisite and visually appealing user interface.
-- Integrated captivating ```Quanta GIFs``` into the embeds, elevating the overall user experience to new heights.
-- Expanded the list of ```third-party APIs```, unlocking limitless possibilities and empowering your creativity.
-- Made a ```database change``` by transitioning QuantaAI to utilize MongoDB as the primary database.
-- Incorporated ```RapidAPI``` integration, bringing QuantaAI commands to a whole new level.
+- Implemented **Embeds** for a broader range of commands, offering an exquisite and visually appealing user interface.
+- Integrated captivating **Quanta GIFs** into the embeds, elevating the overall user experience to new heights.
+- Expanded the list of **third-party APIs**, unlocking limitless possibilities and empowering your creativity.
+- Made a **database change** by transitioning QuantaAI to utilize MongoDB as the primary database.
+- Incorporated **RapidAPI** integration, bringing QuantaAI commands to a whole new level.
 
 > ## Updates
 
