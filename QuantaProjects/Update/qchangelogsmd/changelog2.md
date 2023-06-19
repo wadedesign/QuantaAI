@@ -16,7 +16,7 @@ Not Working - QuantaAI Voice Systems, qsay, etc.
 - Expanded the list of ```3rd party APIs``` to unlock endless possibilities and empower your creativity.
 
 
-> ## Removed
+> ## Update
 
 - ```Migrated``` some of the regular commands to a more refined and alluring format, perfectly aligned with our commitment to deliver an extraordinary user experience.
 
