@@ -8,6 +8,14 @@ Not Working - QuantaAI Voice Systems, qsay, etc.
 ```
 ``` fix ``` - Hosting site needs to fix it on their end
 
+## Welcome to the Beta!
+
+``` in the beta phase, we understand that commands will look odd & out of place ```
+
+```but when out of beta, it will look very pretty! ```
+
+
+
 
 > ## Feature 
 
