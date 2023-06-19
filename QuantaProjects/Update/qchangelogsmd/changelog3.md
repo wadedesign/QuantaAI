@@ -12,10 +12,10 @@
 
 ## 🚀 Upcoming Features
 
-- **QuantaAI API**: Prepare to be amazed as we introduce an exciting new addition that allows developers to seamlessly integrate QuantaAI into their own applications.
+```- **QuantaAI API**: Prepare to be amazed as we introduce an exciting new addition that allows developers to seamlessly integrate QuantaAI into their own applications.
 - **QuantaAI Music**: Get ready to immerse yourself in a world of auditory delight, as QuantaAI brings you a revolutionary music feature that will harmonize with your soul.
 - **QuantaAI AutoGPT (Work in Progress)**: We're tirelessly working on this cutting-edge feature and seeking support from our generous funders to expedite its completion. Your contribution can make a difference!
-- **Upgrading to OpenAI Functions, new 16k Model**: Having QuantaAI use this new model will be able to give you 16k tokens worth of whatever you will like to know. 
+- **Upgrading to OpenAI Functions, new 16k Model**: Having QuantaAI use this new model will be able to give you 16k tokens worth of whatever you will like to know. ```
 
 
 ## ❌ Removed
