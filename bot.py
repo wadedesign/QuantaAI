@@ -96,7 +96,7 @@ async def on_ready():
             changelog = f.read()
 
         # Configuration
-        channel_id = 1112958990171775089  # Replace with the ID of the channel you want to send the embed to
+        channel_id = 1120168070015615086  # Replace with the ID of the channel you want to send the embed to
 
         # Send the embed
         channel = bot.get_channel(channel_id)

@@ -23,7 +23,7 @@ nba_collection = db["nba_players"]
 
 ## ! Make more sub commands of this! ##
 
-version1="Bot V.1006-23.beta"
+version1="1.0 Beta"
 version2 ="`optimization upgrade, chat gpt improvements, chat gpt in mp work, dalle avalaible work in mp too, mention bot in mp work, report work in mp, version work in mp and ping work in mp`"
 
 version3="Bot V.0906-23.beta"
@@ -176,7 +176,7 @@ class XKCD(BaseCog):
 
             await interaction.send(embed=embed)
             
-            
+    '''         
     @main.subcommand()
     async def qversion(self, interaction: nextcord.Interaction):
         if isinstance(interaction.channel, nextcord.TextChannel):
@@ -197,7 +197,7 @@ class XKCD(BaseCog):
             image_data = f.read()
         embed.set_thumbnail(url="attachment://logo-black.png")
         await interaction.send(embed=embed, file=nextcord.File(io.BytesIO(image_data), "logo-black.png"))
-
+    '''
     @main.subcommand(name="qreport")
     async def report(self, interaction: nextcord.Interaction, *, message: str):
         """Report a bug"""
@@ -221,7 +221,7 @@ class XKCD(BaseCog):
             embedc1.set_author(name=f"Requested by {interaction.user.name}", icon_url=interaction.user.avatar)
             embedc1.set_footer(text=version1)
             await interaction.send(embed=embedc1)
-
+'''
     @main.subcommand()
     async def helps(self, interaction: nextcord.Interaction):
 
@@ -352,7 +352,7 @@ class XKCD(BaseCog):
         await interaction.send(embed=embed_message2)
         await interaction.send(embed=embed_message3)
         await interaction.send(embed=embed_message6, file=nextcord.File(io.BytesIO(image_data), "logo-black.png"))
-
+'''
 def setup(bot):
     bot.add_cog(XKCD(bot))
     
