@@ -1,6 +1,7 @@
 
 
- QuantaAI Beta V0.1
+ > ```QuantaAI 1.0 Beta ```
+
 
 > ## ✨ Enhancements
 
