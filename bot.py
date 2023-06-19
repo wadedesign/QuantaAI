@@ -78,8 +78,8 @@ def create_view() -> nextcord.ui.View:
         (nextcord.ButtonStyle.link, "Visit Website", "<:icons8twittercircled94:1119119011163148308>", "http://wadderprojects.bhweb.ws/assets/images/logo/logo-no-background.png"),
         (nextcord.ButtonStyle.primary, "Support Server", "<:icons8faq94:1119240484875935766>", "https://discord.gg/CaSre2pN2f"),
         (nextcord.ButtonStyle.secondary, "GitHub Repo", "<:icons8github48:1119230633256947802>", "https://github.com/wadder12"),
-        (nextcord.ButtonStyle.success, "Documentation", "<:icons8help94:1119230634632695850>", "https://example.com/docs"),
-        (nextcord.ButtonStyle.danger, "Bug Report", "<:icons8bug48:1119237589573050450>", "https://example.com/bug-report"),
+        (nextcord.ButtonStyle.success, "Documentation", "<:icons8help94:1119230634632695850>", "https://quantaai.notion.site/95ef9858856b4649a104094926acd147?v=59b04385c0ef446490fa697eef037cd7&pvs=4"),
+        (nextcord.ButtonStyle.danger, "Bug Report", "<:icons8bug48:1119237589573050450>", "https://discord.gg/CaSre2pN2f"),
         
     ]
     for style, label, emoji, url in buttons:
