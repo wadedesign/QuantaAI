@@ -1,6 +1,7 @@
 
 
- > ```QuantaAI 1.0 Beta ```
+
+ >## ```QuantaAI 1.0 Beta```
 
 
 > ## ✨ Enhancements
