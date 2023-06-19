@@ -14,6 +14,8 @@ Not Working - QuantaAI Voice Systems, qsay, etc.
 - Implemented ```Embeds``` for a wider range of Commands, providing an exquisite and visually appealing interface.
 - Integrated the captivating ```Quanta GIF``` into the embeds, elevating the overall user experience to new heights.
 - Expanded the list of ```3rd party APIs``` to unlock endless possibilities and empower your creativity.
+- ```DataBase``` change, QuantaAI has moved to using mongodb as the primary database.
+- ```RapidAPI``` intergration, brings QuantaAI commands to a whole new level.
 
 
 > ## Update
