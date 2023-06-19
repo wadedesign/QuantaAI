@@ -33,3 +33,5 @@ Issue - QuantaAI Voice Systems, qsay, etc.
 > ```Website``` 
 >
 >- [QuantaAI](http://wadderprojects.bhweb.ws)
+
+![QuantaAI](/images/quantaai/png/logo-no-background.png "QuantaAI Logo")
