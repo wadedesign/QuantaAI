@@ -11,10 +11,11 @@
 
 ## 🚀 Upcoming Features
 
-- **QuantaAI API**: Prepare to be amazed as we introduce an exciting new addition that allows developers to seamlessly integrate QuantaAI into their own applications.
+```- **QuantaAI API**: Prepare to be amazed as we introduce an exciting new addition that allows developers to seamlessly integrate QuantaAI into their own applications.
 - **QuantaAI Music**: Get ready to immerse yourself in a world of auditory delight, as QuantaAI brings you a revolutionary music feature that will harmonize with your soul.
 - **QuantaAI AutoGPT (Work in Progress)**: We're tirelessly working on this cutting-edge feature and seeking support from our generous funders to expedite its completion. Your contribution can make a difference!
 - **"/images/quanta.gif"**: Brace yourself for a mesmerizing visual treat, as a visually stunning GIF showcasing the brilliance of Quanta awaits to enchant your senses.
+```
 
 ## ❌ Removed
 
