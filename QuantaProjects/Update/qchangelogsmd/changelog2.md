@@ -23,11 +23,11 @@ Issue - QuantaAI Voice Systems, qsay, etc.
 
 > ## Updates
 
-- ```Refined``` some regular commands to a more polished and captivating format, perfectly aligned with our commitment to deliver an extraordinary user experience.
+- **Refined** some regular commands to a more polished and captivating format, perfectly aligned with our commitment to deliver an extraordinary user experience.
 
 > ## Bug Fixes
 
-- ```Resolved``` persistent issues with AI commands, ensuring a seamless and more accurate interaction that will leave you impressed.
+- **Resolved** persistent issues with AI commands, ensuring a seamless and more accurate interaction that will leave you impressed.
 
 
 > ```Website``` 
