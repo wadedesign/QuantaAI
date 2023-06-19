@@ -1,6 +1,5 @@
 
 
-
  >## ```QuantaAI 1.0 Beta```
 
 ``` 
@@ -29,3 +28,8 @@ Issue - QuantaAI Voice Systems, qsay, etc.
 > ## Bug Fixes
 
 - ```Resolved``` persistent issues with AI commands, ensuring a seamless and more accurate interaction that will leave you impressed.
+
+
+> Website 
+
+- [QuantaAI](https://duckduckgo.com)
