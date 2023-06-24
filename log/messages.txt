@@ -151,3 +151,8 @@ QuantaAI - text-based - wade5#0: !get_projects_full
 QuantaAI - text-based - wade5#0: !get_projects_full
 QuantaAI - text-based - wade5#0: !get_board 1
 QuantaAI - text-based - wade5#0: /dev3 qversion
+QuantaAI - trello - wade5#0: test
+The CPreds Collection - 💭・general - thrill4realz#0: CHING CHING LING LONG LANG
+The CPreds Collection - 💭・general - thrill4realz#0: (I'm asian its fine)
+Bravo Company - 📸・media - paladin817#0: my puppy knocked it over and busted the screen
+Bravo Company - 📸・media - paladin817#0: sad day
