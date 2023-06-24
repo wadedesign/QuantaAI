@@ -255,17 +255,15 @@ class Logger(commands.Cog):
                 f"{before.author.mention} edited their message:\n\n**Before:** {before.content}\n**After:** {after.content}",
             )
 
-    async def log_delete(message):
+    async def log_delete(self, message):
         if message.author.bot:
             return
 
         logger_channel = nextcord.utils.get(message.guild.text_channels, name="logger")
         if logger_channel:
-            embed = nextcord.Embed(title="Message Deleted", color=0xFF0000)
-            embed.add_field(name="Author", value=message.author.mention, inline=False)
-            embed.add_field(name="Content", value=message.content, inline=False)
-            embed.set_footer(text="Deleted message")
-            await logger_channel.send(embed=embed)
+            await self.log_embed(
+                logger_channel, "Message Deleted", f"{message.author.mention}'s message was deleted: {message.content}"
+            )
 
     async def log_member_join(self, member):
         # Log the event

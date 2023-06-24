@@ -160,7 +160,7 @@ async def log_delete(message):
         embed = nextcord.Embed(title="Message Deleted", color=0xFF0000)
         embed.add_field(name="Author", value=message.author.mention, inline=False)
         embed.add_field(name="Content", value=message.content, inline=False)
-        embed.set_footer(text="Deleted message")
+        embed.set_footer(text="Deleted message2")
         await logger_channel.send(embed=embed)
 
 async def log_member_join(member):
