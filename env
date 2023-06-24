@@ -1,0 +1,28 @@
+# Enter the role ID of the role you want to give to users who are authorized to use the bot.
+AUTHORIZED_ROLE="1086313112673714338"
+
+HELICONE_API='sk-re62dca-taaufcq-r2m44wa-su3niuy'
+
+# Discord token
+DISCORD_TOKEN="MTA3NTE0NDgyODMzMDk3MTE4Ng.GfmdEz.QYt7iNXXQHiFV9rBVl1r9Q2MY3yjBhSVuatRv0"
+
+SCENEX_API_KEY="CVefCRR5nmU6LdoBQ3vE:70bdd9fb4ad238240a524fbaa931540a652bb8c878e3873df2fa8d18251657ab"
+SERPER_API_KEY="b3388317b282e74513f0ef012247ca31cc661420"
+
+# Open AI API key
+OPENAI_API_KEY='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'
+
+# Eleven labs API key
+ELEVENLABS_API_KEY='2a80772c8a7a5c8dba31d81ea822acd9'
+VOICEID='VR6AewLTigWG4xSOukaG'
+
+# User Id
+YOUR_USER_ID=404687039905136661
+
+SERPAPI_API_KEY='699dffabdbe268638db02f4f4663dc7bfa7ded8da92b2ae47b41ddb40cdbffcc'
+
+# API key for the Weather API
+WEATHER_API_KEY='0544abe9dd16465c8cc155530232104'
+
+# Channel ID for the SerpAPI service
+CHANNEL_ID='1086313113462255682'
