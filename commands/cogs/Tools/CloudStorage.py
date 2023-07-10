@@ -1,42 +1,29 @@
+import asyncio
+import datetime
+import importlib
+import inspect
 import json
 import math
-import random
-import time
-import nextcord
-from nextcord.ext import commands, tasks
-import aiosqlite
-import nextcord
-import json
-import asyncio
-import datetime
-import time
-import random
 import os
-import discord
-import asyncio
-from dotenv import load_dotenv
+import random
 import random as rn
-import string
-
-from nextcord.ext import commands
-from nextcord.utils import get
-import datetime
-from datetime import timedelta
-from datetime import date
-import time
-import asyncio
-from nextcord.ext import commands
-import nextcord
-import inspect
-import importlib
-import sys
-import traceback
 import re
+import string
+import sys
+import time
+import traceback
 import unicodedata
-import datetime
-import unicodedata
-from random import randint
+from datetime import date, timedelta
 from random import choice as randchoice
+from random import randint
+
+import aiosqlite
+import discord
+import nextcord
+from dotenv import load_dotenv
+from nextcord.ext import commands, tasks
+from nextcord.utils import get
+
 mentions_transforms = {
     '@everyone': '@\u200beveryone',
     '@here': '@\u200bhere'
