@@ -41,7 +41,7 @@ from langchain.agents import initialize_agent
 from langchain.llms import OpenAI
 import json
 import re
-openai_api_key ='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'
+openai_api_key ='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'
 serpapi_api_key =os.getenv("SERPAPI_API_KEY")
 
 llm = OpenAI(temperature=0, openai_api_key=openai_api_key)
