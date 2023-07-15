@@ -16,9 +16,7 @@ import requests
 from logger import setup_logger
 import sentry_sdk
 # added by wade
-import ctypes.util
-opus_lib = ctypes.util.find_library('opus')
-nextcord.opus.load_opus(opus_lib)
+
 sentry_sdk.init(
     dsn="https://899564a6b18d45948704c3560277eea4@o4505376557432832.ingest.sentry.io/4505376561037312",
 
