@@ -41,6 +41,7 @@ class ModerationView(View):
             await interaction.channel.send(f"{interaction.user.mention}, unable to find the specified member.", delete_after=5)
 
     @button(label="Ban", style=nextcord.ButtonStyle.red)
+    
     async def ban(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
         user_id = await self.prompt_user_id(interaction)
         member = interaction.guild.get_member(user_id)
