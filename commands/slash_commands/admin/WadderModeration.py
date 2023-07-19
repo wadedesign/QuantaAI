@@ -11,7 +11,7 @@ def setup(bot):
         pass
 
     @moderate.subcommand(name="kick", description="Kick a member from the server")
-    @commands.has_permissions(administrator=True)
+    @commands.has_permissions(is_owner=True)
     async def kick(interaction: nextcord.Interaction, member: nextcord.Member, reason: str = None):
         await member.kick(reason=reason)
         embed = nextcord.Embed(
