@@ -2,6 +2,7 @@ import nextcord
 from nextcord.ext import commands
 import requests
 import asyncio
+from itertools import islice
 
 class ArmaServerCog2(commands.Cog):
 
@@ -29,7 +30,7 @@ class ArmaServerCog2(commands.Cog):
   def get_stats_embed(self):
     if self.server_stats["status"] == "online":
       embed = nextcord.Embed(title="Arma 3 SOG", color=nextcord.Color.green())
-
+    
       if 'details' in self.server_stats and 'game' in self.server_stats['details']:
         embed.add_field(name="Game", value=self.server_stats['details']['game'])
 
@@ -59,6 +60,8 @@ class ArmaServerCog2(commands.Cog):
 
       if 'details' in self.server_stats and 'mission' in self.server_stats['details']:
         embed.add_field(name="Mission", value=self.server_stats['details']['mission'])
+        
+    
 
       if 'details' in self.server_stats and 'mods' in self.server_stats['details']:
         if self.server_stats['details']['mods']:
