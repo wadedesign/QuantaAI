@@ -7,7 +7,7 @@ import asyncio
 class ArmaServerCog2(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.server_url = "https://api.battlemetrics.com/servers/19734404"  # Replace with your server ID
+        self.server_url = "https://api.battlemetrics.com/servers/22537109"  # Replace with your server ID
         self.server_stats = None
         self.refresh_task = self.bot.loop.create_task(self.refresh_server_status())
 
