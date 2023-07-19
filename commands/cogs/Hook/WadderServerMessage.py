@@ -33,7 +33,7 @@ class ArmaServerCog2(commands.Cog):
 
       if 'details' in self.server_stats and 'game' in self.server_stats['details']:
         embed.add_field(name="Game", value=self.server_stats['details']['game'])
-        if 'players' in self.server_stats:
+      if 'players' in self.server_stats:
             player_names = list(islice(self.server_stats['players'], 0, 10)) # Show first 10 players
             embed.add_field(name="Players", value="\n".join(player_names), inline=False)
       if 'details' in self.server_stats and 'name' in self.server_stats['details']:
