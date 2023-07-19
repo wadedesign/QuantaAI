@@ -2,7 +2,7 @@ import nextcord
 from nextcord.ext import commands, tasks
 
 
-mcOs = True #IF True = Minecraft Serve OR IF False = Source Server (like gmod,csgo...)
+mcOs = False #IF True = Minecraft Serve OR IF False = Source Server (like gmod,csgo...)
 
 if mcOs:
     from mcstatus import JavaServer
@@ -12,8 +12,8 @@ else:
 class ServerStatusCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.server_ip = '208.52.147.254'
-        self.server_port = '25565'
+        self.server_ip = '38.133.154.16'
+        self.server_port = '2382'
         self.mcOs = True
 
         self.status_loop.start()
