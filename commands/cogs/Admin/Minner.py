@@ -13,7 +13,7 @@ class ServerStatusCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.server_ip = '38.133.154.16'
-        self.server_port = '2382'
+        self.server_port = '2383'
         self.mcOs = True
 
         self.status_loop.start()
