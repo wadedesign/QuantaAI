@@ -53,7 +53,7 @@ class ArmaServerCog2(commands.Cog):
             return embed
 
     async def send_server_status_to_channel(self, embed):
-        channel_id = 1090827805765402655  # Replace with your channel ID
+        channel_id = 1111315549889245234  # Replace with your channel ID
         channel = self.bot.get_channel(channel_id)
         if channel:
             # Check if previous status message exists
