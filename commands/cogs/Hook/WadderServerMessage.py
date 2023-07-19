@@ -41,16 +41,30 @@ class ArmaServerCog2(commands.Cog):
                 embed.add_field(name="Map", value=self.server_stats['details']['map'])
             if 'details' in self.server_stats and 'mission' in self.server_stats['details']:
                 embed.add_field(name="Mission", value=self.server_stats['details']['mission'])
-            if 'details' in self.server_stats and 'mods' in self.server_stats['details']:
-                if self.server_stats['details']['mods']:
-                    mods = "\n".join(self.server_stats['details']['mods'])
-                    embed.add_field(name="Mods", value=mods, inline=False)
+            # In get_stats_embed()
 
-            return embed
-        else:
-            embed = nextcord.Embed(title="Server Status", color=nextcord.Color.red())
-            embed.add_field(name="Status", value="Offline")
-            return embed
+            if 'details' in self.server_stats and 'game' in self.server_stats['details']:
+                embed.add_field(name="Game", value=self.server_stats['details']['game']) 
+
+            if 'details' in self.server_stats and 'name' in self.server_stats['details']:
+                embed.add_field(name="Server Name", value=self.server_stats['details']['name'])
+            
+            if 'details' in self.server_stats and 'ip' in self.server_stats['details']:
+                embed.add_field(name="IP Address", value=self.server_stats['details']['ip'])
+
+            # Additional game version field  
+            if 'details' in self.server_stats and 'version' in self.server_stats['details']:
+                embed.add_field(name="Version", value=self.server_stats['details']['version'])
+                if 'details' in self.server_stats and 'mods' in self.server_stats['details']:
+                            if self.server_stats['details']['mods']:
+                                mods = "\n".join(self.server_stats['details']['mods'])
+                                embed.add_field(name="Mods", value=mods, inline=False)
+
+                return embed
+            else:
+                        embed = nextcord.Embed(title="Server Status", color=nextcord.Color.red())
+                        embed.add_field(name="Status", value="Offline")
+                        return embed
 
     async def send_server_status_to_channel(self, embed):
         channel_id = 1111315549889245234  # Replace with your channel ID
