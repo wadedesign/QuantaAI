@@ -12,8 +12,8 @@ else:
 class ServerStatusCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.server_ip = '38.133.154.16'
-        self.server_port = '2383'
+        self.server_ip = 'nae-sog1.armahosts.com'
+        self.server_port = '2382'
         self.mcOs = True
 
         self.status_loop.start()
