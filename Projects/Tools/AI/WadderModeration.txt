@@ -7,6 +7,7 @@ from nextcord.ext import commands
 
 def setup(bot):
     @bot.slash_command(name="moderate", description="A command for various moderation actions")
+    @commands.has_permissions(is_owner=True)
     async def moderate(interaction: nextcord.Interaction):
         pass
 
