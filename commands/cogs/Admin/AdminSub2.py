@@ -93,16 +93,18 @@ class WadderCommandsV1(commands.Cog):
                 if role in user.roles:
                     if user.dm_channel is None:
                         await user.create_dm()
-                await user.dm_channel.send(message)
-                print(f"sent to {user.name}")
-                await asyncio.sleep(1)
-                sentCounter += 1
+                    await user.dm_channel.send(message)
+                    print(f"sent to {user.name}")
+                    await asyncio.sleep(1)
+                    sentCounter += 1
             except Exception as e:
                 print(e)
                 notSentCounter += 1
-            await interaction.send(
-            f"Message sent to **{str(sentCounter)}** members and not sent to **{str(notSentCounter)}** members"
-            )
+            
+        # Since we removed the interaction response, there won't be any message sent in the chat.
+        # If you still want to keep track of the sent and not sent counts, you can log it instead.
+        print(f"Message sent to {sentCounter} members and not sent to {notSentCounter} members")
+
             
     @main.subcommand(name="qyesorno", description="Creates a yes or no poll.")
     async def yesnopoll(self, interaction: nextcord.Interaction, poll: str = nextcord.SlashOption(name="poll", description="The poll to be created", required=True)):
