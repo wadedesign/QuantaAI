@@ -79,7 +79,7 @@ class WadderCommandsV1(commands.Cog):
         
         
         
-    @main.subcommand(name="rmessage", description="Sends a message to all members with a specific role.")
+    @main.subcommand(name="rmessage", description="sends message")
     @commands.has_permissions(administrator=True)
     async def rmessage(self, interaction: nextcord.Interaction, role: nextcord.Role, *, message):
 
