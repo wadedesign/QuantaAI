@@ -6,8 +6,8 @@ import asyncio
 import urllib.parse
 
 # MongoDB connection details
-username = urllib.parse.quote_plus("uname") 
-password = urllib.parse.quote_plus("pass")
+username = urllib.parse.quote_plus("apwade75009") 
+password = urllib.parse.quote_plus("Celina@12")
 cluster = MongoClient(f"mongodb+srv://{username}:{password}@cluster.mongodb.net/db?retryWrites=true")
 
 db = cluster["commands_db"]
