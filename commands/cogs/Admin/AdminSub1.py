@@ -1,99 +1,99 @@
 import nextcord
 from nextcord.ext import commands
 from pymongo import MongoClient
+import asyncio
 import urllib.parse
 
 # MongoDB connection details
-username = urllib.parse.quote_plus("apwade75009")
-password = urllib.parse.quote_plus("Celina@12")
-cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mongodb.net/")
-db = cluster["QuantaAI"]  # Replace "YourNewDatabaseName" with your desired database name
-commands_collection = db["custom_commands"]
+username = urllib.parse.quote_plus("uname") 
+password = urllib.parse.quote_plus("pass")
+cluster = MongoClient(f"mongodb+srv://{username}:{password}@cluster.mongodb.net/db?retryWrites=true")
 
+db = cluster["commands_db"]
+commands_collection = db["commands"]
 
 class CustomCommands(commands.Cog):
+    
     def __init__(self, bot):
         self.bot = bot
         self.commands = {}
-        self.load_custom_commands()
-
-    def load_custom_commands(self):
-        commands_data = commands_collection.find({})
-        for command_data in commands_data:
-            name = command_data["_id"]
-            response = command_data["response"]
-            self.commands[name] = response
-
-    @commands.group(name='cc', invoke_without_command=True)
-    async def custom_commands(self, ctx):
-        """Manage custom commands."""
-        await ctx.send('Invalid subcommand. Use `create`, `edit`, `delete`, or `list`.')
-
-    @custom_commands.command(name='create')
-    @commands.has_permissions(administrator=True)
-    async def create_custom_command(self, ctx, name: str, *, response: str):
-        """Create a new custom command."""
-        if name in self.commands:
-            await ctx.send(f'Error: `{name}` already exists.')
-            return
-
-        self.commands[name] = response
-        commands_collection.insert_one({"_id": name, "response": response})
-        await ctx.send(f'Successfully created custom command: `{name}`')
-
-    @custom_commands.command(name='edit')
-    @commands.has_permissions(administrator=True)
-    async def edit_custom_command(self, ctx, name: str, *, response: str):
-        """Edit an existing custom command."""
-        if name not in self.commands:
-            await ctx.send(f'Error: `{name}` does not exist.')
-            return
-
-        self.commands[name] = response
-        commands_collection.update_one({"_id": name}, {"$set": {"response": response}})
-        await ctx.send(f'Successfully edited custom command: `{name}`')
-
-    @custom_commands.command(name='delete')
-    @commands.has_permissions(administrator=True)
-    async def delete_custom_command(self, ctx, name: str):
-        """Delete an existing custom command."""
-        if name not in self.commands:
-            await ctx.send(f'Error: `{name}` does not exist.')
-            return
-
-        del self.commands[name]
-        commands_collection.delete_one({"_id": name})
-        await ctx.send(f'Successfully deleted custom command: `{name}`')
-
-    @custom_commands.command(name='list')
-    async def list_custom_commands(self, ctx):
-        """List all custom commands."""
-        if not self.commands:
-            await ctx.send('There are no custom commands.')
-            return
-
-        embed = nextcord.Embed(title='Custom Commands', color=0x3cff00)
-        for name, response in self.commands.items():
-            embed.add_field(name=name, value=response, inline=False)
-
-        await ctx.send(embed=embed)
+        self.cooldowns = {}
 
     @commands.Cog.listener()
+    async def on_ready(self):
+        print('Custom commands cog loaded')
+        await self.populate_commands()
+        
+    async def populate_commands(self):
+        cursor = commands_collection.find({})
+        async for document in cursor:
+            self.commands[document['_id']] = document['response']
+        
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def add(self, ctx, name: str, *, response: str):
+        if name in self.commands:
+            return await ctx.send('That command already exists')
+        
+        commands_collection.insert_one({'_id': name, 'response': response})
+        self.commands[name] = response
+        await ctx.send(f'Added `{name}` command')
+
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def edit(self, ctx, name: str, *, response: str):
+        if name not in self.commands:
+            return await ctx.send('That command does not exist')
+        
+        self.commands[name] = response
+        commands_collection.update_one({'_id': name}, {'$set': {'response': response}}) 
+        await ctx.send(f'Edited `{name}` command')
+
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def remove(self, ctx, name: str):
+        if name not in self.commands:
+            return await ctx.send('That command does not exist')
+        
+        del self.commands[name]
+        commands_collection.delete_one({'_id': name})
+        await ctx.send(f'Removed `{name}` command')
+
+    @commands.command()
+    async def commands(self, ctx):
+        """Lists all custom commands"""
+        if not self.commands:
+            return await ctx.send('No custom commands set')
+            
+        embed = nextcord.Embed(title='Custom Commands', color=nextcord.Color.green())
+        for name in self.commands:
+            embed.add_field(name=name, value=self.commands[name], inline=False)
+        await ctx.send(embed=embed)
+            
+    @commands.Cog.listener() 
     async def on_message(self, message):
         if message.author.bot:
             return
-
-        command = message.content.strip().lower()
-
-        if command in self.commands:
-            response = self.commands[command]
+    
+        prefix = '!' # change to your bot's prefix
+        if not message.content.startswith(prefix):
+            return
+            
+        cmd = message.content[len(prefix):].lower().split(' ')[0] 
+        if cmd in self.commands:
+            
+            if message.author.id in self.cooldowns:
+                if time.time() - self.cooldowns[message.author.id] < 5: 
+                    # 5 second cooldown
+                    return
+            
+            self.cooldowns[message.author.id] = time.time()
+            
+            response = self.commands[cmd]
             await message.channel.send(response)
-
-
+        
 def setup(bot):
     bot.add_cog(CustomCommands(bot))
-
-    
     
     
     
