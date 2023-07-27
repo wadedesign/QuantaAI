@@ -1,3 +1,4 @@
+from datetime import time
 import nextcord
 from nextcord.ext import commands
 from pymongo import MongoClient
@@ -94,22 +95,3 @@ class CustomCommands(commands.Cog):
         
 def setup(bot):
     bot.add_cog(CustomCommands(bot))
-    
-    
-    
-    
-    # CustomCommands cog allows server admins to create custom text commands that trigger specific responses from the bot.
-
-# Use the cc create command to create a new custom command. For example, to create a custom command named !hello that responds with Hello, world!, an admin could run the following command:
-# cc create hello Hello, world!
-
-# Use the cc edit command to edit an existing custom command. For example, to change the response for the !hello command to Hi there!, an admin could run the following command:
-# cc edit hello Hi there!
-
-# Use the cc delete command to delete an existing custom command. For example, to delete the !hello command, an admin could run the following command:
-# cc delete hello
-
-# Use the cc list command to list all existing custom commands. An admin could run the following command to see a list of all custom commands:
-# cc list
-
-# Whenever a user sends a message that matches a custom command, the bot will respond with the associated response. For example, if a user sends a message that says !hello, the bot will respond with Hi there! if that was the last response set by an admin.
