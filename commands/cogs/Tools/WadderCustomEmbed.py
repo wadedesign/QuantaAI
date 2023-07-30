@@ -44,7 +44,7 @@ class UserMod(commands.Cog):
   def __init__(self, bot):
     self.bot = bot
 
-  @nextcord.slash_command(name="cusembed", description="Create an embed")
+  @nextcord.slash_command(name="qembed", description="Create an embed")
   async def embed(self, interaction: nextcord.Interaction):
     await interaction.response.send_modal(EmbedCus())
     
