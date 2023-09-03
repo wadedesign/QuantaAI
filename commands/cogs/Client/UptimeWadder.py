@@ -2,6 +2,7 @@ import nextcord
 from nextcord.ext import commands, tasks
 import psutil
 from datetime import datetime
+import matplotlib.pyplot as plt
 
 class Uptime(commands.Cog, description="Uptime command"):
     def __init__(self, bot):
@@ -63,8 +64,15 @@ class Uptime(commands.Cog, description="Uptime command"):
         
         embed.set_footer(text=f"Last Updated • {current_time}")
 
-        # Send the embed
-        await self.uptime_message.edit(embed=embed)
+        # Create and save the graph
+        plt.plot([self.td, self.th, self.tm, self.ts], [0, 0, 0, 0])  # Replace with actual data
+        plt.savefig("uptime_graph.png")
+        plt.close()
+
+        # Send the embed with the graph
+        file = nextcord.File("uptime_graph.png")
+        embed.set_image(url="attachment://uptime_graph.png")
+        await self.uptime_message.edit(embed=embed, file=file)
 
 
 
@@ -79,8 +87,6 @@ class Uptime(commands.Cog, description="Uptime command"):
 
 def setup(bot):
     bot.add_cog(Uptime(bot))
-
-
 
 
 
