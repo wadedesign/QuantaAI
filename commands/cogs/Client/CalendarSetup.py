@@ -3,7 +3,7 @@ from datetime import datetime
 import nextcord
 import calendar
 from nextcord.ext import commands
-import os 
+import os
 from pymongo import MongoClient
 import urllib.parse
 
@@ -37,7 +37,7 @@ class CalendarCog(commands.Cog):
             await interaction.response.send_message("You do not have permission to use this command.", ephemeral=True)
             return
 
-        event_datetime = f"{date} {time}"
+        event_datetime = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M")
         server_id = str(interaction.guild.id)
 
         await self.save_event(server_id, event_name, event_datetime)
@@ -77,7 +77,7 @@ class CalendarCog(commands.Cog):
             cal_str += "\n"
 
         event_list = [f"**{event['event_name']}** on {event['datetime'].strftime('%Y-%m-%d %H:%M')}" for event in events]
-    
+
         await interaction.response.send_message(cal_str + "\nUpcoming events:\n" + "\n".join(event_list))
 
 def setup(bot):
