@@ -25,7 +25,7 @@ class StoryCog(commands.Cog):
         
         embed = nextcord.Embed(title=title)
         msg = await interaction.send(embed=embed)
-        self.stories[story_id]["message_id"] = msg.id
+        self.stories[story_id]["message_url"] = msg.jump_url  # Store the message URL
 
         await interaction.respond(f"New story started with id {story_id}")
 
@@ -50,7 +50,8 @@ class StoryCog(commands.Cog):
         for i, line in enumerate(story["lines"]):
             embed.add_field(name=f"Line {i+1}", value=line, inline=False)
 
-        message = await interaction.channel.fetch_message(story["message_id"])
+        message_url = story["message_url"]
+        message = await interaction.channel.fetch_message(message_url)
         await message.edit(embed=embed)
 
         await interaction.respond("Your line was added to the story!")
@@ -63,7 +64,8 @@ class StoryCog(commands.Cog):
             return
 
         story = self.stories.pop(story_id)
-        message = await interaction.channel.fetch_message(story["message_id"])
+        message_url = story["message_url"]
+        message = await interaction.channel.fetch_message(message_url)
         await message.delete()
 
         await interaction.respond("The story has ended.")
