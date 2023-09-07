@@ -14,7 +14,6 @@ cluster = MongoClient(f"mongodb+srv://{username}:{password}@quantaai.irlbjcw.mon
 db = cluster["QuantaAI"]  # Replace "YourNewDatabaseName" with your desired database name
 calendar_collection = db["calendar_events"]
 
-
 class CalendarCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -61,13 +60,25 @@ class CalendarCog(commands.Cog):
 
         events = list(events)
         events.sort(key=lambda x: x['datetime'])
-        event_list = [f"**{event['event_name']}** on {event['datetime']}" for event in events]
 
-        cal = calendar.TextCalendar()
-        cal_str = cal.formatmonth(year, month)
+        cal = calendar.monthcalendar(year, month)
+        cal_str = f"Calendar for {calendar.month_name[month]} {year}:\n"
+        for week in cal:
+            for day in week:
+                if day == 0:
+                    cal_str += "   "  # Blank spaces for days outside the current month
+                else:
+                    day_str = str(day).zfill(2)
+                    events_on_day = [event for event in events if event['datetime'].day == day]
+                    if events_on_day:
+                        cal_str += f" {day_str}* "  # Add asterisk to indicate events on this day
+                    else:
+                        cal_str += f" {day_str}  "
+            cal_str += "\n"
 
-        await interaction.response.send_message(f"Calendar for {calendar.month_name[month]} {year}:\n```\n{cal_str}\n```\nUpcoming events:\n" + "\n".join(event_list))
-
+        event_list = [f"**{event['event_name']}** on {event['datetime'].strftime('%Y-%m-%d %H:%M')}" for event in events]
+    
+        await interaction.response.send_message(cal_str + "\nUpcoming events:\n" + "\n".join(event_list))
 
 def setup(bot):
     bot.add_cog(CalendarCog(bot))
